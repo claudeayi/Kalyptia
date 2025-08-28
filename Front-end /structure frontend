@@ -1,0 +1,36 @@
+kalyptia-frontend/
+├── src/
+│   ├── api/
+│   │   ├── axios.js         # Axios config avec JWT
+│   │   ├── auth.js          # Login, Register, Profil
+│   │   ├── dataset.js       # CRUD datasets
+│   │   ├── payment.js       # Stripe / PayPal / CinetPay
+│   │   └── analytics.js     # KPIs (revenus, stats)
+│   │
+│   ├── components/
+│   │   ├── Navbar.jsx       # Branding + Profil + DarkMode + Logout
+│   │   └── Sidebar.jsx      # Navigation latérale (toutes les pages)
+│   │
+│   ├── context/
+│   │   └── ThemeContext.jsx # Gestion Dark Mode global
+│   │
+│   ├── pages/
+│   │   ├── Login.jsx        # Authentification
+│   │   ├── Register.jsx     # Inscription
+│   │   ├── Dashboard.jsx    # Layout principal (Navbar + Sidebar + Outlet)
+│   │   ├── Home.jsx         # Cockpit IA futuriste (KPIs + Graph + Suggestions + Activity)
+│   │   ├── Marketplace.jsx  # Liste datasets + favoris + paiements directs
+│   │   ├── Datasets.jsx     # Gestion datasets (CRUD côté user)
+│   │   ├── Transactions.jsx # Historique d’achats (timeline)
+│   │   ├── Payments.jsx     # Tester paiements (Stripe, PayPal, CinetPay)
+│   │   ├── Analytics.jsx    # Graphiques stratégiques (revenus, datasets, utilisateurs)
+│   │   ├── AI.jsx           # Tester IA (clean, summarize)
+│   │   ├── Blockchain.jsx   # Ledger des blocs (timeline hashée)
+│   │   ├── Activity.jsx     # Flux temps réel (Socket.io)
+│   │   └── Profile.jsx      # Profil utilisateur + rôle + stats perso
+│   │
+│   ├── App.jsx              # Routes principales
+│   └── main.jsx             # Entrée React + Provider + Router
+│
+├── index.css                # Styles globaux
+├── tailwind.config.js       # Config Tailwind (DarkMode = class)
