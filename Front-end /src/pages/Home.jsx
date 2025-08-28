@@ -16,11 +16,11 @@ export default function Home() {
         setRevenue((await getRevenue()).data.totalRevenue);
         setStats((await getStats()).data);
 
-        // Placeholder IA (plus tard branché à ton backend IA)
+        // ✅ Suggestions IA (placeholder, futur backend IA)
         setSuggestions([
-          "💡 Le dataset X pourrait générer +20% si traduit en anglais.",
+          "💡 Le dataset X pourrait générer +20% s’il est traduit en anglais.",
           "📊 Forte demande en datasets financiers cette semaine.",
-          "🚀 2 datasets similaires au tien se vendent mieux, optimises leur description."
+          "🚀 2 datasets similaires au tien se vendent mieux, optimise leur description."
         ]);
       } catch (err) {
         console.error("❌ Erreur Home Dashboard:", err);
@@ -28,7 +28,7 @@ export default function Home() {
     };
     fetchData();
 
-    // Socket.io pour activité live
+    // ✅ Socket.io pour activité temps réel
     const socket = io("http://localhost:5000");
     socket.on("DATASET_CREATED", (data) =>
       setActivity((prev) => [
@@ -52,7 +52,7 @@ export default function Home() {
     return () => socket.disconnect();
   }, []);
 
-  // Exemple graphique (évolution des revenus)
+  // ✅ Graphique revenus
   const chartData = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May"],
     datasets: [
@@ -69,16 +69,16 @@ export default function Home() {
 
   return (
     <div className="space-y-10">
-      {/* Titre animé */}
+      {/* Titre cockpit */}
       <motion.h2
-        className="text-3xl font-extrabold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent"
+        className="text-3xl font-extrabold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent dark:from-blue-300 dark:to-purple-400"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
         🚀 Tableau de Bord IA – Kalyptia
       </motion.h2>
 
-      {/* KPIs avec effet glass */}
+      {/* KPIs */}
       <div className="grid grid-cols-4 gap-6">
         {[
           { label: "💵 Revenu total", value: `${revenue} $`, color: "from-green-400 to-green-600" },
@@ -88,7 +88,7 @@ export default function Home() {
         ].map((kpi, i) => (
           <motion.div
             key={i}
-            className={`p-6 rounded-xl shadow-lg bg-gradient-to-br ${kpi.color} text-white text-center`}
+            className={`p-6 rounded-xl shadow-lg bg-gradient-to-br ${kpi.color} text-white text-center dark:opacity-90`}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.2 }}
@@ -101,41 +101,45 @@ export default function Home() {
 
       {/* Graphique revenus */}
       <motion.div
-        className="bg-white shadow p-6 rounded-xl"
+        className="bg-white dark:bg-gray-900 shadow p-6 rounded-xl"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
       >
-        <h3 className="font-semibold mb-4">📊 Évolution des revenus</h3>
+        <h3 className="font-semibold mb-4 text-gray-700 dark:text-gray-200">📊 Évolution des revenus</h3>
         <Line data={chartData} />
       </motion.div>
 
       {/* Suggestions IA */}
       <motion.div
-        className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white p-6 rounded-xl shadow"
+        className="bg-gradient-to-r from-indigo-500 to-blue-500 dark:from-indigo-400 dark:to-blue-600 text-white p-6 rounded-xl shadow"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
       >
         <h3 className="font-semibold mb-4">🤖 Suggestions IA</h3>
         <ul className="space-y-2">
           {suggestions.map((s, i) => (
-            <li key={i} className="bg-white bg-opacity-20 p-3 rounded">{s}</li>
+            <li key={i} className="bg-white bg-opacity-20 dark:bg-black dark:bg-opacity-20 p-3 rounded">{s}</li>
           ))}
         </ul>
       </motion.div>
 
       {/* Activité récente */}
       <motion.div
-        className="bg-white shadow p-6 rounded-xl"
+        className="bg-white dark:bg-gray-900 shadow p-6 rounded-xl"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h3 className="font-semibold mb-4">⚡ Activité récente</h3>
+        <h3 className="font-semibold mb-4 text-gray-700 dark:text-gray-200">⚡ Activité récente</h3>
         {activity.slice(0, 5).map((event, i) => (
-          <div key={i} className="border-b py-2">
-            <p className="text-sm">{event.time} — {event.message}</p>
+          <div key={i} className="border-b dark:border-gray-700 py-2">
+            <p className="text-sm text-gray-700 dark:text-gray-300">
+              {event.time} — {event.message}
+            </p>
           </div>
         ))}
-        {activity.length === 0 && <p className="text-gray-500">Aucune activité pour l’instant...</p>}
+        {activity.length === 0 && (
+          <p className="text-gray-500 dark:text-gray-400">Aucune activité pour l’instant...</p>
+        )}
       </motion.div>
     </div>
   );
