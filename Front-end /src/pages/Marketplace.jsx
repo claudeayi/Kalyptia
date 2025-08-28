@@ -77,6 +77,19 @@ export default function Marketplace() {
     return matchesSearch && matchesStatus && matchesOwner && matchesPrice;
   });
 
+  // ✅ Fonction simulant l’IA (placeholder avant backend IA avancé)
+  const getAIInsights = (dataset) => {
+    return {
+      score: Math.floor(Math.random() * 100), // Score IA fictif 0 → 100
+      insights: [
+        "💡 Qualité des données : bonne, mais 8% de valeurs manquantes détectées.",
+        "📊 Potentiel de marché élevé : forte demande en datasets similaires.",
+        "🚀 Recommandation : enrichir avec métadonnées pour +20% ventes."
+      ],
+      prediction: `Ce dataset pourrait générer environ ${Math.floor(Math.random() * 500) + 100}$ dans le prochain mois.`
+    };
+  };
+
   return (
     <div className="space-y-10">
       <motion.h2
@@ -146,17 +159,6 @@ export default function Marketplace() {
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">{ds.description}</p>
               <p className="text-xs text-gray-500 dark:text-gray-400">👤 {ds.owner?.name || "N/A"}</p>
-              <span
-                className={`inline-block px-2 py-1 text-xs rounded mt-1 ${
-                  ds.status === "APPROVED"
-                    ? "bg-green-200 text-green-800"
-                    : ds.status === "PENDING"
-                    ? "bg-yellow-200 text-yellow-800"
-                    : "bg-red-200 text-red-800"
-                }`}
-              >
-                {ds.status}
-              </span>
             </div>
             <div className="mt-4 flex gap-2">
               <button
@@ -164,24 +166,6 @@ export default function Marketplace() {
                 className="bg-gray-600 text-white px-3 py-1 rounded hover:bg-gray-700 text-sm"
               >
                 Aperçu
-              </button>
-              <button
-                onClick={() => handlePayment("stripe", ds.id, 10)}
-                className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm"
-              >
-                Stripe
-              </button>
-              <button
-                onClick={() => handlePayment("paypal", ds.id, 10)}
-                className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 text-sm"
-              >
-                PayPal
-              </button>
-              <button
-                onClick={() => handlePayment("cinetpay", ds.id, 10)}
-                className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 text-sm"
-              >
-                CinetPay
               </button>
             </div>
           </motion.div>
@@ -192,7 +176,7 @@ export default function Marketplace() {
         <p className="text-gray-500 dark:text-gray-400">Aucun dataset trouvé...</p>
       )}
 
-      {/* Modal aperçu */}
+      {/* Modal aperçu + IA widget */}
       {selected && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <motion.div
@@ -208,10 +192,42 @@ export default function Marketplace() {
             </button>
             <h3 className="text-xl font-bold mb-2 text-gray-800 dark:text-white">{selected.name}</h3>
             <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">{selected.description}</p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">👤 Propriétaire: {selected.owner?.name || "N/A"}</p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">📅 Créé le: {new Date(selected.createdAt).toLocaleDateString()}</p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">💵 Prix: 10 USD</p>
-            <div className="mt-4 flex gap-2">
+
+            {/* ✅ Widget IA */}
+            <div className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-4 rounded-lg shadow mb-4">
+              <h4 className="font-semibold mb-2">🤖 Analyse IA</h4>
+              {(() => {
+                const ai = getAIInsights(selected);
+                return (
+                  <>
+                    {/* Score */}
+                    <div className="mb-2">
+                      <p className="text-sm">Score Qualité :</p>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div
+                          className="bg-green-400 h-2 rounded-full"
+                          style={{ width: `${ai.score}%` }}
+                        ></div>
+                      </div>
+                      <p className="text-xs mt-1">⚡ {ai.score}/100</p>
+                    </div>
+
+                    {/* Insights */}
+                    <ul className="list-disc list-inside space-y-1 text-sm">
+                      {ai.insights.map((ins, i) => (
+                        <li key={i}>{ins}</li>
+                      ))}
+                    </ul>
+
+                    {/* Prévision */}
+                    <p className="text-sm mt-2 italic">{ai.prediction}</p>
+                  </>
+                );
+              })()}
+            </div>
+
+            {/* Paiements */}
+            <div className="flex gap-2">
               <button
                 onClick={() => handlePayment("stripe", selected.id, 10)}
                 className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm"
