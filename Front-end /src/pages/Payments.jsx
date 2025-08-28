@@ -1,72 +1,101 @@
 import { useState } from "react";
 import { payWithStripe, payWithPayPal, payWithCinetPay } from "../api/payment";
+import { motion } from "framer-motion";
 
 export default function Payments() {
-  const [form, setForm] = useState({ datasetId: "", amount: "", currency: "USD" });
-  const [response, setResponse] = useState(null);
+  const [amount, setAmount] = useState("");
+  const [datasetId, setDatasetId] = useState("");
+  const [message, setMessage] = useState("");
 
-  const handleStripe = async () => {
-    const res = await payWithStripe(form);
-    setResponse(res.data);
-  };
-
-  const handlePayPal = async () => {
-    const res = await payWithPayPal(form);
-    setResponse(res.data);
-  };
-
-  const handleCinetPay = async () => {
-    const res = await payWithCinetPay(form);
-    setResponse(res.data);
+  const handlePayment = async (method) => {
+    try {
+      setMessage("");
+      let res;
+      if (method === "stripe") {
+        res = await payWithStripe({ datasetId, amount, currency: "USD" });
+      } else if (method === "paypal") {
+        res = await payWithPayPal({ datasetId, amount, currency: "USD" });
+      } else if (method === "cinetpay") {
+        res = await payWithCinetPay({
+          datasetId,
+          amount,
+          currency: "XAF",
+          description: "Achat dataset Kalyptia",
+        });
+      }
+      setMessage(`✅ Paiement réussi via ${method.toUpperCase()} (Transaction #${res.data.transaction.id})`);
+    } catch (err) {
+      console.error(err);
+      setMessage(`❌ Paiement via ${method.toUpperCase()} échoué`);
+    }
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">💳 Paiements</h2>
+    <div className="space-y-10">
+      <motion.h2
+        className="text-3xl font-extrabold bg-gradient-to-r from-purple-500 to-pink-600 bg-clip-text text-transparent dark:from-purple-300 dark:to-pink-400"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        💳 Paiements
+      </motion.h2>
 
-      <div className="flex gap-3 mb-6">
-        <input
-          type="text"
-          placeholder="ID Dataset"
-          className="p-2 border rounded"
-          value={form.datasetId}
-          onChange={(e) => setForm({ ...form, datasetId: e.target.value })}
-        />
-        <input
-          type="number"
-          placeholder="Montant"
-          className="p-2 border rounded"
-          value={form.amount}
-          onChange={(e) => setForm({ ...form, amount: e.target.value })}
-        />
-        <select
-          className="p-2 border rounded"
-          value={form.currency}
-          onChange={(e) => setForm({ ...form, currency: e.target.value })}
-        >
-          <option value="USD">USD</option>
-          <option value="XAF">XAF</option>
-          <option value="EUR">EUR</option>
-        </select>
+      <div className="bg-white dark:bg-gray-900 shadow p-6 rounded-xl space-y-6">
+        {/* Formulaire */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+              💵 Montant
+            </label>
+            <input
+              type="number"
+              className="w-full p-2 border rounded dark:bg-gray-800 dark:text-white dark:border-gray-700"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="Ex: 10"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+              📂 Dataset ID
+            </label>
+            <input
+              type="text"
+              className="w-full p-2 border rounded dark:bg-gray-800 dark:text-white dark:border-gray-700"
+              value={datasetId}
+              onChange={(e) => setDatasetId(e.target.value)}
+              placeholder="Ex: 1"
+            />
+          </div>
+        </div>
+
+        {/* Boutons de paiement */}
+        <div className="flex gap-4">
+          <button
+            onClick={() => handlePayment("stripe")}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition"
+          >
+            Payer avec Stripe
+          </button>
+          <button
+            onClick={() => handlePayment("paypal")}
+            className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded transition"
+          >
+            Payer avec PayPal
+          </button>
+          <button
+            onClick={() => handlePayment("cinetpay")}
+            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition"
+          >
+            Payer avec CinetPay
+          </button>
+        </div>
+
+        {/* Message retour */}
+        {message && (
+          <p className="text-sm mt-4 text-gray-700 dark:text-gray-300">{message}</p>
+        )}
       </div>
-
-      <div className="flex gap-4">
-        <button onClick={handleStripe} className="bg-blue-600 text-white px-4 py-2 rounded">
-          Payer par Stripe
-        </button>
-        <button onClick={handlePayPal} className="bg-yellow-500 text-white px-4 py-2 rounded">
-          Payer par PayPal
-        </button>
-        <button onClick={handleCinetPay} className="bg-green-600 text-white px-4 py-2 rounded">
-          Payer par CinetPay
-        </button>
-      </div>
-
-      {response && (
-        <pre className="mt-6 bg-gray-900 text-green-400 p-4 rounded text-sm overflow-x-auto">
-          {JSON.stringify(response, null, 2)}
-        </pre>
-      )}
     </div>
   );
 }
