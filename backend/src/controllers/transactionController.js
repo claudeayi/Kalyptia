@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { addBlock } from "../services/blockchainService.js"; // ✅ ajout
 
 const prisma = new PrismaClient();
 
@@ -23,6 +24,16 @@ export const buyDataset = async (req, res) => {
         amount: amount || 10.0,
         currency: currency || "USD"
       }
+    });
+
+    // ✅ Log automatique dans la blockchain
+    addBlock("DATASET_PURCHASED", {
+      transactionId: transaction.id,
+      datasetId: dataset.id,
+      buyerId: req.user.id,
+      sellerId: dataset.ownerId,
+      amount: transaction.amount,
+      currency: transaction.currency
     });
 
     res.json({
