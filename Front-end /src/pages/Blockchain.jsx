@@ -21,7 +21,12 @@ export default function Blockchain() {
     <div>
       <h2 className="text-2xl font-bold mb-6">⛓ Blockchain Ledger</h2>
 
+      {/* Timeline verticale */}
       <div className="relative border-l-2 border-blue-600 pl-6">
+        {blocks.length === 0 && (
+          <p className="text-gray-500">Aucun bloc dans le ledger...</p>
+        )}
+
         {blocks.map((block, i) => (
           <div key={i} className="mb-8">
             {/* Point sur la timeline */}
@@ -33,8 +38,10 @@ export default function Blockchain() {
             <div className="bg-white shadow-md p-4 rounded border border-gray-200">
               <p className="text-sm text-gray-500">🕒 {block.timestamp}</p>
               <p className="font-semibold text-blue-700">{block.action}</p>
-              <p className="text-xs text-gray-500">Hash: {block.hash}</p>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-gray-500 truncate">
+                Hash: {block.hash}
+              </p>
+              <p className="text-xs text-gray-500 truncate">
                 PrevHash: {block.previousHash}
               </p>
 
