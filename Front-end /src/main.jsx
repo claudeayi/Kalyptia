@@ -4,13 +4,16 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "./index.css";
 import { ThemeProvider } from "./context/ThemeContext";
+import { NotificationProvider } from "./context/NotificationContext"; // ✅ ajout
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ThemeProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <NotificationProvider> {/* ✅ Fournit les notifs globales */}
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </NotificationProvider>
     </ThemeProvider>
   </React.StrictMode>
 );
