@@ -2,6 +2,8 @@ import http from "http";
 import { Server } from "socket.io";
 import app from "./app.js";
 import dotenv from "dotenv";
+import jwt from "jsonwebtoken"; // ✅ pour décoder le JWT
+import { registerUserSocket } from "./services/notificationService.js"; // ✅
 
 dotenv.config();
 
@@ -21,6 +23,17 @@ const io = new Server(server, {
 // Gestion des connexions Socket.io
 io.on("connection", (socket) => {
   console.log("🟢 Client connecté:", socket.id);
+
+  // ✅ Lorsqu’un client envoie son token pour s’authentifier
+  socket.on("auth", (token) => {
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const userId = decoded.id;
+      registerUserSocket(socket, userId); // mappe socket ↔ userId
+    } catch (err) {
+      console.log("❌ Token invalide pour socket:", socket.id);
+    }
+  });
 
   socket.on("disconnect", () => {
     console.log("🔴 Client déconnecté:", socket.id);
