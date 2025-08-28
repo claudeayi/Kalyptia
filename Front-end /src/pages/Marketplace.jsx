@@ -10,6 +10,10 @@ export default function Marketplace() {
   const [priceFilter, setPriceFilter] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [favorites, setFavorites] = useState(() =>
+    JSON.parse(localStorage.getItem("favorites") || "[]")
+  );
+  const [selected, setSelected] = useState(null); // modal dataset
 
   const fetchDatasets = async () => {
     try {
@@ -27,6 +31,19 @@ export default function Marketplace() {
     fetchDatasets();
   }, []);
 
+  // Sauvegarde favoris
+  const toggleFavorite = (id) => {
+    let updated;
+    if (favorites.includes(id)) {
+      updated = favorites.filter((fid) => fid !== id);
+    } else {
+      updated = [...favorites, id];
+    }
+    setFavorites(updated);
+    localStorage.setItem("favorites", JSON.stringify(updated));
+  };
+
+  // Paiements
   const handlePayment = async (method, datasetId, amount) => {
     try {
       setMessage("");
@@ -58,7 +75,7 @@ export default function Marketplace() {
     const matchesOwner =
       ownerFilter === "" || (ds.owner?.name || "").toLowerCase().includes(ownerFilter.toLowerCase());
     const matchesPrice =
-      priceFilter === "" || parseFloat(priceFilter) <= (ds.price || 10); // default 10
+      priceFilter === "" || parseFloat(priceFilter) <= (ds.price || 10);
     return matchesSearch && matchesStatus && matchesOwner && matchesPrice;
   });
 
@@ -112,11 +129,17 @@ export default function Marketplace() {
             className="bg-white shadow p-4 rounded border flex flex-col justify-between"
           >
             <div>
-              <h3 className="font-semibold text-lg">{ds.name}</h3>
+              <div className="flex justify-between items-center">
+                <h3 className="font-semibold text-lg">{ds.name}</h3>
+                <button
+                  onClick={() => toggleFavorite(ds.id)}
+                  className={`text-xl ${favorites.includes(ds.id) ? "text-red-500" : "text-gray-400"}`}
+                >
+                  ♥
+                </button>
+              </div>
               <p className="text-sm text-gray-600 mb-2">{ds.description}</p>
-              <p className="text-xs text-gray-500">
-                Propriétaire: {ds.owner?.name || "N/A"}
-              </p>
+              <p className="text-xs text-gray-500">👤 {ds.owner?.name || "N/A"}</p>
               <span
                 className={`inline-block px-2 py-1 text-xs rounded mt-1 ${
                   ds.status === "APPROVED"
@@ -130,6 +153,12 @@ export default function Marketplace() {
               </span>
             </div>
             <div className="mt-4 flex gap-2">
+              <button
+                onClick={() => setSelected(ds)}
+                className="bg-gray-600 text-white px-3 py-1 rounded hover:bg-gray-700 text-sm"
+              >
+                Aperçu
+              </button>
               <button
                 onClick={() => handlePayment("stripe", ds.id, 10)}
                 className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm"
@@ -155,6 +184,45 @@ export default function Marketplace() {
 
       {filtered.length === 0 && !loading && (
         <p className="text-gray-500">Aucun dataset trouvé...</p>
+      )}
+
+      {/* Modal aperçu détaillé */}
+      {selected && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded shadow-lg max-w-lg w-full relative">
+            <button
+              onClick={() => setSelected(null)}
+              className="absolute top-2 right-2 text-gray-500 hover:text-black"
+            >
+              ✖
+            </button>
+            <h3 className="text-xl font-bold mb-2">{selected.name}</h3>
+            <p className="text-sm text-gray-600 mb-4">{selected.description}</p>
+            <p className="text-sm text-gray-500">👤 Propriétaire: {selected.owner?.name || "N/A"}</p>
+            <p className="text-sm text-gray-500">📅 Créé le: {new Date(selected.createdAt).toLocaleDateString()}</p>
+            <p className="text-sm text-gray-500">💵 Prix: 10 USD</p>
+            <div className="mt-4 flex gap-2">
+              <button
+                onClick={() => handlePayment("stripe", selected.id, 10)}
+                className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm"
+              >
+                Stripe
+              </button>
+              <button
+                onClick={() => handlePayment("paypal", selected.id, 10)}
+                className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 text-sm"
+              >
+                PayPal
+              </button>
+              <button
+                onClick={() => handlePayment("cinetpay", selected.id, 10)}
+                className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 text-sm"
+              >
+                CinetPay
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
