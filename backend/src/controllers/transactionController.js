@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-import { addBlock } from "../services/blockchainService.js"; // ✅ ajout
+import { addBlock } from "../services/blockchainService.js"; // ✅ blockchain
+import { sendNotification } from "../services/notificationService.js"; // ✅ notifications
 
 const prisma = new PrismaClient();
 
@@ -28,6 +29,16 @@ export const buyDataset = async (req, res) => {
 
     // ✅ Log automatique dans la blockchain
     addBlock("DATASET_PURCHASED", {
+      transactionId: transaction.id,
+      datasetId: dataset.id,
+      buyerId: req.user.id,
+      sellerId: dataset.ownerId,
+      amount: transaction.amount,
+      currency: transaction.currency
+    });
+
+    // ✅ Notification temps réel (Socket.io)
+    sendNotification(req.app, "DATASET_PURCHASED", {
       transactionId: transaction.id,
       datasetId: dataset.id,
       buyerId: req.user.id,
