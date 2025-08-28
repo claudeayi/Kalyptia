@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import authRoutes from "./routes/auth.js";
 import datasetRoutes from "./routes/dataset.js";
+import transactionRoutes from "./routes/transaction.js"; // ✅ ajout
 
 const app = express();
 
@@ -15,5 +16,6 @@ app.get("/", (req, res) => {
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/datasets", datasetRoutes);
+app.use("/api/transactions", transactionRoutes); // ✅ ajout
 
 export default app;
