@@ -19,7 +19,12 @@ export default function Notification() {
 
     // Dataset créé
     socket.on("DATASET_CREATED", (data) => {
-      addNotification(`📂 Nouveau dataset: ${data.name}`, "dataset", data, "/datasets");
+      addNotification(
+        `📂 Nouveau dataset: ${data.name}`,
+        "dataset",
+        data,
+        "/datasets"
+      );
     });
 
     // Dataset acheté
@@ -48,8 +53,9 @@ export default function Notification() {
   // ✅ Ajouter une notif avec route liée
   const addNotification = (message, type, data, link) => {
     const id = Date.now();
+    const time = new Date().toLocaleTimeString();
     setNotifications((prev) => [
-      { id, type, message, data, showDetails: false, link },
+      { id, type, message, data, showDetails: false, link, time },
       ...prev,
     ]);
 
@@ -88,15 +94,17 @@ export default function Notification() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 50 }}
             transition={{ duration: 0.3 }}
-            className={`bg-white dark:bg-gray-900 shadow-lg p-3 rounded border-l-4 ${typeColors[n.type]}`}
+            className={`bg-white dark:bg-gray-900 shadow-lg p-4 rounded-lg border-l-4 ${typeColors[n.type]} backdrop-blur-md bg-opacity-90 hover:scale-105 transform transition`}
           >
+            {/* Header (message + heure) */}
             <div
-              className="cursor-pointer"
+              className="cursor-pointer flex justify-between items-center"
               onClick={() => handleNavigate(n.link)}
             >
-              <p className="text-sm text-gray-800 dark:text-gray-200 font-semibold">
+              <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">
                 {n.message}
               </p>
+              <span className="text-xs text-gray-400">{n.time}</span>
             </div>
 
             {/* ✅ Détails JSON cliquables */}
@@ -108,7 +116,7 @@ export default function Notification() {
 
             <p
               onClick={() => toggleDetails(n.id)}
-              className="text-xs text-blue-600 dark:text-blue-400 mt-1 cursor-pointer"
+              className="text-xs text-blue-600 dark:text-blue-400 mt-2 cursor-pointer"
             >
               {n.showDetails ? "▲ Masquer détails" : "▼ Voir détails"}
             </p>
