@@ -3,12 +3,16 @@ import { getRevenue, getStats } from "../api/analytics";
 import { io } from "socket.io-client";
 import { Line } from "react-chartjs-2";
 import { motion } from "framer-motion";
+import API from "../api/axios";
 
 export default function Home() {
   const [revenue, setRevenue] = useState(0);
   const [stats, setStats] = useState({});
   const [activity, setActivity] = useState([]);
   const [aiSummary, setAiSummary] = useState([]);
+  const [chatHistory, setChatHistory] = useState([]);
+  const [userInput, setUserInput] = useState("");
+  const [loadingAI, setLoadingAI] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,9 +20,9 @@ export default function Home() {
         setRevenue((await getRevenue()).data.totalRevenue);
         setStats((await getStats()).data);
 
-        // ✅ IA Copilot résumé simulé (placeholder avant backend IA avancé)
+        // ✅ IA Copilot résumé simulé
         setAiSummary([
-          "📊 Les revenus sont stables (+10% cette semaine).",
+          "📊 Revenus stables (+10% cette semaine).",
           "⚡ 3 nouveaux datasets créés aujourd’hui.",
           "💰 Transactions en hausse de 18% sur les datasets financiers.",
           "🚀 Projection IA : +40% de revenus possibles d’ici 30 jours.",
@@ -75,6 +79,32 @@ export default function Home() {
         fill: true,
       },
     ],
+  };
+
+  // ✅ Chat IA – Appel API simulé (plus tard branché au backend IA)
+  const handleAskAI = async () => {
+    if (!userInput.trim()) return;
+    const question = userInput;
+    setUserInput("");
+    setLoadingAI(true);
+
+    // Ajouter la question de l’utilisateur dans l’historique
+    setChatHistory((prev) => [...prev, { sender: "user", text: question }]);
+
+    try {
+      // Simulation IA – remplacer par API backend `/ai/chat`
+      const res = await API.post("/ai/summarize", { text: question });
+      const answer = res.data.result || "🤖 Je n’ai pas encore la réponse exacte, mais je vais apprendre.";
+
+      setChatHistory((prev) => [...prev, { sender: "ai", text: answer }]);
+    } catch (err) {
+      setChatHistory((prev) => [
+        ...prev,
+        { sender: "ai", text: "❌ Erreur IA, réessaie plus tard." },
+      ]);
+    } finally {
+      setLoadingAI(false);
+    }
   };
 
   return (
@@ -150,6 +180,49 @@ export default function Home() {
           </div>
         ))}
         {activity.length === 0 && <p className="text-gray-500">Aucune activité pour l’instant...</p>}
+      </motion.div>
+
+      {/* ✅ Copilot IA – Chat interactif */}
+      <motion.div
+        className="bg-gradient-to-r from-pink-500 to-red-600 text-white p-6 rounded-xl shadow space-y-4"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <h3 className="font-semibold mb-4">💬 Copilot IA – Posez vos questions</h3>
+
+        <div className="h-64 overflow-y-auto bg-white dark:bg-gray-800 p-4 rounded text-gray-800 dark:text-gray-200 space-y-3">
+          {chatHistory.map((msg, i) => (
+            <div
+              key={i}
+              className={`p-2 rounded max-w-[80%] ${
+                msg.sender === "user"
+                  ? "bg-blue-500 text-white ml-auto"
+                  : "bg-gray-200 dark:bg-gray-700"
+              }`}
+            >
+              {msg.text}
+            </div>
+          ))}
+          {loadingAI && (
+            <p className="text-sm italic text-gray-500 dark:text-gray-400">⏳ L’IA réfléchit...</p>
+          )}
+        </div>
+
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
+            className="flex-1 p-2 rounded text-black dark:text-white dark:bg-gray-800"
+            placeholder="Ex: Quels sont mes top datasets ?"
+          />
+          <button
+            onClick={handleAskAI}
+            className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800"
+          >
+            Envoyer
+          </button>
+        </div>
       </motion.div>
     </div>
   );
