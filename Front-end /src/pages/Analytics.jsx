@@ -31,6 +31,15 @@ export default function Analytics() {
         tension: 0.4,
         fill: true,
       },
+      {
+        label: "Projection IA ($)",
+        data: [600, 1300, 2000, 2500, revenue + 500], // courbe projetée
+        borderColor: "#8B5CF6",
+        backgroundColor: "rgba(139,92,246,0.2)",
+        borderDash: [5, 5],
+        tension: 0.4,
+        fill: true,
+      },
     ],
   };
 
@@ -61,6 +70,14 @@ export default function Analytics() {
     ],
   };
 
+  // ✅ IA Insights (placeholder avant backend IA avancé)
+  const aiInsights = [
+    "📊 Les revenus devraient croître de +35% d’ici 30 jours.",
+    "⚠️ Anomalie détectée : pic inhabituel de ventes le 12 Mars.",
+    "💡 Les datasets financiers génèrent 2x plus de transactions que la moyenne.",
+    "🚀 Recommandation : traduire vos datasets en anglais pour +20% ventes.",
+  ];
+
   return (
     <div className="space-y-10">
       <motion.h2
@@ -71,13 +88,15 @@ export default function Analytics() {
         📈 Analytics – Kalyptia
       </motion.h2>
 
-      {/* Revenus */}
+      {/* Revenus + IA projection */}
       <motion.div
         className="bg-white dark:bg-gray-900 shadow p-6 rounded-xl"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
       >
-        <h3 className="font-semibold mb-4 text-gray-700 dark:text-gray-200">💵 Évolution des revenus</h3>
+        <h3 className="font-semibold mb-4 text-gray-700 dark:text-gray-200">
+          💵 Évolution des revenus (avec projection IA)
+        </h3>
         <Line data={revenueData} />
       </motion.div>
 
@@ -87,7 +106,9 @@ export default function Analytics() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h3 className="font-semibold mb-4 text-gray-700 dark:text-gray-200">📂 Datasets par statut</h3>
+        <h3 className="font-semibold mb-4 text-gray-700 dark:text-gray-200">
+          📂 Datasets par statut
+        </h3>
         <Bar data={datasetData} />
       </motion.div>
 
@@ -97,8 +118,29 @@ export default function Analytics() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h3 className="font-semibold mb-4 text-gray-700 dark:text-gray-200">👥 Répartition des utilisateurs</h3>
+        <h3 className="font-semibold mb-4 text-gray-700 dark:text-gray-200">
+          👥 Répartition des utilisateurs
+        </h3>
         <Pie data={userData} />
+      </motion.div>
+
+      {/* ✅ Widget IA Insights */}
+      <motion.div
+        className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6 rounded-xl shadow space-y-3"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <h3 className="font-semibold mb-4">🤖 Insights IA</h3>
+        <ul className="space-y-2">
+          {aiInsights.map((ins, i) => (
+            <li
+              key={i}
+              className="bg-white bg-opacity-20 p-3 rounded text-sm"
+            >
+              {ins}
+            </li>
+          ))}
+        </ul>
       </motion.div>
     </div>
   );
