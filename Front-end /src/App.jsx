@@ -10,7 +10,8 @@ import AI from "./pages/AI";
 import Blockchain from "./pages/Blockchain"; 
 import Profile from "./pages/Profile";       
 import Activity from "./pages/Activity";     
-import Home from "./pages/Home";             // ✅ nouveau
+import Home from "./pages/Home";             
+import Marketplace from "./pages/Marketplace"; // ✅ nouveau
 
 function App() {
   return (
@@ -21,7 +22,8 @@ function App() {
 
       {/* Dashboard + sous-pages */}
       <Route path="/" element={<Dashboard />}>
-        <Route index element={<Home />} />              {/* ✅ Page d’accueil */}
+        <Route index element={<Home />} />              
+        <Route path="marketplace" element={<Marketplace />} /> {/* ✅ ajout */}
         <Route path="datasets" element={<Datasets />} />
         <Route path="transactions" element={<Transactions />} />
         <Route path="payments" element={<Payments />} />
