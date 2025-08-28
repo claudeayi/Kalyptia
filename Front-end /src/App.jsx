@@ -6,6 +6,9 @@ import Datasets from "./pages/Datasets";
 import Transactions from "./pages/Transactions";
 import Payments from "./pages/Payments";
 import Analytics from "./pages/Analytics";
+import AI from "./pages/AI";             // ✅ ajout
+import Blockchain from "./pages/Blockchain"; // ✅ ajout
+import Profile from "./pages/Profile";       // ✅ ajout
 
 function App() {
   return (
@@ -20,6 +23,9 @@ function App() {
         <Route path="transactions" element={<Transactions />} />
         <Route path="payments" element={<Payments />} />
         <Route path="analytics" element={<Analytics />} />
+        <Route path="ai" element={<AI />} />               {/* ✅ IA */}
+        <Route path="blockchain" element={<Blockchain />} /> {/* ✅ Ledger */}
+        <Route path="profile" element={<Profile />} />       {/* ✅ Profil */}
       </Route>
     </Routes>
   );
