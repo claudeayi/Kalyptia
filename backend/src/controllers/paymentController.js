@@ -3,6 +3,7 @@ import { createStripePayment } from "../services/paymentService.js";
 import { createPayPalPayment } from "../services/paypalService.js";
 import { createCinetPayPayment } from "../services/cinetpayService.js";
 import { addBlock } from "../services/blockchainService.js"; // ✅ ledger
+import { sendNotification } from "../services/notificationService.js"; // ✅ notifications
 
 const prisma = new PrismaClient();
 
@@ -26,6 +27,16 @@ export const payWithStripe = async (req, res) => {
 
     // ✅ Blockchain log
     addBlock("PAYMENT_STRIPE", {
+      transactionId: transaction.id,
+      datasetId,
+      userId: req.user.id,
+      amount,
+      currency
+    });
+
+    // ✅ Notification temps réel
+    sendNotification(req.app, "PAYMENT_SUCCESS", {
+      method: "STRIPE",
       transactionId: transaction.id,
       datasetId,
       userId: req.user.id,
@@ -64,6 +75,16 @@ export const payWithPayPal = async (req, res) => {
       currency
     });
 
+    // ✅ Notification temps réel
+    sendNotification(req.app, "PAYMENT_SUCCESS", {
+      method: "PAYPAL",
+      transactionId: transaction.id,
+      datasetId,
+      userId: req.user.id,
+      amount,
+      currency
+    });
+
     res.json({ payment, transaction });
   } catch (error) {
     res.status(500).json({ error: "PayPal payment failed", details: error.message });
@@ -88,6 +109,16 @@ export const payWithCinetPay = async (req, res) => {
     });
 
     addBlock("PAYMENT_CINETPAY", {
+      transactionId: transaction.id,
+      datasetId,
+      userId: req.user.id,
+      amount,
+      currency
+    });
+
+    // ✅ Notification temps réel
+    sendNotification(req.app, "PAYMENT_SUCCESS", {
+      method: "CINETPAY",
       transactionId: transaction.id,
       datasetId,
       userId: req.user.id,
