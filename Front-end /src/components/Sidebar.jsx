@@ -6,6 +6,9 @@ export default function Sidebar() {
     { to: "/transactions", label: "💰 Transactions" },
     { to: "/payments", label: "💳 Paiements" },
     { to: "/analytics", label: "📈 Analytics" },
+    { to: "/ai", label: "🤖 IA" },         // ✅ ajout
+    { to: "/blockchain", label: "⛓ Blockchain" }, // ✅ ajout
+    { to: "/profile", label: "👤 Profil" },       // ✅ ajout
   ];
 
   return (
