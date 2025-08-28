@@ -8,7 +8,7 @@ export default function Home() {
   const [revenue, setRevenue] = useState(0);
   const [stats, setStats] = useState({});
   const [activity, setActivity] = useState([]);
-  const [suggestions, setSuggestions] = useState([]);
+  const [aiSummary, setAiSummary] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,11 +16,12 @@ export default function Home() {
         setRevenue((await getRevenue()).data.totalRevenue);
         setStats((await getStats()).data);
 
-        // ✅ Suggestions IA (placeholder, futur backend IA)
-        setSuggestions([
-          "💡 Le dataset X pourrait générer +20% s’il est traduit en anglais.",
-          "📊 Forte demande en datasets financiers cette semaine.",
-          "🚀 2 datasets similaires au tien se vendent mieux, optimise leur description."
+        // ✅ IA Copilot résumé simulé (placeholder avant backend IA avancé)
+        setAiSummary([
+          "📊 Les revenus sont stables (+10% cette semaine).",
+          "⚡ 3 nouveaux datasets créés aujourd’hui.",
+          "💰 Transactions en hausse de 18% sur les datasets financiers.",
+          "🚀 Projection IA : +40% de revenus possibles d’ici 30 jours.",
         ]);
       } catch (err) {
         console.error("❌ Erreur Home Dashboard:", err);
@@ -32,19 +33,19 @@ export default function Home() {
     const socket = io("http://localhost:5000");
     socket.on("DATASET_CREATED", (data) =>
       setActivity((prev) => [
-        { type: "dataset", message: `Dataset ${data.name} créé`, time: new Date().toLocaleTimeString() },
+        { type: "dataset", message: `📂 Dataset ${data.name} créé`, time: new Date().toLocaleTimeString() },
         ...prev,
       ])
     );
     socket.on("DATASET_PURCHASED", (data) =>
       setActivity((prev) => [
-        { type: "transaction", message: `Dataset #${data.datasetId} acheté`, time: new Date().toLocaleTimeString() },
+        { type: "transaction", message: `💰 Dataset #${data.datasetId} acheté`, time: new Date().toLocaleTimeString() },
         ...prev,
       ])
     );
     socket.on("PAYMENT_SUCCESS", (data) =>
       setActivity((prev) => [
-        { type: "payment", message: `Paiement ${data.amount} ${data.currency}`, time: new Date().toLocaleTimeString() },
+        { type: "payment", message: `💳 Paiement ${data.amount} ${data.currency}`, time: new Date().toLocaleTimeString() },
         ...prev,
       ])
     );
@@ -52,7 +53,7 @@ export default function Home() {
     return () => socket.disconnect();
   }, []);
 
-  // ✅ Graphique revenus
+  // ✅ Exemple graphique (revenus réels + projection IA)
   const chartData = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May"],
     datasets: [
@@ -64,12 +65,21 @@ export default function Home() {
         tension: 0.4,
         fill: true,
       },
+      {
+        label: "Projection IA ($)",
+        data: [600, 1400, 1100, 2000, revenue + 500],
+        borderColor: "#8B5CF6",
+        backgroundColor: "rgba(139,92,246,0.2)",
+        borderDash: [5, 5],
+        tension: 0.4,
+        fill: true,
+      },
     ],
   };
 
   return (
     <div className="space-y-10">
-      {/* Titre cockpit */}
+      {/* Titre */}
       <motion.h2
         className="text-3xl font-extrabold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent dark:from-blue-300 dark:to-purple-400"
         initial={{ opacity: 0, y: -20 }}
@@ -77,6 +87,22 @@ export default function Home() {
       >
         🚀 Tableau de Bord IA – Kalyptia
       </motion.h2>
+
+      {/* ✅ Copilot IA – Résumé global */}
+      <motion.div
+        className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6 rounded-xl shadow space-y-3"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <h3 className="font-semibold mb-4">🤖 Copilot IA – Synthèse Globale</h3>
+        <ul className="space-y-2">
+          {aiSummary.map((s, i) => (
+            <li key={i} className="bg-white bg-opacity-20 p-3 rounded text-sm">
+              {s}
+            </li>
+          ))}
+        </ul>
+      </motion.div>
 
       {/* KPIs */}
       <div className="grid grid-cols-4 gap-6">
@@ -88,7 +114,7 @@ export default function Home() {
         ].map((kpi, i) => (
           <motion.div
             key={i}
-            className={`p-6 rounded-xl shadow-lg bg-gradient-to-br ${kpi.color} text-white text-center dark:opacity-90`}
+            className={`p-6 rounded-xl shadow-lg bg-gradient-to-br ${kpi.color} text-white text-center`}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.2 }}
@@ -105,22 +131,8 @@ export default function Home() {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
       >
-        <h3 className="font-semibold mb-4 text-gray-700 dark:text-gray-200">📊 Évolution des revenus</h3>
+        <h3 className="font-semibold mb-4">📊 Évolution des revenus</h3>
         <Line data={chartData} />
-      </motion.div>
-
-      {/* Suggestions IA */}
-      <motion.div
-        className="bg-gradient-to-r from-indigo-500 to-blue-500 dark:from-indigo-400 dark:to-blue-600 text-white p-6 rounded-xl shadow"
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <h3 className="font-semibold mb-4">🤖 Suggestions IA</h3>
-        <ul className="space-y-2">
-          {suggestions.map((s, i) => (
-            <li key={i} className="bg-white bg-opacity-20 dark:bg-black dark:bg-opacity-20 p-3 rounded">{s}</li>
-          ))}
-        </ul>
       </motion.div>
 
       {/* Activité récente */}
@@ -129,17 +141,15 @@ export default function Home() {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h3 className="font-semibold mb-4 text-gray-700 dark:text-gray-200">⚡ Activité récente</h3>
+        <h3 className="font-semibold mb-4">⚡ Activité récente</h3>
         {activity.slice(0, 5).map((event, i) => (
-          <div key={i} className="border-b dark:border-gray-700 py-2">
-            <p className="text-sm text-gray-700 dark:text-gray-300">
+          <div key={i} className="border-b py-2">
+            <p className="text-sm">
               {event.time} — {event.message}
             </p>
           </div>
         ))}
-        {activity.length === 0 && (
-          <p className="text-gray-500 dark:text-gray-400">Aucune activité pour l’instant...</p>
-        )}
+        {activity.length === 0 && <p className="text-gray-500">Aucune activité pour l’instant...</p>}
       </motion.div>
     </div>
   );
