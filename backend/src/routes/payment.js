@@ -1,10 +1,16 @@
 import express from "express";
-import { payWithStripe, payWithPayPal } from "../controllers/paymentController.js";
+import { payWithStripe, payWithPayPal, payWithCinetPay } from "../controllers/paymentController.js"; // ✅ ajout
 import authMiddleware from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
+// Stripe
 router.post("/stripe", authMiddleware, payWithStripe);
-router.post("/paypal", authMiddleware, payWithPayPal); // ✅ ajout
+
+// PayPal
+router.post("/paypal", authMiddleware, payWithPayPal);
+
+// CinetPay (Mobile Money)
+router.post("/cinetpay", authMiddleware, payWithCinetPay); // ✅ ajout
 
 export default router;
