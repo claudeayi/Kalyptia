@@ -1,94 +1,105 @@
 import { useEffect, useState } from "react";
-import { getRevenue, getTopDatasets, getTopUsers, getStats } from "../api/analytics";
-import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, Legend
-} from "recharts";
+import { getRevenue, getStats } from "../api/analytics";
+import { Bar, Pie, Line } from "react-chartjs-2";
+import { motion } from "framer-motion";
 
 export default function Analytics() {
-  const [revenue, setRevenue] = useState(null);
-  const [topDatasets, setTopDatasets] = useState([]);
-  const [topUsers, setTopUsers] = useState([]);
+  const [revenue, setRevenue] = useState(0);
   const [stats, setStats] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setRevenue((await getRevenue()).data);
-        setTopDatasets((await getTopDatasets()).data);
-        setTopUsers((await getTopUsers()).data);
+        setRevenue((await getRevenue()).data.totalRevenue);
         setStats((await getStats()).data);
       } catch (err) {
-        console.error("❌ Erreur analytics:", err);
+        console.error("❌ Erreur récupération analytics:", err);
       }
     };
     fetchData();
   }, []);
 
-  const COLORS = ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6"];
+  // ✅ Line chart - Revenus
+  const revenueData = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May"],
+    datasets: [
+      {
+        label: "Revenus ($)",
+        data: [500, 1200, 1800, 2200, revenue],
+        borderColor: "#3B82F6",
+        backgroundColor: "rgba(59,130,246,0.3)",
+        tension: 0.4,
+        fill: true,
+      },
+    ],
+  };
+
+  // ✅ Bar chart - Datasets par statut
+  const datasetData = {
+    labels: ["Pending", "Approved", "Rejected"],
+    datasets: [
+      {
+        label: "Datasets",
+        data: [
+          stats.datasetsPending || 0,
+          stats.datasetsApproved || 0,
+          stats.datasetsRejected || 0,
+        ],
+        backgroundColor: ["#FACC15", "#22C55E", "#EF4444"],
+      },
+    ],
+  };
+
+  // ✅ Pie chart - Répartition utilisateurs
+  const userData = {
+    labels: ["USER", "PREMIUM", "ADMIN"],
+    datasets: [
+      {
+        data: [stats.users || 0, stats.premium || 0, stats.admin || 0],
+        backgroundColor: ["#3B82F6", "#8B5CF6", "#EF4444"],
+      },
+    ],
+  };
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-6">📈 Analytics</h2>
+    <div className="space-y-10">
+      <motion.h2
+        className="text-3xl font-extrabold bg-gradient-to-r from-yellow-500 to-orange-600 bg-clip-text text-transparent dark:from-yellow-300 dark:to-orange-400"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        📈 Analytics – Kalyptia
+      </motion.h2>
 
-      {/* KPIs */}
-      <div className="grid grid-cols-3 gap-6 mb-10">
-        <div className="bg-white shadow p-4 rounded text-center">
-          <h3 className="font-semibold">💵 Revenu total</h3>
-          <p className="text-2xl text-green-600">
-            {revenue?.totalRevenue || 0} $
-          </p>
-        </div>
-        <div className="bg-white shadow p-4 rounded text-center">
-          <h3 className="font-semibold">👥 Utilisateurs</h3>
-          <p className="text-2xl">{stats.users || 0}</p>
-        </div>
-        <div className="bg-white shadow p-4 rounded text-center">
-          <h3 className="font-semibold">💰 Transactions</h3>
-          <p className="text-2xl">{stats.transactions || 0}</p>
-        </div>
-      </div>
+      {/* Revenus */}
+      <motion.div
+        className="bg-white dark:bg-gray-900 shadow p-6 rounded-xl"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+      >
+        <h3 className="font-semibold mb-4 text-gray-700 dark:text-gray-200">💵 Évolution des revenus</h3>
+        <Line data={revenueData} />
+      </motion.div>
 
-      {/* Graphiques */}
-      <div className="grid grid-cols-2 gap-10">
-        {/* Top Datasets */}
-        <div className="bg-white shadow p-6 rounded">
-          <h3 className="font-semibold mb-4">🔥 Top Datasets vendus</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={topDatasets}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="datasetId" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="_sum.amount" fill="#3B82F6" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+      {/* Datasets par statut */}
+      <motion.div
+        className="bg-white dark:bg-gray-900 shadow p-6 rounded-xl"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <h3 className="font-semibold mb-4 text-gray-700 dark:text-gray-200">📂 Datasets par statut</h3>
+        <Bar data={datasetData} />
+      </motion.div>
 
-        {/* Top Acheteurs */}
-        <div className="bg-white shadow p-6 rounded">
-          <h3 className="font-semibold mb-4">👤 Top Acheteurs</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={topUsers}
-                dataKey="_sum.amount"
-                nameKey="userId"
-                cx="50%"
-                cy="50%"
-                outerRadius={100}
-                label
-              >
-                {topUsers.map((_, index) => (
-                  <Cell key={index} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
+      {/* Utilisateurs par rôle */}
+      <motion.div
+        className="bg-white dark:bg-gray-900 shadow p-6 rounded-xl"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <h3 className="font-semibold mb-4 text-gray-700 dark:text-gray-200">👥 Répartition des utilisateurs</h3>
+        <Pie data={userData} />
+      </motion.div>
     </div>
   );
 }
