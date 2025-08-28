@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 
 export default function Activity() {
   const [events, setEvents] = useState([]);
+  const [aiInsights, setAiInsights] = useState([]);
 
   useEffect(() => {
     const socket = io("http://localhost:5000");
@@ -51,6 +52,17 @@ export default function Activity() {
 
     return () => socket.disconnect();
   }, []);
+
+  // ✅ Insights IA simulés (placeholder avant backend IA avancé)
+  useEffect(() => {
+    const insights = [
+      "⚡ Aujourd’hui : 3 datasets créés (+20% par rapport à hier).",
+      "💰 Transactions en hausse de 15% cette semaine.",
+      "📊 Forte activité dans la catégorie datasets financiers.",
+      "🚀 Prévision IA : +25% de paiements d’ici 7 jours.",
+    ];
+    setAiInsights(insights);
+  }, [events]);
 
   return (
     <div className="space-y-10">
@@ -116,6 +128,25 @@ export default function Activity() {
           </motion.div>
         ))}
       </div>
+
+      {/* ✅ Section Insights IA */}
+      <motion.div
+        className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6 rounded-xl shadow space-y-3"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <h3 className="font-semibold mb-4">🤖 Insights IA</h3>
+        <ul className="space-y-2">
+          {aiInsights.map((ins, i) => (
+            <li
+              key={i}
+              className="bg-white bg-opacity-20 p-3 rounded text-sm"
+            >
+              {ins}
+            </li>
+          ))}
+        </ul>
+      </motion.div>
     </div>
   );
 }
