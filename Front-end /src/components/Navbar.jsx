@@ -5,7 +5,7 @@ import { useNotifications } from "../context/NotificationContext";
 
 export default function Navbar() {
   const { darkMode, setDarkMode } = useTheme();
-  const { notifications } = useNotifications();
+  const { notifications, unreadCount, markAllAsRead } = useNotifications();
   const [user, setUser] = useState(null);
   const [openMenu, setOpenMenu] = useState(false);
 
@@ -26,6 +26,13 @@ export default function Navbar() {
     window.location.href = "/login";
   };
 
+  const toggleMenu = () => {
+    setOpenMenu(!openMenu);
+    if (!openMenu) {
+      markAllAsRead(); // ✅ marque toutes les notifs comme lues
+    }
+  };
+
   const roleColors = {
     USER: "bg-blue-500 text-white",
     PREMIUM: "bg-purple-600 text-white",
@@ -43,11 +50,11 @@ export default function Navbar() {
       <div className="flex items-center gap-6">
         {/* 🔔 Notifications */}
         <div className="relative">
-          <button onClick={() => setOpenMenu(!openMenu)} className="relative text-2xl">
+          <button onClick={toggleMenu} className="relative text-2xl">
             🔔
-            {notifications.length > 0 && (
+            {unreadCount > 0 && (
               <span className="absolute -top-1 -right-2 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">
-                {notifications.length}
+                {unreadCount}
               </span>
             )}
           </button>
@@ -73,6 +80,14 @@ export default function Navbar() {
                   </li>
                 )}
               </ul>
+              <div className="mt-2 text-right">
+                <a
+                  href="/activity"
+                  className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+                >
+                  Voir tout ⚡
+                </a>
+              </div>
             </div>
           )}
         </div>
