@@ -1,21 +1,18 @@
-import { useNavigate } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
 
 export default function Navbar() {
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
-  };
+  const { darkMode, setDarkMode } = useTheme();
 
   return (
-    <nav className="flex justify-between items-center bg-white shadow px-6 py-3">
-      <h1 className="text-xl font-bold text-blue-600">🚀 Kalyptia</h1>
+    <nav className="flex justify-between items-center px-6 py-3 bg-white dark:bg-gray-900 shadow">
+      <h1 className="text-xl font-bold text-gray-800 dark:text-white">
+        🚀 Kalyptia
+      </h1>
       <button
-        onClick={handleLogout}
-        className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
+        onClick={() => setDarkMode(!darkMode)}
+        className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 transition"
       >
-        Déconnexion
+        {darkMode ? "☀️ Mode clair" : "🌙 Mode sombre"}
       </button>
     </nav>
   );
