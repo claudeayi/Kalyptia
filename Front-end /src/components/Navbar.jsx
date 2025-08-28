@@ -1,10 +1,13 @@
 import { useTheme } from "../context/ThemeContext";
 import { useEffect, useState } from "react";
 import API from "../api/axios";
+import { useNotifications } from "../context/NotificationContext";
 
 export default function Navbar() {
   const { darkMode, setDarkMode } = useTheme();
+  const { notifications } = useNotifications();
   const [user, setUser] = useState(null);
+  const [openMenu, setOpenMenu] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -30,7 +33,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="flex justify-between items-center px-6 py-3 bg-white dark:bg-gray-900 shadow">
+    <nav className="flex justify-between items-center px-6 py-3 bg-white dark:bg-gray-900 shadow relative">
       {/* Branding */}
       <h1 className="text-xl font-extrabold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent dark:from-blue-300 dark:to-purple-400">
         🚀 Kalyptia
@@ -38,6 +41,42 @@ export default function Navbar() {
 
       {/* Actions */}
       <div className="flex items-center gap-6">
+        {/* 🔔 Notifications */}
+        <div className="relative">
+          <button onClick={() => setOpenMenu(!openMenu)} className="relative text-2xl">
+            🔔
+            {notifications.length > 0 && (
+              <span className="absolute -top-1 -right-2 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                {notifications.length}
+              </span>
+            )}
+          </button>
+
+          {/* Menu déroulant */}
+          {openMenu && (
+            <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-3 z-50">
+              <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
+                Dernières notifications
+              </h3>
+              <ul className="space-y-2 max-h-60 overflow-y-auto">
+                {notifications.slice(0, 5).map((n) => (
+                  <li
+                    key={n.id}
+                    className="p-2 rounded bg-gray-100 dark:bg-gray-700 text-sm text-gray-800 dark:text-gray-200"
+                  >
+                    {n.message}
+                  </li>
+                ))}
+                {notifications.length === 0 && (
+                  <li className="text-sm text-gray-500 dark:text-gray-400">
+                    Aucune notification
+                  </li>
+                )}
+              </ul>
+            </div>
+          )}
+        </div>
+
         {/* Toggle Dark Mode */}
         <button
           onClick={() => setDarkMode(!darkMode)}
