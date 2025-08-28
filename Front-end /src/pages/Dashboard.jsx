@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
+import Notification from "../components/Notification"; // ✅ ajout
 
 export default function Dashboard() {
   return (
@@ -15,6 +16,9 @@ export default function Dashboard() {
           <Outlet />
         </main>
       </div>
+
+      {/* Notifications temps réel */}
+      <Notification /> {/* ✅ ajout */}
     </div>
   );
 }
