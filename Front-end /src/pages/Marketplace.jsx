@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getDatasets } from "../api/dataset";
 import { payWithStripe, payWithPayPal, payWithCinetPay } from "../api/payment";
+import { motion } from "framer-motion";
 
 export default function Marketplace() {
   const [datasets, setDatasets] = useState([]);
@@ -13,7 +14,7 @@ export default function Marketplace() {
   const [favorites, setFavorites] = useState(() =>
     JSON.parse(localStorage.getItem("favorites") || "[]")
   );
-  const [selected, setSelected] = useState(null); // modal dataset
+  const [selected, setSelected] = useState(null);
 
   const fetchDatasets = async () => {
     try {
@@ -31,7 +32,6 @@ export default function Marketplace() {
     fetchDatasets();
   }, []);
 
-  // Sauvegarde favoris
   const toggleFavorite = (id) => {
     let updated;
     if (favorites.includes(id)) {
@@ -43,7 +43,6 @@ export default function Marketplace() {
     localStorage.setItem("favorites", JSON.stringify(updated));
   };
 
-  // Paiements
   const handlePayment = async (method, datasetId, amount) => {
     try {
       setMessage("");
@@ -66,7 +65,6 @@ export default function Marketplace() {
     }
   };
 
-  // Filtrage
   const filtered = datasets.filter((ds) => {
     const matchesSearch =
       ds.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -80,20 +78,26 @@ export default function Marketplace() {
   });
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-6">🛒 Marketplace des Datasets</h2>
+    <div className="space-y-10">
+      <motion.h2
+        className="text-3xl font-extrabold bg-gradient-to-r from-green-500 to-blue-600 bg-clip-text text-transparent dark:from-green-300 dark:to-blue-400"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        🛒 Marketplace des Datasets
+      </motion.h2>
 
       {/* Filtres */}
       <div className="grid grid-cols-4 gap-4 mb-6">
         <input
           type="text"
           placeholder="🔍 Rechercher..."
-          className="p-2 border rounded"
+          className="p-2 border rounded dark:bg-gray-900 dark:text-white dark:border-gray-700"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
         <select
-          className="p-2 border rounded"
+          className="p-2 border rounded dark:bg-gray-900 dark:text-white dark:border-gray-700"
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
         >
@@ -105,32 +109,34 @@ export default function Marketplace() {
         <input
           type="text"
           placeholder="👤 Propriétaire"
-          className="p-2 border rounded"
+          className="p-2 border rounded dark:bg-gray-900 dark:text-white dark:border-gray-700"
           value={ownerFilter}
           onChange={(e) => setOwnerFilter(e.target.value)}
         />
         <input
           type="number"
           placeholder="💵 Prix max"
-          className="p-2 border rounded"
+          className="p-2 border rounded dark:bg-gray-900 dark:text-white dark:border-gray-700"
           value={priceFilter}
           onChange={(e) => setPriceFilter(e.target.value)}
         />
       </div>
 
-      {loading && <p className="text-gray-500">Chargement...</p>}
+      {loading && <p className="text-gray-500 dark:text-gray-400">Chargement...</p>}
       {message && <p className="mb-4 text-sm">{message}</p>}
 
       {/* Liste datasets */}
       <div className="grid grid-cols-2 gap-6">
         {filtered.map((ds) => (
-          <div
+          <motion.div
             key={ds.id}
-            className="bg-white shadow p-4 rounded border flex flex-col justify-between"
+            className="bg-white dark:bg-gray-900 shadow p-4 rounded border dark:border-gray-700 flex flex-col justify-between"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
           >
             <div>
               <div className="flex justify-between items-center">
-                <h3 className="font-semibold text-lg">{ds.name}</h3>
+                <h3 className="font-semibold text-lg text-gray-800 dark:text-white">{ds.name}</h3>
                 <button
                   onClick={() => toggleFavorite(ds.id)}
                   className={`text-xl ${favorites.includes(ds.id) ? "text-red-500" : "text-gray-400"}`}
@@ -138,8 +144,8 @@ export default function Marketplace() {
                   ♥
                 </button>
               </div>
-              <p className="text-sm text-gray-600 mb-2">{ds.description}</p>
-              <p className="text-xs text-gray-500">👤 {ds.owner?.name || "N/A"}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">{ds.description}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">👤 {ds.owner?.name || "N/A"}</p>
               <span
                 className={`inline-block px-2 py-1 text-xs rounded mt-1 ${
                   ds.status === "APPROVED"
@@ -178,29 +184,33 @@ export default function Marketplace() {
                 CinetPay
               </button>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
 
       {filtered.length === 0 && !loading && (
-        <p className="text-gray-500">Aucun dataset trouvé...</p>
+        <p className="text-gray-500 dark:text-gray-400">Aucun dataset trouvé...</p>
       )}
 
-      {/* Modal aperçu détaillé */}
+      {/* Modal aperçu */}
       {selected && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded shadow-lg max-w-lg w-full relative">
+          <motion.div
+            className="bg-white dark:bg-gray-900 p-6 rounded shadow-lg max-w-lg w-full relative"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+          >
             <button
               onClick={() => setSelected(null)}
-              className="absolute top-2 right-2 text-gray-500 hover:text-black"
+              className="absolute top-2 right-2 text-gray-500 hover:text-black dark:hover:text-white"
             >
               ✖
             </button>
-            <h3 className="text-xl font-bold mb-2">{selected.name}</h3>
-            <p className="text-sm text-gray-600 mb-4">{selected.description}</p>
-            <p className="text-sm text-gray-500">👤 Propriétaire: {selected.owner?.name || "N/A"}</p>
-            <p className="text-sm text-gray-500">📅 Créé le: {new Date(selected.createdAt).toLocaleDateString()}</p>
-            <p className="text-sm text-gray-500">💵 Prix: 10 USD</p>
+            <h3 className="text-xl font-bold mb-2 text-gray-800 dark:text-white">{selected.name}</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">{selected.description}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">👤 Propriétaire: {selected.owner?.name || "N/A"}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">📅 Créé le: {new Date(selected.createdAt).toLocaleDateString()}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">💵 Prix: 10 USD</p>
             <div className="mt-4 flex gap-2">
               <button
                 onClick={() => handlePayment("stripe", selected.id, 10)}
@@ -221,7 +231,7 @@ export default function Marketplace() {
                 CinetPay
               </button>
             </div>
-          </div>
+          </motion.div>
         </div>
       )}
     </div>
