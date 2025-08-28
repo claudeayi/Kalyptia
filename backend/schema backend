@@ -1,0 +1,39 @@
+kalyptia-backend/
+├── prisma/
+│   └── schema.prisma     # User, Dataset, Transaction, Role, Status
+│
+├── src/
+│   ├── app.js            # Déclaration routes
+│   ├── server.js         # Serveur Express + Socket.io (temps réel)
+│   │
+│   ├── controllers/      # Logique métier
+│   │   ├── authController.js        # Register/Login/Profil
+│   │   ├── datasetController.js     # CRUD Datasets + Blockchain + Notifs
+│   │   ├── transactionController.js # Achats Datasets + Blockchain + Notifs
+│   │   ├── paymentController.js     # Stripe / PayPal / CinetPay + Blockchain + Notifs
+│   │   ├── analyticsController.js   # Stats (revenus, top datasets/users, global)
+│   │   └── aiController.js          # Bridge vers AI-Core (clean / summarize)
+│   │
+│   ├── routes/           # Définition des endpoints REST
+│   │   ├── auth.js
+│   │   ├── dataset.js
+│   │   ├── transaction.js
+│   │   ├── payment.js
+│   │   ├── analytics.js
+│   │   ├── blockchain.js
+│   │   └── ai.js
+│   │
+│   ├── middlewares/
+│   │   ├── authMiddleware.js   # Vérifie JWT
+│   │   └── roleMiddleware.js   # (préparé) gestion permissions
+│   │
+│   ├── services/
+│   │   ├── blockchainService.js     # Ledger interne (blocks)
+│   │   ├── notificationService.js   # Socket.io broadcast & ciblage
+│   │   ├── paymentService.js        # Stripe
+│   │   ├── paypalService.js         # PayPal
+│   │   └── cinetpayService.js       # Mobile Money (Orange, MTN…)
+│   │
+│   └── utils/              # (optionnel pour helpers)
+│
+└── .env                    # Variables (DB, JWT, Stripe, PayPal, CinetPay…)
