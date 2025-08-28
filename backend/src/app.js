@@ -5,7 +5,8 @@ import datasetRoutes from "./routes/dataset.js";
 import transactionRoutes from "./routes/transaction.js";
 import aiRoutes from "./routes/ai.js";
 import blockchainRoutes from "./routes/blockchain.js";
-import paymentRoutes from "./routes/payment.js"; // ✅ nouveau
+import paymentRoutes from "./routes/payment.js";
+import analyticsRoutes from "./routes/analytics.js"; // ✅ ajout
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use("/api/datasets", datasetRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/blockchain", blockchainRoutes);
-app.use("/api/payments", paymentRoutes); // ✅ nouveau
+app.use("/api/payments", paymentRoutes);
+app.use("/api/analytics", analyticsRoutes); // ✅ ajout
 
 export default app;
