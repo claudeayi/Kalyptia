@@ -4,25 +4,25 @@ import {
   getTopDatasets,
   getTopUsers,
   getStats,
+  getAIInsights,
 } from "../controllers/analyticsController.js";
 import authMiddleware from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-/**
- * 📊 Analytics Routes – protégées par JWT
- */
-
 // 💵 Chiffre d’affaires total
 router.get("/revenue", authMiddleware, getRevenue);
 
-// 📂 Top 5 datasets les plus vendus
+// 📂 Top 5 datasets
 router.get("/top-datasets", authMiddleware, getTopDatasets);
 
-// 👥 Top 5 utilisateurs (meilleurs acheteurs/contributeurs)
+// 👥 Top 5 utilisateurs
 router.get("/top-users", authMiddleware, getTopUsers);
 
-// 📈 Statistiques globales (users, datasets, transactions)
+// 📈 Statistiques globales
 router.get("/stats", authMiddleware, getStats);
+
+// 🤖 Insights IA dynamiques
+router.get("/ai-insights", authMiddleware, getAIInsights);
 
 export default router;
