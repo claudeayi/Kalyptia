@@ -12,7 +12,12 @@ import Profile from "./pages/Profile";
 import Activity from "./pages/Activity";     
 import Home from "./pages/Home";             
 import Marketplace from "./pages/Marketplace"; 
-import Notifications from "./pages/Notifications"; // ✅ nouveau
+import Notifications from "./pages/Notifications"; 
+
+// ✅ IA Insights
+import Suggestions from "./pages/Suggestions";
+import Anomalies from "./pages/Anomalies";
+import Predictions from "./pages/Predictions";
 
 function App() {
   return (
@@ -32,8 +37,13 @@ function App() {
         <Route path="ai" element={<AI />} />               
         <Route path="blockchain" element={<Blockchain />} /> 
         <Route path="activity" element={<Activity />} />     
-        <Route path="notifications" element={<Notifications />} /> {/* ✅ Notifications */}
+        <Route path="notifications" element={<Notifications />} /> 
         <Route path="profile" element={<Profile />} />       
+
+        {/* ✅ IA Insights */}
+        <Route path="ai/suggestions" element={<Suggestions />} />
+        <Route path="ai/anomalies" element={<Anomalies />} />
+        <Route path="ai/predictions" element={<Predictions />} />
       </Route>
     </Routes>
   );
