@@ -681,3 +681,38 @@
 {"instruction": "Structurer dataset brut en JSON", "input": "Musique=Yesterday; Artiste=The Beatles; Année=1965", "output": "{ \"musique\": \"Yesterday\", \"artiste\": \"The Beatles\", \"annee\": 1965 }"}
 {"instruction": "Structurer dataset brut en JSON", "input": "Musique=Respect; Artiste=Aretha Franklin; Année=1967", "output": "{ \"musique\": \"Respect\", \"artiste\": \"Aretha Franklin\", \"annee\": 1967 }"}
 {"instruction": "Structurer dataset brut en JSON", "input": "Musique=One Dance; Artiste=Drake; Année=2016", "output": "{ \"musique\": \"One Dance\", \"artiste\": \"Drake\", \"annee\": 2016 }"}
+{"instruction": "Publier un dataset en marketplace", "input": {"name": "Données météo Cameroun 2023", "description": "Historique météo complet Cameroun", "price": 20}, "output": "✅ Dataset 'Données météo Cameroun 2023' publié avec succès au prix de 20$."}
+{"instruction": "Publier un dataset en marketplace", "input": {"name": "Transactions Mobile Money 2022", "description": "Volumes agrégés par opérateur", "price": 50}, "output": "✅ Dataset 'Transactions Mobile Money 2022' publié avec succès au prix de 50$."}
+{"instruction": "Publier un dataset en marketplace", "input": {"name": "Recensement populations Afrique Centrale", "description": "Tableau détaillé des populations par région", "price": 35}, "output": "✅ Dataset 'Recensement populations Afrique Centrale' publié avec succès au prix de 35$."}
+{"instruction": "Publier un dataset en marketplace", "input": {"name": "Cours du cacao 10 ans", "description": "Historique des prix du cacao 2013-2023", "price": 15}, "output": "✅ Dataset 'Cours du cacao 10 ans' publié avec succès au prix de 15$."}
+{"instruction": "Publier un dataset en marketplace", "input": {"name": "Données Covid Cameroun", "description": "Cas, décès, guérisons 2020-2022", "price": 10}, "output": "✅ Dataset 'Données Covid Cameroun' publié avec succès au prix de 10$."}
+{"instruction": "Rechercher un dataset", "input": {"query": "météo Cameroun"}, "output": ["Données météo Cameroun 2023", "Climat Afrique Centrale 2000-2020"]}
+{"instruction": "Rechercher un dataset", "input": {"query": "Mobile Money"}, "output": ["Transactions Mobile Money 2022", "Comptes Mobile Money anonymisés"]}
+{"instruction": "Rechercher un dataset", "input": {"query": "agriculture cacao"}, "output": ["Cours du cacao 10 ans", "Exportations cacao Côte d'Ivoire 2000-2020"]}
+{"instruction": "Rechercher un dataset", "input": {"query": "population Cameroun"}, "output": ["Recensement populations Afrique Centrale", "Population Yaoundé 2010-2020"]}
+{"instruction": "Rechercher un dataset", "input": {"query": "santé covid"}, "output": ["Données Covid Cameroun", "Statistiques hospitalières Covid Afrique"]}
+{"instruction": "Ajouter un dataset aux favoris", "input": {"datasetId": 1, "userId": 10}, "output": "❤️ Dataset #1 ajouté aux favoris de l’utilisateur #10."}
+{"instruction": "Ajouter un dataset aux favoris", "input": {"datasetId": 2, "userId": 15}, "output": "❤️ Dataset #2 ajouté aux favoris de l’utilisateur #15."}
+{"instruction": "Ajouter un dataset aux favoris", "input": {"datasetId": 3, "userId": 11}, "output": "❤️ Dataset #3 ajouté aux favoris de l’utilisateur #11."}
+{"instruction": "Ajouter un dataset aux favoris", "input": {"datasetId": 5, "userId": 8}, "output": "❤️ Dataset #5 ajouté aux favoris de l’utilisateur #8."}
+{"instruction": "Ajouter un dataset aux favoris", "input": {"datasetId": 7, "userId": 9}, "output": "❤️ Dataset #7 ajouté aux favoris de l’utilisateur #9."}
+{"instruction": "Acheter un dataset", "input": {"datasetId": 1, "userId": 10, "method": "Stripe"}, "output": "✅ Achat validé via Stripe : Dataset #1 téléchargé par User #10."}
+{"instruction": "Acheter un dataset", "input": {"datasetId": 2, "userId": 11, "method": "PayPal"}, "output": "✅ Achat validé via PayPal : Dataset #2 téléchargé par User #11."}
+{"instruction": "Acheter un dataset", "input": {"datasetId": 3, "userId": 12, "method": "CinetPay"}, "output": "✅ Achat validé via CinetPay : Dataset #3 téléchargé par User #12."}
+{"instruction": "Acheter un dataset", "input": {"datasetId": 4, "userId": 13, "method": "Stripe"}, "output": "✅ Achat validé via Stripe : Dataset #4 téléchargé par User #13."}
+{"instruction": "Acheter un dataset", "input": {"datasetId": 5, "userId": 14, "method": "PayPal"}, "output": "✅ Achat validé via PayPal : Dataset #5 téléchargé par User #14."}
+{"instruction": "Donner une note à un dataset", "input": {"datasetId": 1, "userId": 10, "rating": 5}, "output": "⭐ Note 5/5 attribuée au dataset #1 par l’utilisateur #10."}
+{"instruction": "Donner une note à un dataset", "input": {"datasetId": 2, "userId": 12, "rating": 4}, "output": "⭐ Note 4/5 attribuée au dataset #2 par l’utilisateur #12."}
+{"instruction": "Donner une note à un dataset", "input": {"datasetId": 3, "userId": 11, "rating": 3}, "output": "⭐ Note 3/5 attribuée au dataset #3 par l’utilisateur #11."}
+{"instruction": "Donner une note à un dataset", "input": {"datasetId": 4, "userId": 13, "rating": 5}, "output": "⭐ Note 5/5 attribuée au dataset #4 par l’utilisateur #13."}
+{"instruction": "Donner une note à un dataset", "input": {"datasetId": 5, "userId": 14, "rating": 4}, "output": "⭐ Note 4/5 attribuée au dataset #5 par l’utilisateur #14."}
+{"instruction": "Commenter un dataset", "input": {"datasetId": 1, "userId": 10, "comment": "Très utile pour mes recherches météo !"}, "output": "💬 Commentaire ajouté sur dataset #1 par User #10."}
+{"instruction": "Commenter un dataset", "input": {"datasetId": 2, "userId": 11, "comment": "Bonne qualité mais manque de données 2022."}, "output": "💬 Commentaire ajouté sur dataset #2 par User #11."}
+{"instruction": "Commenter un dataset", "input": {"datasetId": 3, "userId": 12, "comment": "Dataset intéressant mais un peu cher."}, "output": "💬 Commentaire ajouté sur dataset #3 par User #12."}
+{"instruction": "Commenter un dataset", "input": {"datasetId": 4, "userId": 13, "comment": "Super clair et bien structuré."}, "output": "💬 Commentaire ajouté sur dataset #4 par User #13."}
+{"instruction": "Commenter un dataset", "input": {"datasetId": 5, "userId": 14, "comment": "Données partielles mais exploitables."}, "output": "💬 Commentaire ajouté sur dataset #5 par User #14."}
+{"instruction": "Vérifier la disponibilité d’un dataset", "input": {"datasetId": 1}, "output": "✅ Dataset #1 disponible à l’achat."}
+{"instruction": "Vérifier la disponibilité d’un dataset", "input": {"datasetId": 6}, "output": "❌ Dataset #6 supprimé ou retiré du marketplace."}
+{"instruction": "Vérifier la disponibilité d’un dataset", "input": {"datasetId": 3}, "output": "✅ Dataset #3 disponible à l’achat."}
+{"instruction": "Vérifier la disponibilité d’un dataset", "input": {"datasetId": 7}, "output": "✅ Dataset #7 disponible à l’achat."}
+{"instruction": "Vérifier la disponibilité d’un dataset", "input": {"datasetId": 9}, "output": "❌ Dataset #9 retiré par le propriétaire."}
