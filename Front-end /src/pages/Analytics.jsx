@@ -19,7 +19,7 @@ export default function Analytics() {
     fetchData();
   }, []);
 
-  // ✅ Line chart - Revenus
+  // ✅ Line chart - Revenus + Projection IA
   const revenueData = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May"],
     datasets: [
@@ -33,7 +33,7 @@ export default function Analytics() {
       },
       {
         label: "Projection IA ($)",
-        data: [600, 1300, 2000, 2500, revenue + 500], // courbe projetée
+        data: [600, 1300, 2000, 2500, revenue + 500],
         borderColor: "#8B5CF6",
         backgroundColor: "rgba(139,92,246,0.2)",
         borderDash: [5, 5],
@@ -70,7 +70,7 @@ export default function Analytics() {
     ],
   };
 
-  // ✅ IA Insights (placeholder avant backend IA avancé)
+  // ✅ Insights IA simulés
   const aiInsights = [
     "📊 Les revenus devraient croître de +35% d’ici 30 jours.",
     "⚠️ Anomalie détectée : pic inhabituel de ventes le 12 Mars.",
@@ -88,7 +88,7 @@ export default function Analytics() {
         📈 Analytics – Kalyptia
       </motion.h2>
 
-      {/* Revenus + IA projection */}
+      {/* Revenus + Projection IA */}
       <motion.div
         className="bg-white dark:bg-gray-900 shadow p-6 rounded-xl"
         initial={{ opacity: 0, scale: 0.95 }}
@@ -124,7 +124,7 @@ export default function Analytics() {
         <Pie data={userData} />
       </motion.div>
 
-      {/* ✅ Widget IA Insights */}
+      {/* ✅ Widget Insights IA */}
       <motion.div
         className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6 rounded-xl shadow space-y-3"
         initial={{ opacity: 0, y: 40 }}
@@ -133,10 +133,7 @@ export default function Analytics() {
         <h3 className="font-semibold mb-4">🤖 Insights IA</h3>
         <ul className="space-y-2">
           {aiInsights.map((ins, i) => (
-            <li
-              key={i}
-              className="bg-white bg-opacity-20 p-3 rounded text-sm"
-            >
+            <li key={i} className="bg-white bg-opacity-20 p-3 rounded text-sm">
               {ins}
             </li>
           ))}
