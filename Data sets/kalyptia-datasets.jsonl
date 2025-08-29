@@ -587,3 +587,51 @@
 {"instruction": "Structurer dataset brut en JSON", "input": "Pays=Japon; Capitale=Tokyo; Monnaie=JPY", "output": "{ \"pays\": \"Japon\", \"capitale\": \"Tokyo\", \"monnaie\": \"JPY\" }"}
 {"instruction": "Structurer dataset brut en JSON", "input": "Pays=Chine; Capitale=Pékin; Monnaie=RMB", "output": "{ \"pays\": \"Chine\", \"capitale\": \"Pékin\", \"monnaie\": \"RMB\" }"}
 {"instruction": "Structurer dataset brut en JSON", "input": "Pays=Inde; Capitale=New Delhi; Monnaie=INR", "output": "{ \"pays\": \"Inde\", \"capitale\": \"New Delhi\", \"monnaie\": \"INR\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Projet=UInova; Domaine=No-code; Année=2025", "output": "{ \"projet\": \"UInova\", \"domaine\": \"No-code\", \"annee\": 2025 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Projet=Kalyptia; Domaine=Data; Version=Beta", "output": "{ \"projet\": \"Kalyptia\", \"domaine\": \"Data\", \"version\": \"Beta\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Serveur=Apache; Version=2.4; Status=Actif", "output": "{ \"serveur\": \"Apache\", \"version\": \"2.4\", \"status\": \"Actif\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Serveur=Nginx; Version=1.20; Status=Inactif", "output": "{ \"serveur\": \"Nginx\", \"version\": \"1.20\", \"status\": \"Inactif\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Navigateur=Chrome; Version=120; Utilisateurs=3B", "output": "{ \"navigateur\": \"Chrome\", \"version\": 120, \"utilisateurs\": \"3B\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Navigateur=Firefox; Version=115; Utilisateurs=400M", "output": "{ \"navigateur\": \"Firefox\", \"version\": 115, \"utilisateurs\": \"400M\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "App=Discord; Utilisateurs=600M; Fonction=Chat", "output": "{ \"app\": \"Discord\", \"utilisateurs\": \"600M\", \"fonction\": \"Chat\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "App=Slack; Utilisateurs=50M; Fonction=Travail", "output": "{ \"app\": \"Slack\", \"utilisateurs\": \"50M\", \"fonction\": \"Travail\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "App=Telegram; Utilisateurs=900M; Fonction=Messagerie", "output": "{ \"app\": \"Telegram\", \"utilisateurs\": \"900M\", \"fonction\": \"Messagerie\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "App=Signal; Utilisateurs=40M; Fonction=Sécurité", "output": "{ \"app\": \"Signal\", \"utilisateurs\": \"40M\", \"fonction\": \"Sécurité\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Ville=Douala; Pays=Cameroun; Population=3000000", "output": "{ \"ville\": \"Douala\", \"pays\": \"Cameroun\", \"population\": 3000000 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Ville=Yaoundé; Pays=Cameroun; Population=2500000", "output": "{ \"ville\": \"Yaoundé\", \"pays\": \"Cameroun\", \"population\": 2500000 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Ville=Lagos; Pays=Nigeria; Population=21000000", "output": "{ \"ville\": \"Lagos\", \"pays\": \"Nigeria\", \"population\": 21000000 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Ville=Accra; Pays=Ghana; Population=5000000", "output": "{ \"ville\": \"Accra\", \"pays\": \"Ghana\", \"population\": 5000000 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Université=Harvard; Pays=USA; Classement=1", "output": "{ \"universite\": \"Harvard\", \"pays\": \"USA\", \"classement\": 1 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Université=MIT; Pays=USA; Classement=2", "output": "{ \"universite\": \"MIT\", \"pays\": \"USA\", \"classement\": 2 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Université=Oxford; Pays=UK; Classement=3", "output": "{ \"universite\": \"Oxford\", \"pays\": \"UK\", \"classement\": 3 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Université=Cambridge; Pays=UK; Classement=4", "output": "{ \"universite\": \"Cambridge\", \"pays\": \"UK\", \"classement\": 4 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Université=Yaoundé II; Pays=Cameroun; Classement=1200", "output": "{ \"universite\": \"Yaoundé II\", \"pays\": \"Cameroun\", \"classement\": 1200 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Université=Bamenda; Pays=Cameroun; Classement=1500", "output": "{ \"universite\": \"Bamenda\", \"pays\": \"Cameroun\", \"classement\": 1500 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Jeu=FIFA 25; Editeur=EA Sports; Genre=Sport", "output": "{ \"jeu\": \"FIFA 25\", \"editeur\": \"EA Sports\", \"genre\": \"Sport\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Jeu=GTA VI; Editeur=Rockstar; Genre=Action", "output": "{ \"jeu\": \"GTA VI\", \"editeur\": \"Rockstar\", \"genre\": \"Action\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Jeu=Fortnite; Editeur=Epic Games; Genre=Battle Royale", "output": "{ \"jeu\": \"Fortnite\", \"editeur\": \"Epic Games\", \"genre\": \"Battle Royale\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Jeu=League of Legends; Editeur=Riot; Genre=MOBA", "output": "{ \"jeu\": \"League of Legends\", \"editeur\": \"Riot\", \"genre\": \"MOBA\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Jeu=Minecraft; Editeur=Mojang; Genre=Sandbox", "output": "{ \"jeu\": \"Minecraft\", \"editeur\": \"Mojang\", \"genre\": \"Sandbox\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Jeu=Clash of Clans; Editeur=Supercell; Genre=Stratégie", "output": "{ \"jeu\": \"Clash of Clans\", \"editeur\": \"Supercell\", \"genre\": \"Stratégie\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Climat=Douala; Temp=28°C; Humidité=90%", "output": "{ \"ville\": \"Douala\", \"temperature\": \"28°C\", \"humidite\": \"90%\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Climat=Paris; Temp=12°C; Humidité=70%", "output": "{ \"ville\": \"Paris\", \"temperature\": \"12°C\", \"humidite\": \"70%\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Climat=Berlin; Temp=15°C; Humidité=65%", "output": "{ \"ville\": \"Berlin\", \"temperature\": \"15°C\", \"humidite\": \"65%\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Climat=New York; Temp=18°C; Humidité=60%", "output": "{ \"ville\": \"New York\", \"temperature\": \"18°C\", \"humidite\": \"60%\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Climat=Tokyo; Temp=20°C; Humidité=55%", "output": "{ \"ville\": \"Tokyo\", \"temperature\": \"20°C\", \"humidite\": \"55%\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Climat=Yaoundé; Temp=26°C; Humidité=85%", "output": "{ \"ville\": \"Yaoundé\", \"temperature\": \"26°C\", \"humidite\": \"85%\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Transport=Bus; Ligne=25; Ville=Yaoundé", "output": "{ \"transport\": \"Bus\", \"ligne\": 25, \"ville\": \"Yaoundé\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Transport=Métro; Ligne=1; Ville=Paris", "output": "{ \"transport\": \"Métro\", \"ligne\": 1, \"ville\": \"Paris\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Transport=Train; Ligne=TGV; Ville=Lyon", "output": "{ \"transport\": \"Train\", \"ligne\": \"TGV\", \"ville\": \"Lyon\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Transport=Tram; Ligne=A; Ville=Strasbourg", "output": "{ \"transport\": \"Tram\", \"ligne\": \"A\", \"ville\": \"Strasbourg\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Transport=Taxi; Compagnie=Uber; Ville=Douala", "output": "{ \"transport\": \"Taxi\", \"compagnie\": \"Uber\", \"ville\": \"Douala\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Transport=Moto; Compagnie=Gozem; Ville=Yaoundé", "output": "{ \"transport\": \"Moto\", \"compagnie\": \"Gozem\", \"ville\": \"Yaoundé\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Transport=Avion; Compagnie=Air France; Ville=Paris", "output": "{ \"transport\": \"Avion\", \"compagnie\": \"Air France\", \"ville\": \"Paris\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Transport=Bateau; Compagnie=CMA CGM; Ville=Marseille", "output": "{ \"transport\": \"Bateau\", \"compagnie\": \"CMA CGM\", \"ville\": \"Marseille\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Transport=Train; Compagnie=Camrail; Ville=Douala", "output": "{ \"transport\": \"Train\", \"compagnie\": \"Camrail\", \"ville\": \"Douala\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Transport=Bus; Compagnie=Touristique; Ville=Kribi", "output": "{ \"transport\": \"Bus\", \"compagnie\": \"Touristique\", \"ville\": \"Kribi\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Produit=Laptop; Marque=Apple; Prix=2000$", "output": "{ \"produit\": \"Laptop\", \"marque\": \"Apple\", \"prix\": \"2000$\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Produit=Smartphone; Marque=Samsung; Prix=1200$", "output": "{ \"produit\": \"Smartphone\", \"marque\": \"Samsung\", \"prix\": \"1200$\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Produit=Casque; Marque=Sony; Prix=300$", "output": "{ \"produit\": \"Casque\", \"marque\": \"Sony\", \"prix\": \"300$\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Produit=TV; Marque=LG; Prix=1500$", "output": "{ \"produit\": \"TV\", \"marque\": \"LG\", \"prix\": \"1500$\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Produit=Montre; Marque=Rolex; Prix=8000$", "output": "{ \"produit\": \"Montre\", \"marque\": \"Rolex\", \"prix\": \"8000$\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Produit=Chaussures; Marque=Nike; Prix=150$", "output": "{ \"produit\": \"Chaussures\", \"marque\": \"Nike\", \"prix\": \"150$\" }"}
