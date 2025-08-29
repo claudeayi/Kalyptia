@@ -716,3 +716,55 @@
 {"instruction": "Vérifier la disponibilité d’un dataset", "input": {"datasetId": 3}, "output": "✅ Dataset #3 disponible à l’achat."}
 {"instruction": "Vérifier la disponibilité d’un dataset", "input": {"datasetId": 7}, "output": "✅ Dataset #7 disponible à l’achat."}
 {"instruction": "Vérifier la disponibilité d’un dataset", "input": {"datasetId": 9}, "output": "❌ Dataset #9 retiré par le propriétaire."}
+{"instruction": "Lister mes favoris", "input": {"userId": 10}, "output": ["Dataset #1 - Données météo Cameroun 2023", "Dataset #3 - Recensement populations Afrique Centrale"]}
+{"instruction": "Lister mes favoris", "input": {"userId": 12}, "output": ["Dataset #2 - Transactions Mobile Money 2022"]}
+{"instruction": "Lister mes favoris", "input": {"userId": 14}, "output": ["Dataset #5 - Données Covid Cameroun"]}
+{"instruction": "Lister mes favoris", "input": {"userId": 15}, "output": ["Dataset #2 - Transactions Mobile Money 2022", "Dataset #4 - Cours du cacao 10 ans"]}
+{"instruction": "Lister mes favoris", "input": {"userId": 8}, "output": ["Dataset #7 - Exportations cacao Côte d'Ivoire 2000-2020"]}
+{"instruction": "Supprimer un dataset des favoris", "input": {"userId": 10, "datasetId": 1}, "output": "💔 Dataset #1 supprimé des favoris de l’utilisateur #10."}
+{"instruction": "Supprimer un dataset des favoris", "input": {"userId": 12, "datasetId": 2}, "output": "💔 Dataset #2 supprimé des favoris de l’utilisateur #12."}
+{"instruction": "Supprimer un dataset des favoris", "input": {"userId": 14, "datasetId": 5}, "output": "💔 Dataset #5 supprimé des favoris de l’utilisateur #14."}
+{"instruction": "Supprimer un dataset des favoris", "input": {"userId": 15, "datasetId": 4}, "output": "💔 Dataset #4 supprimé des favoris de l’utilisateur #15."}
+{"instruction": "Supprimer un dataset des favoris", "input": {"userId": 8, "datasetId": 7}, "output": "💔 Dataset #7 supprimé des favoris de l’utilisateur #8."}
+{"instruction": "Afficher les datasets les plus vendus", "input": {}, "output": ["Transactions Mobile Money 2022 (50 ventes)", "Données météo Cameroun 2023 (45 ventes)", "Cours du cacao 10 ans (38 ventes)"]}
+{"instruction": "Afficher les datasets les mieux notés", "input": {}, "output": ["Cours du cacao 10 ans (4.9/5)", "Données météo Cameroun 2023 (4.8/5)", "Recensement populations Afrique Centrale (4.6/5)"]}
+{"instruction": "Afficher les datasets récents", "input": {}, "output": ["Données Covid Cameroun", "Recensement populations Afrique Centrale", "Transactions Mobile Money 2022"]}
+{"instruction": "Trier datasets par prix", "input": {"order": "asc"}, "output": ["Données Covid Cameroun (10$)", "Cours du cacao 10 ans (15$)", "Données météo Cameroun 2023 (20$)"]}
+{"instruction": "Trier datasets par prix", "input": {"order": "desc"}, "output": ["Transactions Mobile Money 2022 (50$)", "Recensement populations Afrique Centrale (35$)", "Données météo Cameroun 2023 (20$)"]}
+{"instruction": "Rechercher datasets par propriétaire", "input": {"owner": "Claude Ayissi"}, "output": ["Datasets #1, #3, #5 publiés par Claude Ayissi"]}
+{"instruction": "Rechercher datasets par propriétaire", "input": {"owner": "LegionWeb"}, "output": ["Datasets #2 et #4 publiés par LegionWeb"]}
+{"instruction": "Afficher datasets approuvés", "input": {}, "output": ["Dataset #1 - Approved", "Dataset #2 - Approved", "Dataset #3 - Approved"]}
+{"instruction": "Afficher datasets pending", "input": {}, "output": ["Dataset #6 - Pending", "Dataset #9 - Pending"]}
+{"instruction": "Afficher datasets rejetés", "input": {}, "output": ["Dataset #8 - Rejeté"]}
+{"instruction": "Filtrer datasets par mot-clé", "input": {"keyword": "Covid"}, "output": ["Données Covid Cameroun", "Statistiques hospitalières Covid Afrique"]}
+{"instruction": "Filtrer datasets par mot-clé", "input": {"keyword": "Cacao"}, "output": ["Cours du cacao 10 ans", "Exportations cacao Côte d'Ivoire 2000-2020"]}
+{"instruction": "Afficher détails dataset", "input": {"datasetId": 1}, "output": {"name": "Données météo Cameroun 2023", "price": 20, "status": "APPROVED", "owner": "Claude Ayissi"}}
+{"instruction": "Afficher détails dataset", "input": {"datasetId": 2}, "output": {"name": "Transactions Mobile Money 2022", "price": 50, "status": "APPROVED", "owner": "LegionWeb"}}
+{"instruction": "Afficher détails dataset", "input": {"datasetId": 3}, "output": {"name": "Recensement populations Afrique Centrale", "price": 35, "status": "APPROVED", "owner": "Claude Ayissi"}}
+{"instruction": "Afficher détails dataset", "input": {"datasetId": 4}, "output": {"name": "Cours du cacao 10 ans", "price": 15, "status": "APPROVED", "owner": "LegionWeb"}}
+{"instruction": "Afficher détails dataset", "input": {"datasetId": 5}, "output": {"name": "Données Covid Cameroun", "price": 10, "status": "APPROVED", "owner": "Claude Ayissi"}}
+{"instruction": "Obtenir prédiction IA sur ventes", "input": {"dataset": "Transactions Mobile Money 2022"}, "output": "🤖 Ce dataset pourrait générer 70 ventes supplémentaires le mois prochain."}
+{"instruction": "Obtenir prédiction IA sur ventes", "input": {"dataset": "Cours du cacao 10 ans"}, "output": "🤖 Prévision : +25% d’intérêt à cause des fluctuations récentes du marché du cacao."}
+{"instruction": "Obtenir prédiction IA sur ventes", "input": {"dataset": "Données météo Cameroun 2023"}, "output": "🤖 Forte probabilité de +40 téléchargements car la demande en météo agricole augmente."}
+{"instruction": "Obtenir prédiction IA sur ventes", "input": {"dataset": "Recensement populations Afrique Centrale"}, "output": "🤖 Potentiel haut : utilisé par institutions, attendu +15 ventes par trimestre."}
+{"instruction": "Obtenir prédiction IA sur ventes", "input": {"dataset": "Données Covid Cameroun"}, "output": "🤖 Prévision : 5 à 10 ventes supplémentaires par des ONG santé au cours de l’année."}
+{"instruction": "Générer recommandations IA marketplace", "input": {"user": "chercheur climat"}, "output": ["Données météo Cameroun 2023", "Climat Afrique Centrale 2000-2020"]}
+{"instruction": "Générer recommandations IA marketplace", "input": {"user": "banque locale"}, "output": ["Transactions Mobile Money 2022", "Recensement populations Afrique Centrale"]}
+{"instruction": "Générer recommandations IA marketplace", "input": {"user": "agro-industrie"}, "output": ["Cours du cacao 10 ans", "Exportations cacao Côte d'Ivoire"]}
+{"instruction": "Générer recommandations IA marketplace", "input": {"user": "ONG santé"}, "output": ["Données Covid Cameroun", "Statistiques hospitalières Covid Afrique"]}
+{"instruction": "Obtenir score qualité dataset IA", "input": {"dataset": "Transactions Mobile Money 2022"}, "output": "✅ Score qualité : 92/100 – données complètes et fiables."}
+{"instruction": "Obtenir score qualité dataset IA", "input": {"dataset": "Données météo Cameroun 2023"}, "output": "✅ Score qualité : 88/100 – données vérifiées, mais manque de normalisation."}
+{"instruction": "Obtenir score qualité dataset IA", "input": {"dataset": "Cours du cacao 10 ans"}, "output": "✅ Score qualité : 85/100 – série historique valide, quelques valeurs manquantes."}
+{"instruction": "Obtenir score qualité dataset IA", "input": {"dataset": "Données Covid Cameroun"}, "output": "✅ Score qualité : 80/100 – certaines données incomplètes en 2020."}
+{"instruction": "Obtenir score qualité dataset IA", "input": {"dataset": "Recensement populations Afrique Centrale"}, "output": "✅ Score qualité : 95/100 – source officielle très fiable."}
+{"instruction": "Détecter anomalie prix dataset", "input": {"dataset": "Transactions Mobile Money 2022", "price": 500}, "output": "⚠️ Anomalie détectée : prix trop élevé par rapport à la moyenne du marché (50$)."}
+{"instruction": "Détecter anomalie prix dataset", "input": {"dataset": "Cours du cacao 10 ans", "price": 5}, "output": "⚠️ Anomalie détectée : prix trop bas, suggéré 15$ minimum."}
+{"instruction": "Détecter anomalie prix dataset", "input": {"dataset": "Données Covid Cameroun", "price": 200}, "output": "⚠️ Anomalie détectée : prix exagéré, dataset similaire à 10$."}
+{"instruction": "Détecter anomalie prix dataset", "input": {"dataset": "Données météo Cameroun 2023", "price": 20}, "output": "✅ Prix cohérent avec le marché."}
+{"instruction": "Détecter anomalie prix dataset", "input": {"dataset": "Recensement populations Afrique Centrale", "price": 35}, "output": "✅ Prix cohérent avec le marché."}
+{"instruction": "Analyser tendances ventes IA", "input": {}, "output": ["Datasets financiers en forte demande", "Datasets climatiques +30% en croissance", "Datasets santé stable mais niche rentable"]}
+{"instruction": "Analyser tendances ventes IA", "input": {}, "output": ["Hausse prévue des ventes datasets Mobile Money", "Demande accrue sur datasets agriculture cacao", "Recul datasets Covid"]}
+{"instruction": "Analyser tendances ventes IA", "input": {}, "output": ["Top acheteurs: universités & banques", "Datasets géopolitiques en croissance", "Datasets open-source saturés"]}
+{"instruction": "Générer résumé IA marketplace", "input": {}, "output": "📊 Cette semaine : 120 ventes (+12%), datasets Mobile Money en tête, forte croissance climat & cacao."}
+{"instruction": "Générer résumé IA marketplace", "input": {}, "output": "📊 Dernier mois : 450 ventes (+20%), top ventes = Transactions Mobile Money 2022, forte demande climat."}
+{"instruction": "Générer résumé IA marketplace", "input": {}, "output": "📊 Tendance globale : datasets économiques et agricoles surperforment, Covid en recul, climat reste stable."}
