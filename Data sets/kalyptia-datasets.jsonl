@@ -340,3 +340,53 @@
 {"instruction": "Supprime logs debug", "input": "DEBUG: value=42", "output": ""}
 {"instruction": "Supprime logs error", "input": "ERROR: dataset not found", "output": "dataset not found"}
 {"instruction": "Supprime logs warning", "input": "WARNING: field empty", "output": "field empty"}
+{"instruction": "Supprime logs info", "input": "INFO: démarrage serveur", "output": "démarrage serveur"}
+{"instruction": "Supprime logs timestamp", "input": "[2025-01-01 12:00:00] utilisateur connecté", "output": "utilisateur connecté"}
+{"instruction": "Supprime logs niveau", "input": "[INFO] Dataset validé", "output": "Dataset validé"}
+{"instruction": "Supprime crochets JSON vides", "input": "{}", "output": ""}
+{"instruction": "Supprime tableau vide JSON", "input": "[]", "output": ""}
+{"instruction": "Nettoie données HTML", "input": "<p>AI Data</p>", "output": "AI Data"}
+{"instruction": "Supprime script injection", "input": "<script>alert('hack')</script>", "output": ""}
+{"instruction": "Supprime SQL injection", "input": "DROP TABLE users;", "output": ""}
+{"instruction": "Supprime XSS", "input": "<img src=x onerror=alert(1)>", "output": ""}
+{"instruction": "Supprime balises XML", "input": "<data>valeur</data>", "output": "valeur"}
+{"instruction": "Supprime préfixes HTTP", "input": "http://kalyptia.ai", "output": "kalyptia.ai"}
+{"instruction": "Supprime préfixes HTTPS", "input": "https://kalyptia.ai", "output": "kalyptia.ai"}
+{"instruction": "Supprime www", "input": "www.kalyptia.ai", "output": "kalyptia.ai"}
+{"instruction": "Supprime query string", "input": "kalyptia.ai?user=1", "output": "kalyptia.ai"}
+{"instruction": "Supprime fragment URL", "input": "kalyptia.ai#about", "output": "kalyptia.ai"}
+{"instruction": "Supprime emojis techniques", "input": "⚙️ Paramètres", "output": "Paramètres"}
+{"instruction": "Supprime emojis flèches", "input": "➡️ Aller", "output": "Aller"}
+{"instruction": "Supprime emojis météo", "input": "☀️ Soleil", "output": "Soleil"}
+{"instruction": "Supprime emojis transport", "input": "🚗 Voiture", "output": "Voiture"}
+{"instruction": "Supprime emojis animaux", "input": "🐶 Chien", "output": "Chien"}
+{"instruction": "Supprime emojis nourriture", "input": "🍎 Pomme", "output": "Pomme"}
+{"instruction": "Supprime emojis sport", "input": "⚽ Football", "output": "Football"}
+{"instruction": "Supprime emojis drapeaux", "input": "🇫🇷 France", "output": "France"}
+{"instruction": "Supprime doublons espaces", "input": "Kalyptia   AI", "output": "Kalyptia AI"}
+{"instruction": "Supprime tabs", "input": "Nom\tPrenom", "output": "Nom Prenom"}
+{"instruction": "Supprime retour ligne", "input": "AI\nData", "output": "AI Data"}
+{"instruction": "Supprime caractères spéciaux", "input": "AI@Data!", "output": "AI Data"}
+{"instruction": "Supprime tags XML inutiles", "input": "<note>Texte</note>", "output": "Texte"}
+{"instruction": "Supprime JSON invalide", "input": "{nom:Claude}", "output": "{\"nom\":\"Claude\"}"}
+{"instruction": "Supprime entités HTML", "input": "&amp;AI&amp;", "output": "AI"}
+{"instruction": "Supprime espaces fin ligne", "input": "AI Data   ", "output": "AI Data"}
+{"instruction": "Supprime accents spéciaux", "input": "São Paulo", "output": "Sao Paulo"}
+{"instruction": "Supprime diacritiques rares", "input": "Łódź", "output": "Lodz"}
+{"instruction": "Supprime caractères chinois", "input": "数据AI", "output": "AI"}
+{"instruction": "Supprime caractères arabes", "input": "البياناتAI", "output": "AI"}
+{"instruction": "Supprime caractères cyrilliques", "input": "данныеAI", "output": "AI"}
+{"instruction": "Supprime textes mixtes", "input": "AI数据данные", "output": "AI"}
+{"instruction": "Nettoie numéro téléphone", "input": "(+237) 699-123-456", "output": "+237699123456"}
+{"instruction": "Nettoie numéro carte bancaire", "input": "1234 5678 9012 3456", "output": "[REDACTED]"}
+{"instruction": "Nettoie numéro sécurité sociale", "input": "1 84 12 75 451 089 46", "output": "[REDACTED]"}
+{"instruction": "Supprime identifiant session", "input": "sessionid=abc123", "output": "sessionid=[REDACTED]"}
+{"instruction": "Supprime token JWT", "input": "eyJhbGciOi...xyz", "output": "[REDACTED]"}
+{"instruction": "Supprime clé API", "input": "sk-test-12345", "output": "[REDACTED]"}
+{"instruction": "Supprime clé secrète", "input": "secret=abcdef", "output": "secret=[REDACTED]"}
+{"instruction": "Supprime clé SSH", "input": "ssh-rsa AAAAB3Nza...", "output": "[REDACTED]"}
+{"instruction": "Supprime clé privée", "input": "-----BEGIN PRIVATE KEY-----", "output": "[REDACTED]"}
+{"instruction": "Supprime clé publique", "input": "ssh-ed25519 AAAAC3Nz...", "output": "[REDACTED]"}
+{"instruction": "Supprime mot de passe clair", "input": "motdepasse=1234", "output": "[REDACTED]"}
+{"instruction": "Supprime credentials DB", "input": "mysql://user:pass@host:3306/db", "output": "mysql://user:[REDACTED]@host:3306/db"}
+{"instruction": "Supprime infos sensibles", "input": "email=claude@exemple.com; tel=699123456", "output": "email=[REDACTED]; tel=[REDACTED]"}
