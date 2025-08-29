@@ -118,3 +118,77 @@
 {"instruction": "Liste les tokens", "input": "Kalyptia IA mondiale", "output": "[\"Kalyptia\", \"IA\", \"mondiale\"]"}
 {"instruction": "Extrait les continents", "input": "Europe, Asie, Amérique", "output": "[\"Europe\", \"Asie\", \"Amérique\"]"}
 {"instruction": "Extrait les formats", "input": "PNG, PDF, DOCX", "output": "[\"PNG\", \"PDF\", \"DOCX\"]"}
+{"instruction": "Extrait les emails", "input": "Contact: support@kalyptia.ai, hello@legionweb.net", "output": "[\"support@kalyptia.ai\", \"hello@legionweb.net\"]"}
+{"instruction": "Liste les urls", "input": "Docs: https://docs.kalyptia.ai, https://market.kalyptia.ai", "output": "[\"https://docs.kalyptia.ai\", \"https://market.kalyptia.ai\"]"}
+{"instruction": "Extrait les hashtags", "input": "Campagne #Data #AI #Blockchain", "output": "[\"#Data\", \"#AI\", \"#Blockchain\"]"}
+{"instruction": "Repère les prénoms", "input": "Inscrits: Ali, Benoît, Clara", "output": "[\"Ali\", \"Benoît\", \"Clara\"]"}
+{"instruction": "Extrait les montants", "input": "Dépenses: 450 EUR, 1200 XAF", "output": "[450, 1200]"}
+{"instruction": "Détecte la devise", "input": "Paiement de 90 GBP", "output": "GBP"}
+{"instruction": "Extrait les pays", "input": "Données issues du Cameroun, Sénégal, Maroc", "output": "[\"Cameroun\", \"Sénégal\", \"Maroc\"]"}
+{"instruction": "Extrait les codes postaux", "input": "23700 Bertoua, 34000 Montpellier", "output": "[\"23700\", \"34000\"]"}
+{"instruction": "Extrait les noms propres", "input": "Claude fonde Kalyptia à Douala", "output": "[\"Claude\", \"Kalyptia\", \"Douala\"]"}
+{"instruction": "Extrait les fichiers", "input": "data.json, users.xlsx", "output": "[\"data.json\", \"users.xlsx\"]"}
+{"instruction": "Extrait les dates", "input": "Événements: 12-12-2024, 05-05-2025", "output": "[\"12-12-2024\", \"05-05-2025\"]"}
+{"instruction": "Extrait les heures", "input": "Départ 08h45, Arrivée 14h20", "output": "[\"08h45\", \"14h20\"]"}
+{"instruction": "Extrait les IPs", "input": "Serveurs: 10.0.0.1, 172.16.0.5", "output": "[\"10.0.0.1\", \"172.16.0.5\"]"}
+{"instruction": "Extrait les formats", "input": "Formats supportés: CSV, JSONL, XML", "output": "[\"CSV\", \"JSONL\", \"XML\"]"}
+{"instruction": "Extrait les OS", "input": "Systèmes: iOS, Android, Windows", "output": "[\"iOS\", \"Android\", \"Windows\"]"}
+{"instruction": "Extrait les identifiants", "input": "ID: 123, REF: ABC", "output": "[\"123\", \"ABC\"]"}
+{"instruction": "Extrait les transactions", "input": "Transactions: T001, T002, T003", "output": "[\"T001\", \"T002\", \"T003\"]"}
+{"instruction": "Extrait les séries", "input": "SN001, SN002", "output": "[\"SN001\", \"SN002\"]"}
+{"instruction": "Extrait les mentions Twitter", "input": "Follow @ClaudeCEO et @KalyptiaData", "output": "[\"@ClaudeCEO\", \"@KalyptiaData\"]"}
+{"instruction": "Extrait les devises", "input": "Montants: 300 USD, 2500 XAF", "output": "[\"USD\", \"XAF\"]"}
+{"instruction": "Extrait les tokens", "input": "Kalyptia global IA", "output": "[\"Kalyptia\", \"global\", \"IA\"]"}
+{"instruction": "Extrait les continents", "input": "Afrique, Europe, Amérique", "output": "[\"Afrique\", \"Europe\", \"Amérique\"]"}
+{"instruction": "Extrait les prénoms", "input": "Employés: Paul, Simon, Natacha", "output": "[\"Paul\", \"Simon\", \"Natacha\"]"}
+{"instruction": "Extrait les noms d’entreprises", "input": "Orange, MTN, Kalyptia", "output": "[\"Orange\", \"MTN\", \"Kalyptia\"]"}
+{"instruction": "Extrait les rôles", "input": "Utilisateur: ADMIN, USER", "output": "[\"ADMIN\", \"USER\"]"}
+{"instruction": "Extrait les systèmes cloud", "input": "AWS, Azure, GCP", "output": "[\"AWS\", \"Azure\", \"GCP\"]"}
+{"instruction": "Extrait les langages", "input": "Python, JavaScript, Go", "output": "[\"Python\", \"JavaScript\", \"Go\"]"}
+{"instruction": "Extrait les frameworks", "input": "React, Django, Express", "output": "[\"React\", \"Django\", \"Express\"]"}
+{"instruction": "Extrait les identifiants clients", "input": "Client-1, Client-2", "output": "[\"Client-1\", \"Client-2\"]"}
+{"instruction": "Extrait les emails", "input": "hello@kalyptia.ai", "output": "[\"hello@kalyptia.ai\"]"}
+{"instruction": "Extrait les IPs publiques", "input": "Serveur: 54.213.12.8", "output": "[\"54.213.12.8\"]"}
+{"instruction": "Extrait les devises", "input": "Facture: 99 USD, 800 EUR", "output": "[\"USD\", \"EUR\"]"}
+{"instruction": "Extrait les dates", "input": "Date: 2025-08-28", "output": "[\"2025-08-28\"]"}
+{"instruction": "Extrait les fichiers", "input": "setup.sh, server.js", "output": "[\"setup.sh\", \"server.js\"]"}
+{"instruction": "Extrait les numéros", "input": "N° 1001, 1002", "output": "[\"1001\", \"1002\"]"}
+{"instruction": "Extrait les systèmes OS", "input": "Linux, MacOS", "output": "[\"Linux\", \"MacOS\"]"}
+{"instruction": "Extrait les couleurs hex", "input": "#FFAA00, #112233", "output": "[\"#FFAA00\", \"#112233\"]"}
+{"instruction": "Extrait les entités financières", "input": "CAC40, NYSE", "output": "[\"CAC40\", \"NYSE\"]"}
+{"instruction": "Extrait les emails", "input": "contact@data.org", "output": "[\"contact@data.org\"]"}
+{"instruction": "Extrait les urls", "input": "https://marketplace.kalyptia.ai", "output": "[\"https://marketplace.kalyptia.ai\"]"}
+{"instruction": "Extrait les villes", "input": "Yaoundé, Douala", "output": "[\"Yaoundé\", \"Douala\"]"}
+{"instruction": "Extrait les prénoms", "input": "Adama, Yvan, Mouna", "output": "[\"Adama\", \"Yvan\", \"Mouna\"]"}
+{"instruction": "Extrait les codes postaux", "input": "1000 Bruxelles, 2000 Anvers", "output": "[\"1000\", \"2000\"]"}
+{"instruction": "Extrait les devises", "input": "Paiement 70 CAD, 80 AUD", "output": "[\"CAD\", \"AUD\"]"}
+{"instruction": "Extrait les noms de datasets", "input": "Dataset: Finance2025, HealthAI", "output": "[\"Finance2025\", \"HealthAI\"]"}
+{"instruction": "Extrait les rôles utilisateurs", "input": "PREMIUM, USER, ADMIN", "output": "[\"PREMIUM\", \"USER\", \"ADMIN\"]"}
+{"instruction": "Extrait les hashtags", "input": "Post: #DeepSeek #Kalyptia", "output": "[\"#DeepSeek\", \"#Kalyptia\"]"}
+{"instruction": "Extrait les IPs", "input": "Serveur: 192.168.0.10", "output": "[\"192.168.0.10\"]"}
+{"instruction": "Extrait les heures", "input": "08h00, 22h15", "output": "[\"08h00\", \"22h15\"]"}
+{"instruction": "Extrait les numéros de série", "input": "SN-11, SN-22", "output": "[\"SN-11\", \"SN-22\"]"}
+{"instruction": "Extrait les emails", "input": "mail@kalyptia.ai", "output": "[\"mail@kalyptia.ai\"]"}
+{"instruction": "Extrait les devises", "input": "Valeur: 4000 JPY, 2000 INR", "output": "[\"JPY\", \"INR\"]"}
+{"instruction": "Extrait les prénoms", "input": "Jean, Omar, Fatou", "output": "[\"Jean\", \"Omar\", \"Fatou\"]"}
+{"instruction": "Extrait les fichiers", "input": "app.js, index.html", "output": "[\"app.js\", \"index.html\"]"}
+{"instruction": "Extrait les urls", "input": "http://localhost:3000, http://127.0.0.1", "output": "[\"http://localhost:3000\", \"http://127.0.0.1\"]"}
+{"instruction": "Extrait les formats", "input": "TXT, MD, YAML", "output": "[\"TXT\", \"MD\", \"YAML\"]"}
+{"instruction": "Extrait les rôles", "input": "ADMIN, SUPERADMIN", "output": "[\"ADMIN\", \"SUPERADMIN\"]"}
+{"instruction": "Extrait les devises", "input": "Montants: 50 CHF, 90 SEK", "output": "[\"CHF\", \"SEK\"]"}
+{"instruction": "Extrait les pays", "input": "Italie, Espagne, Portugal", "output": "[\"Italie\", \"Espagne\", \"Portugal\"]"}
+{"instruction": "Extrait les emails", "input": "admin@marketplace.io", "output": "[\"admin@marketplace.io\"]"}
+{"instruction": "Extrait les codes produit", "input": "PROD-A, PROD-B", "output": "[\"PROD-A\", \"PROD-B\"]"}
+{"instruction": "Extrait les systèmes cloud", "input": "Azure, AWS", "output": "[\"Azure\", \"AWS\"]"}
+{"instruction": "Extrait les continents", "input": "Afrique, Océanie", "output": "[\"Afrique\", \"Océanie\"]"}
+{"instruction": "Extrait les transactions", "input": "T101, T102, T103", "output": "[\"T101\", \"T102\", \"T103\"]"}
+{"instruction": "Extrait les mentions Twitter", "input": "Tweet par @AI_Claude", "output": "[\"@AI_Claude\"]"}
+{"instruction": "Extrait les hashtags", "input": "#AI #DataDriven", "output": "[\"#AI\", \"#DataDriven\"]"}
+{"instruction": "Extrait les IPs", "input": "Serveur: 172.20.0.1", "output": "[\"172.20.0.1\"]"}
+{"instruction": "Extrait les prénoms", "input": "Issa, Lina, Hugo", "output": "[\"Issa\", \"Lina\", \"Hugo\"]"}
+{"instruction": "Extrait les devises", "input": "Facture: 120 ZAR, 200 MAD", "output": "[\"ZAR\", \"MAD\"]"}
+{"instruction": "Extrait les villes", "input": "Lomé, Accra, Abidjan", "output": "[\"Lomé\", \"Accra\", \"Abidjan\"]"}
+{"instruction": "Extrait les fichiers", "input": "log.txt, config.yaml", "output": "[\"log.txt\", \"config.yaml\"]"}
+{"instruction": "Extrait les emails", "input": "data@server.net", "output": "[\"data@server.net\"]"}
+{"instruction": "Extrait les codes postaux", "input": "75001 Paris, 69002 Lyon", "output": "[\"75001\", \"69002\"]"}
+{"instruction": "Extrait les prénoms", "input": "Nina, Kader, Malik", "output": "[\"Nina\", \"Kader\", \"Malik\"]"}
