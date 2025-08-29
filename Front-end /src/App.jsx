@@ -11,7 +11,8 @@ import Blockchain from "./pages/Blockchain";
 import Profile from "./pages/Profile";       
 import Activity from "./pages/Activity";     
 import Home from "./pages/Home";             
-import Marketplace from "./pages/Marketplace"; // ✅ nouveau
+import Marketplace from "./pages/Marketplace"; 
+import Notifications from "./pages/Notifications"; // ✅ nouveau
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
       {/* Dashboard + sous-pages */}
       <Route path="/" element={<Dashboard />}>
         <Route index element={<Home />} />              
-        <Route path="marketplace" element={<Marketplace />} /> {/* ✅ ajout */}
+        <Route path="marketplace" element={<Marketplace />} /> 
         <Route path="datasets" element={<Datasets />} />
         <Route path="transactions" element={<Transactions />} />
         <Route path="payments" element={<Payments />} />
@@ -31,6 +32,7 @@ function App() {
         <Route path="ai" element={<AI />} />               
         <Route path="blockchain" element={<Blockchain />} /> 
         <Route path="activity" element={<Activity />} />     
+        <Route path="notifications" element={<Notifications />} /> {/* ✅ Notifications */}
         <Route path="profile" element={<Profile />} />       
       </Route>
     </Routes>
