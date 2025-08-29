@@ -2,65 +2,92 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-// Chiffre d’affaires total
+/**
+ * 📊 Revenus globaux
+ */
 export const getRevenue = async (req, res) => {
   try {
-    const total = await prisma.transaction.aggregate({
-      _sum: { amount: true }
-    });
-    res.json({ totalRevenue: total._sum.amount || 0 });
-  } catch (error) {
-    res.status(500).json({ error: "Failed to fetch revenue", details: error.message });
-  }
-};
-
-// Top datasets par ventes
-export const getTopDatasets = async (req, res) => {
-  try {
-    const datasets = await prisma.transaction.groupBy({
-      by: ["datasetId"],
+    const revenue = await prisma.transaction.aggregate({
       _sum: { amount: true },
-      _count: { datasetId: true },
-      orderBy: { _sum: { amount: "desc" } },
-      take: 5
     });
 
-    res.json(datasets);
+    res.json({ totalRevenue: revenue._sum.amount || 0 });
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch top datasets", details: error.message });
+    res.status(500).json({ error: "Erreur récupération revenus", details: error.message });
   }
 };
 
-// Top utilisateurs acheteurs
-export const getTopUsers = async (req, res) => {
-  try {
-    const users = await prisma.transaction.groupBy({
-      by: ["userId"],
-      _sum: { amount: true },
-      _count: { userId: true },
-      orderBy: { _sum: { amount: "desc" } },
-      take: 5
-    });
-
-    res.json(users);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to fetch top users", details: error.message });
-  }
-};
-
-// Statistiques générales
+/**
+ * 📂 Statistiques globales
+ */
 export const getStats = async (req, res) => {
   try {
-    const users = await prisma.user.count();
-    const datasets = await prisma.dataset.count();
+    // Utilisateurs
+    const users = await prisma.user.count({ where: { role: "USER" } });
+    const premium = await prisma.user.count({ where: { role: "PREMIUM" } });
+    const admin = await prisma.user.count({ where: { role: "ADMIN" } });
+
+    // Datasets par statut
+    const datasetsPending = await prisma.dataset.count({ where: { status: "PENDING" } });
+    const datasetsApproved = await prisma.dataset.count({ where: { status: "APPROVED" } });
+    const datasetsRejected = await prisma.dataset.count({ where: { status: "REJECTED" } });
+
+    // Transactions
     const transactions = await prisma.transaction.count();
 
     res.json({
       users,
-      datasets,
-      transactions
+      premium,
+      admin,
+      datasetsPending,
+      datasetsApproved,
+      datasetsRejected,
+      transactions,
     });
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch stats", details: error.message });
+    res.status(500).json({ error: "Erreur récupération stats", details: error.message });
+  }
+};
+
+/**
+ * ⭐ Top datasets (les plus vendus)
+ */
+export const getTopDatasets = async (req, res) => {
+  try {
+    const topDatasets = await prisma.dataset.findMany({
+      take: 5,
+      orderBy: {
+        transactions: { _count: "desc" },
+      },
+      include: {
+        _count: { select: { transactions: true } },
+        owner: true,
+      },
+    });
+
+    res.json(topDatasets);
+  } catch (error) {
+    res.status(500).json({ error: "Erreur récupération top datasets", details: error.message });
+  }
+};
+
+/**
+ * 👥 Top utilisateurs (meilleurs acheteurs)
+ */
+export const getTopUsers = async (req, res) => {
+  try {
+    const topUsers = await prisma.user.findMany({
+      take: 5,
+      orderBy: {
+        transactions: { _count: "desc" },
+      },
+      include: {
+        _count: { select: { transactions: true } },
+      },
+    });
+
+    res.json(topUsers);
+  } catch (error) {
+    res.status(500).json({ error: "Erreur récupération top users", details: error.message });
   }
 };
