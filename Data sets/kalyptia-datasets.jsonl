@@ -291,3 +291,52 @@
 {"instruction": "Supprime emails", "input": "Contact: claude@kalyptia.ai", "output": "Contact:"}
 {"instruction": "Supprime téléphones", "input": "Appelle le +33 612345678", "output": "Appelle le"}
 {"instruction": "Corrige doublons liste", "input": "[AI,AI,Data]", "output": "[AI,Data]"}
+{"instruction": "Supprime crochets vides", "input": "[] Dataset []", "output": "Dataset"}
+{"instruction": "Supprime accolades vides", "input": "{} AI {}", "output": "AI"}
+{"instruction": "Supprime balises inutiles", "input": "<!-- comment --> Data", "output": "Data"}
+{"instruction": "Corrige champ booléen", "input": "Yes/No", "output": "true/false"}
+{"instruction": "Supprime préfixe dataset", "input": "dataset_AI_001", "output": "AI_001"}
+{"instruction": "Supprime suffixe CSV", "input": "data.csv", "output": "data"}
+{"instruction": "Supprime suffixe JSON", "input": "report.json", "output": "report"}
+{"instruction": "Supprime emoji drapeau", "input": "🇨🇲 Cameroun", "output": "Cameroun"}
+{"instruction": "Supprime emoji monnaie", "input": "💵 Paiement", "output": "Paiement"}
+{"instruction": "Supprime emoji horloge", "input": "🕒 Temps réel", "output": "Temps réel"}
+{"instruction": "Corrige casing phrase", "input": "BONJOUR le Monde", "output": "Bonjour le monde"}
+{"instruction": "Supprime caractères unicode", "input": "Hello\u200BWorld", "output": "HelloWorld"}
+{"instruction": "Nettoie liste JSON", "input": "[\"A\", , \"B\"]", "output": "[\"A\",\"B\"]"}
+{"instruction": "Supprime trailing comma", "input": "{ \"a\":1, }", "output": "{ \"a\":1 }"}
+{"instruction": "Corrige format UUID", "input": "123e4567e89b12d3a456426614174000", "output": "123e4567-e89b-12d3-a456-426614174000"}
+{"instruction": "Corrige numéro carte", "input": "1234-5678-9012-3456", "output": "[REDACTED]"}
+{"instruction": "Supprime IBAN", "input": "FR14 2004 1010 0505 0001 3M02 606", "output": "[REDACTED]"}
+{"instruction": "Supprime code BIC", "input": "BNPAFRPPXXX", "output": "[REDACTED]"}
+{"instruction": "Supprime hashtag marketing", "input": "#Promo2025 IA", "output": "IA"}
+{"instruction": "Supprime mentions Twitter", "input": "@ClaudeAI", "output": "ClaudeAI"}
+{"instruction": "Corrige émojis multiples", "input": "🚀🚀🚀 AI", "output": "AI"}
+{"instruction": "Supprime liens markdown", "input": "[Kalyptia](http://kalyptia.ai)", "output": "Kalyptia"}
+{"instruction": "Supprime code HTML entities", "input": "&lt;AI&gt;", "output": "AI"}
+{"instruction": "Corrige format monétaire", "input": "USD 1,200.00", "output": "1200 USD"}
+{"instruction": "Corrige format monétaire", "input": "XAF 500,00", "output": "500 XAF"}
+{"instruction": "Nettoie dataset CSV", "input": "val1;val2;val3;", "output": "val1,val2,val3"}
+{"instruction": "Nettoie dataset JSON", "input": "{'nom':'Claude'}", "output": "{\"nom\":\"Claude\"}"}
+{"instruction": "Supprime caractère #", "input": "#Data#Set#", "output": "DataSet"}
+{"instruction": "Supprime caractère %", "input": "%AI%DATA%", "output": "AIDATA"}
+{"instruction": "Supprime caractère $", "input": "$Market$", "output": "Market"}
+{"instruction": "Supprime caractère &", "input": "AI&Data", "output": "AIData"}
+{"instruction": "Supprime caractère *", "input": "*Claude*", "output": "Claude"}
+{"instruction": "Supprime caractère ?", "input": "Qui?", "output": "Qui"}
+{"instruction": "Supprime caractère !", "input": "Salut!", "output": "Salut"}
+{"instruction": "Supprime caractère ~", "input": "~Data~", "output": "Data"}
+{"instruction": "Supprime caractère ^", "input": "^Kalyptia^", "output": "Kalyptia"}
+{"instruction": "Supprime caractère |", "input": "AI|CORE", "output": "AICORE"}
+{"instruction": "Supprime caractère /", "input": "AI/Data", "output": "AIData"}
+{"instruction": "Supprime caractère \\", "input": "Claude\\Ayissi", "output": "ClaudeAyissi"}
+{"instruction": "Corrige nombre avec espaces", "input": "1 000 000", "output": "1000000"}
+{"instruction": "Corrige nombre avec virgule", "input": "2,500", "output": "2500"}
+{"instruction": "Supprime texte entre crochets", "input": "Nom [privé]", "output": "Nom"}
+{"instruction": "Supprime texte entre parenthèses", "input": "Data (temporaire)", "output": "Data"}
+{"instruction": "Corrige format JSON booleans", "input": "{ \"active\": True }", "output": "{ \"active\": true }"}
+{"instruction": "Corrige format JSON null", "input": "{ \"val\": None }", "output": "{ \"val\": null }"}
+{"instruction": "Corrige format JSON float", "input": "{ \"pi\": 3,14 }", "output": "{ \"pi\": 3.14 }"}
+{"instruction": "Supprime logs debug", "input": "DEBUG: value=42", "output": ""}
+{"instruction": "Supprime logs error", "input": "ERROR: dataset not found", "output": "dataset not found"}
+{"instruction": "Supprime logs warning", "input": "WARNING: field empty", "output": "field empty"}
