@@ -192,3 +192,53 @@
 {"instruction": "Extrait les emails", "input": "data@server.net", "output": "[\"data@server.net\"]"}
 {"instruction": "Extrait les codes postaux", "input": "75001 Paris, 69002 Lyon", "output": "[\"75001\", \"69002\"]"}
 {"instruction": "Extrait les prénoms", "input": "Nina, Kader, Malik", "output": "[\"Nina\", \"Kader\", \"Malik\"]"}
+{"instruction": "Supprime les doublons", "input": "data = [1,2,2,3,3,3,4]", "output": "[1,2,3,4]"}
+{"instruction": "Nettoie les espaces inutiles", "input": "  Kalyptia   Data   ", "output": "Kalyptia Data"}
+{"instruction": "Normalise les emails", "input": "SUPPORT@KALYPTIA.AI", "output": "support@kalyptia.ai"}
+{"instruction": "Supprime les caractères spéciaux", "input": "Nom@@@##!! Claude", "output": "Nom Claude"}
+{"instruction": "Convertit en minuscules", "input": "DATASET NAME", "output": "dataset name"}
+{"instruction": "Convertit en majuscules", "input": "marketplace", "output": "MARKETPLACE"}
+{"instruction": "Corrige le format date", "input": "12/31/2024", "output": "2024-12-31"}
+{"instruction": "Corrige le format date", "input": "31-12-24", "output": "2024-12-31"}
+{"instruction": "Corrige le format téléphone", "input": "+33 06 12 34 56 78", "output": "+33612345678"}
+{"instruction": "Nettoie les accents", "input": "Café, Été, Noël", "output": "Cafe, Ete, Noel"}
+{"instruction": "Corrige le casing prénom", "input": "claude", "output": "Claude"}
+{"instruction": "Corrige le casing nom", "input": "ayissi", "output": "Ayissi"}
+{"instruction": "Supprime HTML tags", "input": "<p>Kalyptia AI</p>", "output": "Kalyptia AI"}
+{"instruction": "Supprime HTML tags", "input": "<div>Hello</div>", "output": "Hello"}
+{"instruction": "Supprime JSON vide", "input": "{\"data\": {}}", "output": "{}"}
+{"instruction": "Supprime lignes vides", "input": "Claude\\n\\nAyissi", "output": "Claude\\nAyissi"}
+{"instruction": "Supprime ponctuation", "input": "Hello, world!", "output": "Hello world"}
+{"instruction": "Remplace tabulations par espace", "input": "Claude\\tAyissi", "output": "Claude Ayissi"}
+{"instruction": "Corrige majuscules après point", "input": "bonjour. kalyptia est là", "output": "Bonjour. Kalyptia est là"}
+{"instruction": "Supprime espaces début/fin", "input": "   AI Core   ", "output": "AI Core"}
+{"instruction": "Nettoie valeurs manquantes", "input": "[1, null, 2, None, 3]", "output": "[1,2,3]"}
+{"instruction": "Supprime valeurs négatives", "input": "[10, -5, 30]", "output": "[10,30]"}
+{"instruction": "Supprime doublons emails", "input": "test@test.com, test@test.com", "output": "test@test.com"}
+{"instruction": "Corrige case devise", "input": "usd", "output": "USD"}
+{"instruction": "Corrige case devise", "input": "xaf", "output": "XAF"}
+{"instruction": "Supprime underscores", "input": "Claude_Ayissi", "output": "Claude Ayissi"}
+{"instruction": "Supprime tirets", "input": "AI---Data", "output": "AI Data"}
+{"instruction": "Supprime stopwords", "input": "le dataset de la marketplace", "output": "dataset marketplace"}
+{"instruction": "Remplace NULL par vide", "input": "[1,NULL,2]", "output": "[1,,2]"}
+{"instruction": "Supprime doublons hashtags", "input": "#AI #AI #Data", "output": "#AI #Data"}
+{"instruction": "Nettoie champ description", "input": "### Dataset !!! Financial Data", "output": "Dataset Financial Data"}
+{"instruction": "Normalise format prix", "input": "1 200 XAF", "output": "1200 XAF"}
+{"instruction": "Normalise format prix", "input": "2,500 USD", "output": "2500 USD"}
+{"instruction": "Corrige encoding", "input": "FranÃ§ais", "output": "Français"}
+{"instruction": "Corrige encoding", "input": "KalyptÃ­a", "output": "Kalyptia"}
+{"instruction": "Nettoie CSV ligne", "input": "id;name;value;", "output": "id,name,value"}
+{"instruction": "Nettoie JSON keys", "input": "{\"Name\":\"Claude\"}", "output": "{\"name\":\"Claude\"}"}
+{"instruction": "Supprime balises XML", "input": "<user>Claude</user>", "output": "Claude"}
+{"instruction": "Supprime emojis", "input": "Claude 🚀 Ayissi", "output": "Claude Ayissi"}
+{"instruction": "Supprime répétitions", "input": "AI AI AI Data", "output": "AI Data"}
+{"instruction": "Nettoie majuscules", "input": "KALYPTIA DATASET", "output": "Kalyptia Dataset"}
+{"instruction": "Corrige virgules", "input": "1,200,300", "output": "1200300"}
+{"instruction": "Corrige séparateur décimal", "input": "3,14", "output": "3.14"}
+{"instruction": "Corrige séparateur CSV", "input": "1|2|3", "output": "1,2,3"}
+{"instruction": "Corrige espaces multiples", "input": "AI     Data", "output": "AI Data"}
+{"instruction": "Supprime espaces après virgule", "input": "Claude, Ayissi", "output": "Claude,Ayissi"}
+{"instruction": "Nettoie login", "input": " user@domain.com ", "output": "user@domain.com"}
+{"instruction": "Nettoie url", "input": "http://kalyptia.ai/", "output": "http://kalyptia.ai"}
+{"instruction": "Supprime balises script", "input": "<script>alert('hack')</script>", "output": ""}
+{"instruction": "Nettoie texte long", "input": "####### BIENVENUE SUR KALYPTIA ####", "output": "BIENVENUE SUR KALYPTIA"}
