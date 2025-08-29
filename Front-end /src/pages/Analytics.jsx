@@ -80,6 +80,7 @@ export default function Analytics() {
 
   return (
     <div className="space-y-10">
+      {/* Titre */}
       <motion.h2
         className="text-3xl font-extrabold bg-gradient-to-r from-yellow-500 to-orange-600 bg-clip-text text-transparent dark:from-yellow-300 dark:to-orange-400"
         initial={{ opacity: 0, y: -20 }}
