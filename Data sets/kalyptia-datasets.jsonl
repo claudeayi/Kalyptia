@@ -242,3 +242,52 @@
 {"instruction": "Nettoie url", "input": "http://kalyptia.ai/", "output": "http://kalyptia.ai"}
 {"instruction": "Supprime balises script", "input": "<script>alert('hack')</script>", "output": ""}
 {"instruction": "Nettoie texte long", "input": "####### BIENVENUE SUR KALYPTIA ####", "output": "BIENVENUE SUR KALYPTIA"}
+{"instruction": "Supprime chiffres inutiles", "input": "Kalyptia123", "output": "Kalyptia"}
+{"instruction": "Corrige emails cassés", "input": "support@@kalyptia..ai", "output": "support@kalyptia.ai"}
+{"instruction": "Normalise nom propre", "input": "cLaUdE AyIssI", "output": "Claude Ayissi"}
+{"instruction": "Supprime double espaces", "input": "AI   Core", "output": "AI Core"}
+{"instruction": "Corrige encodage spécial", "input": "donnÃ©es", "output": "données"}
+{"instruction": "Supprime accents", "input": "École Française", "output": "Ecole Francaise"}
+{"instruction": "Nettoie texte JSON malformé", "input": "{name: 'Claude'}", "output": "{\"name\":\"Claude\"}"}
+{"instruction": "Corrige champ prix", "input": "€200.00", "output": "200 EUR"}
+{"instruction": "Corrige champ prix", "input": "$150.50", "output": "150.50 USD"}
+{"instruction": "Normalise unité", "input": "100kgs", "output": "100 kg"}
+{"instruction": "Supprime répétitions mots", "input": "AI AI Data Data", "output": "AI Data"}
+{"instruction": "Nettoie mot de passe log", "input": "password=12345", "output": "[REDACTED]"}
+{"instruction": "Supprime IP adresse", "input": "Connexion depuis 192.168.0.1", "output": "Connexion depuis [IP]"}
+{"instruction": "Nettoie coordonnées GPS", "input": "Lat:48.8566; Long:2.3522", "output": "48.8566,2.3522"}
+{"instruction": "Supprime hashtags multiples", "input": "#IA###DATA#", "output": "#IA #DATA"}
+{"instruction": "Corrige majuscule phrase", "input": "kalyptia est innovant.", "output": "Kalyptia est innovant."}
+{"instruction": "Corrige texte marketing", "input": "!!! ACHETEZ !!! Dataset $$$", "output": "Achetez Dataset"}
+{"instruction": "Supprime numéros carte", "input": "Carte: 1234 5678 9012 3456", "output": "Carte: [REDACTED]"}
+{"instruction": "Supprime tokens API", "input": "API_KEY=sk-123456", "output": "API_KEY=[REDACTED]"}
+{"instruction": "Supprime mentions inutiles", "input": "RT @Claude: IA data", "output": "IA data"}
+{"instruction": "Corrige séparateur CSV", "input": "nom;prenom;age", "output": "nom,prenom,age"}
+{"instruction": "Corrige séparateur TSV", "input": "val1\\tval2\\tval3", "output": "val1,val2,val3"}
+{"instruction": "Corrige séparateur colonnes", "input": "a|b|c", "output": "a,b,c"}
+{"instruction": "Supprime trailing slash", "input": "http://kalyptia.ai/", "output": "http://kalyptia.ai"}
+{"instruction": "Corrige case devise", "input": "eur", "output": "EUR"}
+{"instruction": "Corrige case devise", "input": "usd", "output": "USD"}
+{"instruction": "Corrige case devise", "input": "xaf", "output": "XAF"}
+{"instruction": "Nettoie logs", "input": "[INFO] 2024-01-01 Server started", "output": "Server started"}
+{"instruction": "Supprime timestamps", "input": "[12:03:55] User logged in", "output": "User logged in"}
+{"instruction": "Supprime crochets", "input": "[Claude Ayissi]", "output": "Claude Ayissi"}
+{"instruction": "Supprime guillemets", "input": "\"Dataset AI\"", "output": "Dataset AI"}
+{"instruction": "Supprime diacritiques", "input": "Crème brûlée", "output": "Creme brulee"}
+{"instruction": "Normalise booléens", "input": "TRUE, false", "output": "true, false"}
+{"instruction": "Normalise valeurs null", "input": "NULL, None, NaN", "output": "null, null, null"}
+{"instruction": "Supprime ID inutiles", "input": "user_12345", "output": "user"}
+{"instruction": "Corrige format JSON array", "input": "[1,2,3,]", "output": "[1,2,3]"}
+{"instruction": "Supprime colonnes inutiles", "input": "id,name,unused", "output": "id,name"}
+{"instruction": "Supprime accents HTML", "input": "&eacute;cole", "output": "ecole"}
+{"instruction": "Supprime accents HTML", "input": "&ccedil;a", "output": "ca"}
+{"instruction": "Supprime accents HTML", "input": "&agrave;", "output": "a"}
+{"instruction": "Corrige texte JSON array", "input": "[ 'AI','Data']", "output": "[\"AI\",\"Data\"]"}
+{"instruction": "Supprime balises markdown", "input": "**Kalyptia** est *fort*", "output": "Kalyptia est fort"}
+{"instruction": "Supprime balises markdown", "input": "## Titre IA", "output": "Titre IA"}
+{"instruction": "Supprime balises markdown", "input": "`code` snippet", "output": "code snippet"}
+{"instruction": "Supprime mentions Slack", "input": "<@U1234>", "output": "[USER]"}
+{"instruction": "Supprime URLs", "input": "Visitez https://kalyptia.ai", "output": "Visitez"}
+{"instruction": "Supprime emails", "input": "Contact: claude@kalyptia.ai", "output": "Contact:"}
+{"instruction": "Supprime téléphones", "input": "Appelle le +33 612345678", "output": "Appelle le"}
+{"instruction": "Corrige doublons liste", "input": "[AI,AI,Data]", "output": "[AI,Data]"}
