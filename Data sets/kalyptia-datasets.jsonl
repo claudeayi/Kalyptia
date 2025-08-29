@@ -538,3 +538,52 @@
 {"instruction": "Structurer dataset brut en JSON", "input": "Utilisateur: Emma; Role: User", "output": "{ \"utilisateur\": \"Emma\", \"role\": \"User\" }"}
 {"instruction": "Structurer dataset brut en JSON", "input": "Utilisateur: Mark; Role: Premium", "output": "{ \"utilisateur\": \"Mark\", \"role\": \"Premium\" }"}
 {"instruction": "Structurer dataset brut en JSON", "input": "Utilisateur: Daniel; Role: Admin", "output": "{ \"utilisateur\": \"Daniel\", \"role\": \"Admin\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Cours=Physique; Niveau=Licence; Credits=6", "output": "{ \"cours\": \"Physique\", \"niveau\": \"Licence\", \"credits\": 6 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Livre: Titre=Deep Learning; Auteur=Goodfellow; Année=2016", "output": "{ \"titre\": \"Deep Learning\", \"auteur\": \"Goodfellow\", \"annee\": 2016 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Film: Inception; Réalisateur: Nolan; Année: 2010", "output": "{ \"film\": \"Inception\", \"realisateur\": \"Nolan\", \"annee\": 2010 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Client=Paul; Statut=Actif; Solde=12000", "output": "{ \"client\": \"Paul\", \"statut\": \"Actif\", \"solde\": 12000 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Serveur=Node.js; Version=18.0; Hébergeur=VPS", "output": "{ \"serveur\": \"Node.js\", \"version\": \"18.0\", \"hebergeur\": \"VPS\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Article=Chaussures; Prix=25000; Couleur=Rouge", "output": "{ \"article\": \"Chaussures\", \"prix\": 25000, \"couleur\": \"Rouge\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Email=contact@kalyptia.ai; Status=Vérifié", "output": "{ \"email\": \"contact@kalyptia.ai\", \"status\": \"Vérifié\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Machine: GPU; Modèle: RTX 4090; Mémoire: 24GB", "output": "{ \"machine\": \"GPU\", \"modele\": \"RTX 4090\", \"memoire\": \"24GB\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Session: ID=445; Etat=Active; IP=192.168.1.2", "output": "{ \"session_id\": 445, \"etat\": \"Active\", \"ip\": \"192.168.1.2\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Voiture=Toyota; Modèle=Corolla; Année=2021", "output": "{ \"voiture\": \"Toyota\", \"modele\": \"Corolla\", \"annee\": 2021 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Projet: Lingua; Version=1.0; Domaine=Education", "output": "{ \"projet\": \"Lingua\", \"version\": \"1.0\", \"domaine\": \"Education\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "FactureID=889; Montant=75000; Statut=Payé", "output": "{ \"facture_id\": 889, \"montant\": 75000, \"statut\": \"Payé\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Pays: Nigeria; Capitale: Abuja; Population=200000000", "output": "{ \"pays\": \"Nigeria\", \"capitale\": \"Abuja\", \"population\": 200000000 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Crypto=Bitcoin; Symbole=BTC; Prix=30000USD", "output": "{ \"crypto\": \"Bitcoin\", \"symbole\": \"BTC\", \"prix\": \"30000USD\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Crypto=Ethereum; Symbole=ETH; Prix=2000USD", "output": "{ \"crypto\": \"Ethereum\", \"symbole\": \"ETH\", \"prix\": \"2000USD\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Centre: CPFF; Région=Est; Responsable=Madame T.", "output": "{ \"centre\": \"CPFF\", \"region\": \"Est\", \"responsable\": \"Madame T.\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Entreprise: Legionweb; CEO: Claude; Pays: Cameroun", "output": "{ \"entreprise\": \"Legionweb\", \"ceo\": \"Claude\", \"pays\": \"Cameroun\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Animal: Chat; Race=Persan; Age=2", "output": "{ \"animal\": \"Chat\", \"race\": \"Persan\", \"age\": 2 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Produit: Sac; Marque=Louis Vuitton; Prix=2000€", "output": "{ \"produit\": \"Sac\", \"marque\": \"Louis Vuitton\", \"prix\": \"2000€\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Outil: VS Code; Version=1.85; Licence=MIT", "output": "{ \"outil\": \"VS Code\", \"version\": \"1.85\", \"licence\": \"MIT\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Université: Yaoundé 1; Etudiants=35000; Pays=Cameroun", "output": "{ \"universite\": \"Yaoundé 1\", \"etudiants\": 35000, \"pays\": \"Cameroun\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Conférence: AI Global; Année=2025; Pays=USA", "output": "{ \"conference\": \"AI Global\", \"annee\": 2025, \"pays\": \"USA\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Formation: Cloud; Durée=6mois; Certification=AWS", "output": "{ \"formation\": \"Cloud\", \"duree\": \"6 mois\", \"certification\": \"AWS\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Langue: Yamba; Famille=Bantoïde; Pays=Cameroun", "output": "{ \"langue\": \"Yamba\", \"famille\": \"Bantoïde\", \"pays\": \"Cameroun\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Outil: GitHub; Utilisateurs=100M; Domaine=Dev", "output": "{ \"outil\": \"GitHub\", \"utilisateurs\": \"100M\", \"domaine\": \"Dev\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Musique: Afrobeat; Artiste=Wizkid; Année=2023", "output": "{ \"musique\": \"Afrobeat\", \"artiste\": \"Wizkid\", \"annee\": 2023 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Paiement: PayPal; Montant=100€; Statut=Validé", "output": "{ \"paiement\": \"PayPal\", \"montant\": \"100€\", \"statut\": \"Validé\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Paiement: Stripe; Montant=150$; Statut=En attente", "output": "{ \"paiement\": \"Stripe\", \"montant\": \"150$\", \"statut\": \"En attente\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Facture=2023-09; Client=Emma; Montant=90000", "output": "{ \"facture\": \"2023-09\", \"client\": \"Emma\", \"montant\": 90000 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Film=Black Panther; Studio=Marvel; Année=2018", "output": "{ \"film\": \"Black Panther\", \"studio\": \"Marvel\", \"annee\": 2018 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Produit=Orange; Poids=1kg; Origine=Cameroun", "output": "{ \"produit\": \"Orange\", \"poids\": \"1kg\", \"origine\": \"Cameroun\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Produit=Bananes; Poids=2kg; Origine=Gabon", "output": "{ \"produit\": \"Bananes\", \"poids\": \"2kg\", \"origine\": \"Gabon\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Produit=Riz; Quantité=5kg; Origine=Thaïlande", "output": "{ \"produit\": \"Riz\", \"quantite\": \"5kg\", \"origine\": \"Thaïlande\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Stagiaire=Martin; Durée=3mois; Projet=IA", "output": "{ \"stagiaire\": \"Martin\", \"duree\": \"3 mois\", \"projet\": \"IA\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Organisation: ONU; Pays membres=193", "output": "{ \"organisation\": \"ONU\", \"pays_membres\": 193 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Dataset=Logs Serveur; Format=CSV; Taille=2GB", "output": "{ \"dataset\": \"Logs Serveur\", \"format\": \"CSV\", \"taille\": \"2GB\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "App=WhatsApp; Utilisateurs=2.5B; Propriété=Meta", "output": "{ \"app\": \"WhatsApp\", \"utilisateurs\": \"2.5B\", \"propriete\": \"Meta\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Service: Google Drive; Espace=15GB; Version=2024", "output": "{ \"service\": \"Google Drive\", \"espace\": \"15GB\", \"version\": 2024 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Blockchain=Ethereum; Blocks=15000000", "output": "{ \"blockchain\": \"Ethereum\", \"blocks\": 15000000 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Blockchain=Bitcoin; Blocks=800000", "output": "{ \"blockchain\": \"Bitcoin\", \"blocks\": 800000 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "NFT=Image; Artiste=Claude; Valeur=300$", "output": "{ \"nft\": \"Image\", \"artiste\": \"Claude\", \"valeur\": \"300$\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "App=Zoom; Utilisateurs=300M; Fonction=Réunions", "output": "{ \"app\": \"Zoom\", \"utilisateurs\": \"300M\", \"fonction\": \"Réunions\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Pays=France; Capitale=Paris; Monnaie=Euro", "output": "{ \"pays\": \"France\", \"capitale\": \"Paris\", \"monnaie\": \"Euro\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Pays=Allemagne; Capitale=Berlin; Monnaie=Euro", "output": "{ \"pays\": \"Allemagne\", \"capitale\": \"Berlin\", \"monnaie\": \"Euro\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Pays=USA; Capitale=Washington; Monnaie=USD", "output": "{ \"pays\": \"USA\", \"capitale\": \"Washington\", \"monnaie\": \"USD\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Pays=Canada; Capitale=Ottawa; Monnaie=CAD", "output": "{ \"pays\": \"Canada\", \"capitale\": \"Ottawa\", \"monnaie\": \"CAD\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Pays=Japon; Capitale=Tokyo; Monnaie=JPY", "output": "{ \"pays\": \"Japon\", \"capitale\": \"Tokyo\", \"monnaie\": \"JPY\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Pays=Chine; Capitale=Pékin; Monnaie=RMB", "output": "{ \"pays\": \"Chine\", \"capitale\": \"Pékin\", \"monnaie\": \"RMB\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Pays=Inde; Capitale=New Delhi; Monnaie=INR", "output": "{ \"pays\": \"Inde\", \"capitale\": \"New Delhi\", \"monnaie\": \"INR\" }"}
