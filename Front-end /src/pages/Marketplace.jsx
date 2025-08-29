@@ -16,15 +16,16 @@ export default function Marketplace() {
   );
   const [selected, setSelected] = useState(null);
 
+  // 🔄 Charger datasets
   const fetchDatasets = async () => {
     try {
       setLoading(true);
       const res = await getDatasets();
       setDatasets(res.data);
-      setLoading(false);
     } catch (err) {
-      setLoading(false);
       console.error("❌ Erreur récupération datasets:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -32,6 +33,7 @@ export default function Marketplace() {
     fetchDatasets();
   }, []);
 
+  // ❤️ Favoris (localStorage)
   const toggleFavorite = (id) => {
     let updated;
     if (favorites.includes(id)) {
@@ -43,6 +45,7 @@ export default function Marketplace() {
     localStorage.setItem("favorites", JSON.stringify(updated));
   };
 
+  // 💳 Paiements
   const handlePayment = async (method, datasetId, amount) => {
     try {
       setMessage("");
@@ -65,6 +68,7 @@ export default function Marketplace() {
     }
   };
 
+  // 🔎 Filtres
   const filtered = datasets.filter((ds) => {
     const matchesSearch =
       ds.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -77,10 +81,10 @@ export default function Marketplace() {
     return matchesSearch && matchesStatus && matchesOwner && matchesPrice;
   });
 
-  // ✅ Fonction simulant l’IA (placeholder avant backend IA avancé)
+  // 🤖 IA Insights (placeholder, mock)
   const getAIInsights = (dataset) => {
     return {
-      score: Math.floor(Math.random() * 100), // Score IA fictif 0 → 100
+      score: Math.floor(Math.random() * 100),
       insights: [
         "💡 Qualité des données : bonne, mais 8% de valeurs manquantes détectées.",
         "📊 Potentiel de marché élevé : forte demande en datasets similaires.",
@@ -100,7 +104,7 @@ export default function Marketplace() {
         🛒 Marketplace des Datasets
       </motion.h2>
 
-      {/* Filtres */}
+      {/* 🔍 Filtres */}
       <div className="grid grid-cols-4 gap-4 mb-6">
         <input
           type="text"
@@ -138,7 +142,7 @@ export default function Marketplace() {
       {loading && <p className="text-gray-500 dark:text-gray-400">Chargement...</p>}
       {message && <p className="mb-4 text-sm">{message}</p>}
 
-      {/* Liste datasets */}
+      {/* 🗂️ Liste datasets */}
       <div className="grid grid-cols-2 gap-6">
         {filtered.map((ds) => (
           <motion.div
@@ -176,7 +180,7 @@ export default function Marketplace() {
         <p className="text-gray-500 dark:text-gray-400">Aucun dataset trouvé...</p>
       )}
 
-      {/* Modal aperçu + IA widget */}
+      {/* 🔎 Modal Aperçu + IA widget */}
       {selected && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <motion.div
