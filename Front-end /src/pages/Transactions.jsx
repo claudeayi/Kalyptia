@@ -1,15 +1,27 @@
 import { useEffect, useState } from "react";
 import API from "../api/axios";
 import { motion } from "framer-motion";
+import { useNotifications } from "../context/NotificationContext"; // ✅ ajout
 
 export default function Transactions() {
   const [transactions, setTransactions] = useState([]);
   const [selected, setSelected] = useState(null);
+  const { addNotification } = useNotifications(); // ✅ hook global
 
   const fetchTransactions = async () => {
     try {
       const res = await API.get("/transactions");
       setTransactions(res.data);
+
+      // ✅ Générer des notifs cockpit pour nouvelles transactions
+      res.data.forEach((tx) => {
+        addNotification({
+          type: "transaction",
+          message: `💰 Transaction #${tx.id} enregistrée (${tx.amount} ${tx.currency})`,
+          data: tx,
+          link: "/transactions",
+        });
+      });
     } catch (err) {
       console.error("❌ Erreur récupération transactions:", err);
     }
@@ -21,7 +33,7 @@ export default function Transactions() {
 
   return (
     <div className="space-y-10">
-      {/* Titre animé */}
+      {/* Titre cockpit IA */}
       <motion.h2
         className="text-3xl font-extrabold bg-gradient-to-r from-green-500 to-teal-600 bg-clip-text text-transparent dark:from-green-300 dark:to-teal-400"
         initial={{ opacity: 0, y: -20 }}
@@ -30,7 +42,7 @@ export default function Transactions() {
         💰 Mes Transactions
       </motion.h2>
 
-      {/* Liste ou message si vide */}
+      {/* Liste timeline cockpit */}
       {transactions.length === 0 ? (
         <p className="text-gray-600 dark:text-gray-400">
           Aucune transaction trouvée...
@@ -44,7 +56,16 @@ export default function Transactions() {
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.1 }}
-              onClick={() => setSelected(tx)}
+              onClick={() => {
+                setSelected(tx);
+                // ✅ Notif cockpit consultation
+                addNotification({
+                  type: "transaction",
+                  message: `👀 Consultation transaction #${tx.id}`,
+                  data: tx,
+                  link: "/transactions",
+                });
+              }}
             >
               {/* Point timeline */}
               <div className="absolute -left-3 w-6 h-6 bg-blue-600 dark:bg-blue-400 rounded-full flex items-center justify-center text-white text-xs">
@@ -71,7 +92,7 @@ export default function Transactions() {
         </div>
       )}
 
-      {/* ✅ Modal détail cockpit IA */}
+      {/* ✅ Modal cockpit détail */}
       {selected && (
         <motion.div
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
@@ -91,7 +112,6 @@ export default function Transactions() {
               ✖
             </button>
 
-            {/* Titre */}
             <h3 className="text-xl font-bold mb-2 text-gray-800 dark:text-gray-100">
               Transaction #{selected.id}
             </h3>
