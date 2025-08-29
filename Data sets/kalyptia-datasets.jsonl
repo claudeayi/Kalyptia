@@ -768,3 +768,44 @@
 {"instruction": "Générer résumé IA marketplace", "input": {}, "output": "📊 Cette semaine : 120 ventes (+12%), datasets Mobile Money en tête, forte croissance climat & cacao."}
 {"instruction": "Générer résumé IA marketplace", "input": {}, "output": "📊 Dernier mois : 450 ventes (+20%), top ventes = Transactions Mobile Money 2022, forte demande climat."}
 {"instruction": "Générer résumé IA marketplace", "input": {}, "output": "📊 Tendance globale : datasets économiques et agricoles surperforment, Covid en recul, climat reste stable."}
+{"instruction": "Prédire revenu global du mois prochain", "input": {"currentRevenue": 12000}, "output": "🤖 Prévision IA : 14500$ (+20%)"}
+{"instruction": "Prédire revenu global du mois prochain", "input": {"currentRevenue": 8000}, "output": "🤖 Prévision IA : 9500$ (+18%)"}
+{"instruction": "Prédire revenu global du mois prochain", "input": {"currentRevenue": 5000}, "output": "🤖 Prévision IA : 6100$ (+22%)"}
+{"instruction": "Prédire revenu global du mois prochain", "input": {"currentRevenue": 20000}, "output": "🤖 Prévision IA : 23000$ (+15%)"}
+{"instruction": "Prédire revenu global du mois prochain", "input": {"currentRevenue": 15000}, "output": "🤖 Prévision IA : 17500$ (+16%)"}
+{"instruction": "Prévoir ventes dataset", "input": {"dataset": "Transactions Mobile Money 2022", "lastMonthSales": 50}, "output": "🤖 Prévision : 70 ventes le mois prochain"}
+{"instruction": "Prévoir ventes dataset", "input": {"dataset": "Cours du cacao 10 ans", "lastMonthSales": 30}, "output": "🤖 Prévision : 38 ventes le mois prochain"}
+{"instruction": "Prévoir ventes dataset", "input": {"dataset": "Données Covid Cameroun", "lastMonthSales": 15}, "output": "🤖 Prévision : 12 ventes (demande en baisse)"}
+{"instruction": "Prévoir ventes dataset", "input": {"dataset": "Recensement populations Afrique Centrale", "lastMonthSales": 25}, "output": "🤖 Prévision : 30 ventes (croissance stable)"}
+{"instruction": "Prévoir ventes dataset", "input": {"dataset": "Données météo Cameroun 2023", "lastMonthSales": 40}, "output": "🤖 Prévision : 55 ventes (forte demande agricole)"}
+{"instruction": "Détecter anomalie de revenus", "input": {"revenuJour": 2000, "moyenne": 500}, "output": "⚠️ Anomalie détectée : revenu 4x supérieur à la moyenne"}
+{"instruction": "Détecter anomalie de revenus", "input": {"revenuJour": 50, "moyenne": 500}, "output": "⚠️ Anomalie détectée : revenu trop bas (-90%)"}
+{"instruction": "Détecter anomalie de revenus", "input": {"revenuJour": 600, "moyenne": 500}, "output": "✅ Pas d’anomalie, fluctuation normale"}
+{"instruction": "Détecter anomalie de revenus", "input": {"revenuJour": 1000, "moyenne": 800}, "output": "✅ Variation acceptable (+25%)"}
+{"instruction": "Détecter anomalie de revenus", "input": {"revenuJour": 3000, "moyenne": 1000}, "output": "⚠️ Pic inhabituel, alerte générée"}
+{"instruction": "Identifier top utilisateurs acheteurs", "input": {}, "output": ["User #14 – 15 achats", "User #8 – 12 achats", "User #10 – 9 achats"]}
+{"instruction": "Identifier top datasets vendus", "input": {}, "output": ["Transactions Mobile Money 2022 – 70 ventes", "Données météo Cameroun 2023 – 55 ventes", "Cours du cacao 10 ans – 38 ventes"]}
+{"instruction": "Comparer revenus par région", "input": {"regions": ["Afrique Centrale", "Afrique de l’Ouest"]}, "output": {"Afrique Centrale": 12000, "Afrique de l’Ouest": 15000}}
+{"instruction": "Comparer revenus par région", "input": {"regions": ["Europe", "Afrique"]}, "output": {"Europe": 20000, "Afrique": 8000}}
+{"instruction": "Comparer revenus par région", "input": {"regions": ["Amérique du Nord", "Afrique Centrale"]}, "output": {"Amérique du Nord": 25000, "Afrique Centrale": 12000}}
+{"instruction": "Détecter dataset sous-performant", "input": {"dataset": "Données Covid Cameroun", "expectedSales": 20, "actualSales": 12}, "output": "⚠️ Dataset sous-performant (-40%)"}
+{"instruction": "Détecter dataset sous-performant", "input": {"dataset": "Cours du cacao 10 ans", "expectedSales": 40, "actualSales": 38}, "output": "✅ Dataset performant (écart faible)"}
+{"instruction": "Détecter dataset sous-performant", "input": {"dataset": "Transactions Mobile Money 2022", "expectedSales": 80, "actualSales": 70}, "output": "✅ Performances solides (écart -12%)"}
+{"instruction": "Prévoir revenu utilisateur", "input": {"userId": 14, "lastMonth": 200}, "output": "🤖 Prévision IA : 250$ le mois prochain"}
+{"instruction": "Prévoir revenu utilisateur", "input": {"userId": 8, "lastMonth": 150}, "output": "🤖 Prévision IA : 180$ le mois prochain"}
+{"instruction": "Prévoir revenu utilisateur", "input": {"userId": 10, "lastMonth": 300}, "output": "🤖 Prévision IA : 360$ le mois prochain"}
+{"instruction": "Prévoir revenu utilisateur", "input": {"userId": 15, "lastMonth": 100}, "output": "🤖 Prévision IA : 120$ le mois prochain"}
+{"instruction": "Prévoir revenu utilisateur", "input": {"userId": 12, "lastMonth": 80}, "output": "🤖 Prévision IA : 95$ le mois prochain"}
+{"instruction": "Générer résumé IA analytics", "input": {}, "output": "📊 Cette semaine : +15% ventes, top dataset = Transactions Mobile Money 2022, forte demande météo & cacao"}
+{"instruction": "Générer résumé IA analytics", "input": {}, "output": "📊 Mois dernier : 500 ventes, revenu total 12000$, top acheteurs = banques et universités"}
+{"instruction": "Générer résumé IA analytics", "input": {}, "output": "📊 Tendance : datasets financiers en forte hausse, datasets Covid en baisse continue"}
+{"instruction": "Recommander actions IA business", "input": {}, "output": ["Traduire datasets en anglais (+20% ventes)", "Créer bundles datasets finance + climat", "Réduire prix Covid pour écouler stock"]}
+{"instruction": "Recommander actions IA business", "input": {}, "output": ["Investir dans datasets Mobile Money", "Lancer campagne marketing climat", "Ajouter option API premium"]}
+{"instruction": "Recommander actions IA business", "input": {}, "output": ["Créer abonnements mensuels datasets", "Offrir réductions étudiants", "Développer marketplace internationale"]}
+{"instruction": "Détecter corrélations IA", "input": {}, "output": ["Hausse cacao ↔ baisse Mobile Money", "Ventes climat ↔ pics saison agricole", "Datasets financiers ↔ croissance économique"]}
+{"instruction": "Prévoir anomalies marché", "input": {}, "output": "⚠️ Prévision : forte baisse datasets Covid (-30%) dans 3 mois"}
+{"instruction": "Prévoir anomalies marché", "input": {}, "output": "⚠️ Prévision : hausse datasets financiers (+40%) avec crise économique"}
+{"instruction": "Prévoir anomalies marché", "input": {}, "output": "⚠️ Prévision : explosion demande climat avec sécheresse annoncée"}
+{"instruction": "Générer scénario IA futur", "input": {}, "output": "🌍 Dans 6 mois : datasets financiers & climat dominent, santé devient niche, revenu estimé 200k$"}
+{"instruction": "Générer scénario IA futur", "input": {}, "output": "🌍 Dans 12 mois : marché global 1M$, Kalyptia leader Afrique, forte pénétration Europe"}
+{"instruction": "Générer scénario IA futur", "input": {}, "output": "🌍 Dans 2 ans : Kalyptia domine marché mondial datasets émergents, revenu > 10M$"}
