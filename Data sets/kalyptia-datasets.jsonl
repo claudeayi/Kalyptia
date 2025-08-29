@@ -390,3 +390,100 @@
 {"instruction": "Supprime mot de passe clair", "input": "motdepasse=1234", "output": "[REDACTED]"}
 {"instruction": "Supprime credentials DB", "input": "mysql://user:pass@host:3306/db", "output": "mysql://user:[REDACTED]@host:3306/db"}
 {"instruction": "Supprime infos sensibles", "input": "email=claude@exemple.com; tel=699123456", "output": "email=[REDACTED]; tel=[REDACTED]"}
+{"instruction": "Supprime infos carte identité", "input": "CNI: 123456789", "output": "[REDACTED]"}
+{"instruction": "Supprime infos passeport", "input": "Passport: XN123456", "output": "[REDACTED]"}
+{"instruction": "Supprime infos permis conduire", "input": "Permis: CM-123456", "output": "[REDACTED]"}
+{"instruction": "Supprime infos assurance", "input": "Police: 789456123", "output": "[REDACTED]"}
+{"instruction": "Supprime infos bancaires", "input": "RIB: 1234567890123456", "output": "[REDACTED]"}
+{"instruction": "Supprime IBAN complet", "input": "IBAN: FR14 2004 1010 0505 0001 3M02 606", "output": "[REDACTED]"}
+{"instruction": "Supprime BIC", "input": "BIC: BNPAFRPPXXX", "output": "[REDACTED]"}
+{"instruction": "Supprime données GPS", "input": "lat: 3.848, lon: 11.502", "output": "[REDACTED]"}
+{"instruction": "Supprime adresse exacte", "input": "Avenue Kennedy, Yaoundé", "output": "Yaoundé"}
+{"instruction": "Supprime code postal", "input": "75000 Paris", "output": "Paris"}
+{"instruction": "Supprime localisation précise", "input": "3°51′N 11°30′E", "output": "[REDACTED]"}
+{"instruction": "Supprime référence facture", "input": "FACT-2025-0001", "output": "[REDACTED]"}
+{"instruction": "Supprime référence commande", "input": "CMD-998877", "output": "[REDACTED]"}
+{"instruction": "Supprime référence livraison", "input": "SHIP-445566", "output": "[REDACTED]"}
+{"instruction": "Supprime numéro tracking", "input": "TRACK-987654", "output": "[REDACTED]"}
+{"instruction": "Supprime logs système", "input": "[SYSTEM] Memory usage: 80%", "output": "Memory usage: 80%"}
+{"instruction": "Supprime logs sécurité", "input": "[SECURITY] Login failed", "output": "Login failed"}
+{"instruction": "Supprime logs audit", "input": "[AUDIT] Dataset modified", "output": "Dataset modified"}
+{"instruction": "Supprime logs monitoring", "input": "[MONITOR] CPU: 95%", "output": "CPU: 95%"}
+{"instruction": "Supprime logs debug dev", "input": "[DEV] test value=123", "output": "test value=123"}
+{"instruction": "Corrige date FR → ISO", "input": "12/03/2025", "output": "2025-03-12"}
+{"instruction": "Corrige date US → ISO", "input": "03/12/2025", "output": "2025-03-12"}
+{"instruction": "Corrige date longue", "input": "12 Mars 2025", "output": "2025-03-12"}
+{"instruction": "Corrige date avec heure", "input": "12/03/2025 14h30", "output": "2025-03-12T14:30:00"}
+{"instruction": "Corrige heure 12h → 24h", "input": "2:30 PM", "output": "14:30"}
+{"instruction": "Corrige heure UTC", "input": "14:30 GMT+1", "output": "13:30 UTC"}
+{"instruction": "Corrige timestamp UNIX", "input": "1731456000", "output": "2025-11-12T00:00:00Z"}
+{"instruction": "Supprime timezone label", "input": "2025-11-12T00:00:00+01:00", "output": "2025-11-12T00:00:00"}
+{"instruction": "Corrige séparateur CSV", "input": "Nom;Prenom;Age", "output": "Nom,Prenom,Age"}
+{"instruction": "Corrige séparateur TSV", "input": "Nom\tPrenom\tAge", "output": "Nom,Prenom,Age"}
+{"instruction": "Corrige séparateur pipe", "input": "Nom|Prenom|Age", "output": "Nom,Prenom,Age"}
+{"instruction": "Supprime BOM UTF-8", "input": "ï»¿Nom,Prenom", "output": "Nom,Prenom"}
+{"instruction": "Corrige encodage latin1", "input": "FranÃ§ais", "output": "Français"}
+{"instruction": "Corrige encodage UTF-16", "input": "敲敲AI", "output": "AI"}
+{"instruction": "Supprime espaces JSON", "input": "{ \"nom\" : \"Claude\" }", "output": "{\"nom\":\"Claude\"}"}
+{"instruction": "Supprime virgule finale JSON", "input": "{ \"a\":1, }", "output": "{ \"a\":1 }"}
+{"instruction": "Supprime clé vide JSON", "input": "{ \"\": 123 }", "output": "{}"}
+{"instruction": "Supprime valeur vide JSON", "input": "{ \"nom\": \"\" }", "output": "{}"}
+{"instruction": "Corrige booléen Python → JSON", "input": "{ \"actif\": True }", "output": "{ \"actif\": true }"}
+{"instruction": "Corrige None → null", "input": "{ \"val\": None }", "output": "{ \"val\": null }"}
+{"instruction": "Corrige liste avec null", "input": "[1, null, 2]", "output": "[1,2]"}
+{"instruction": "Corrige champ numérique string", "input": "{ \"age\": \"25\" }", "output": "{ \"age\": 25 }"}
+{"instruction": "Supprime champ placeholder", "input": "{ \"value\": \"N/A\" }", "output": "{}"}
+{"instruction": "Supprime champ test", "input": "{ \"test\": true }", "output": "{}"}
+{"instruction": "Supprime champ debug", "input": "{ \"debug\": 123 }", "output": "{}"}
+{"instruction": "Supprime champ temporaire", "input": "{ \"tmp\": \"xyz\" }", "output": "{}"}
+{"instruction": "Supprime champ obsolete", "input": "{ \"old\": \"val\" }", "output": "{}"}
+{"instruction": "Corrige majuscules clé JSON", "input": "{ \"NOM\": \"Claude\" }", "output": "{ \"nom\": \"Claude\"}"}
+{"instruction": "Corrige majuscules multi clés", "input": "{ \"AGE\": 25, \"VILLE\": \"Paris\" }", "output": "{ \"age\": 25, \"ville\": \"Paris\"}"}
+{"instruction": "Corrige valeurs booléennes string", "input": "{ \"isActive\": \"true\" }", "output": "{ \"isActive\": true }"}
+{"instruction": "Corrige valeurs numériques string", "input": "{ \"score\": \"99.9\" }", "output": "{ \"score\": 99.9 }"}
+{"instruction": "Corrige tableau mixte", "input": "[1,\"2\",3]", "output": "[1,2,3]"}
+{"instruction": "Corrige JSON imbriqué string", "input": "{ \"data\": \"{\\\"id\\\":1}\" }", "output": "{ \"data\": { \"id\": 1 } }"}
+{"instruction": "Supprime accents JSON keys", "input": "{ \"café\": \"ok\" }", "output": "{ \"cafe\": \"ok\" }"}
+{"instruction": "Supprime caractères spéciaux clés", "input": "{ \"clé$\": 1 }", "output": "{ \"cle\": 1 }"}
+{"instruction": "Corrige camelCase → snake_case", "input": "{ \"userName\": \"Claude\" }", "output": "{ \"user_name\": \"Claude\" }"}
+{"instruction": "Corrige snake_case → camelCase", "input": "{ \"user_name\": \"Claude\" }", "output": "{ \"userName\": \"Claude\" }"}
+{"instruction": "Supprime valeurs sensibles dataset", "input": "{ \"ssn\": \"123-45-6789\" }", "output": "{ \"ssn\": \"[REDACTED]\" }"}
+{"instruction": "Supprime dataset test", "input": "TEST_DATASET", "output": ""}
+{"instruction": "Supprime dataset demo", "input": "DEMO_DATASET", "output": ""}
+{"instruction": "Supprime dataset mock", "input": "MOCK_DATASET", "output": ""}
+{"instruction": "Supprime dataset fake", "input": "FAKE_DATASET", "output": ""}
+{"instruction": "Supprime dataset temporaire", "input": "TMP_DATASET", "output": ""}
+{"instruction": "Corrige ID dataset", "input": "dataset-0001", "output": "1"}
+{"instruction": "Corrige ID utilisateur", "input": "user-1234", "output": "1234"}
+{"instruction": "Corrige ID transaction", "input": "txn_5678", "output": "5678"}
+{"instruction": "Corrige ID paiement", "input": "pay-999", "output": "999"}
+{"instruction": "Corrige ID blockchain", "input": "block_42", "output": "42"}
+{"instruction": "Supprime commentaires SQL", "input": "-- select * from users", "output": ""}
+{"instruction": "Supprime multi commentaires SQL", "input": "/* test */ select *", "output": "select *"}
+{"instruction": "Supprime injection JSON", "input": "{ \"$where\": \"this.id==1\" }", "output": "{}"}
+{"instruction": "Supprime injection MongoDB", "input": "{ \"$gt\": \"\" }", "output": "{}"}
+{"instruction": "Supprime injection NoSQL", "input": "{ \"$ne\": null }", "output": "{}"}
+{"instruction": "Supprime données trop longues", "input": "AAAAAAAAA... (1000 chars)", "output": "[TRUNCATED]"}
+{"instruction": "Supprime valeurs null multiples", "input": "[null,null,null]", "output": "[]"}
+{"instruction": "Supprime liste vide imbriquée", "input": "[[],[[]]]", "output": "[]"}
+{"instruction": "Corrige clé numérique JSON", "input": "{ \"123\": \"val\" }", "output": "{ \"key_123\": \"val\" }"}
+{"instruction": "Corrige valeur hex string", "input": "0x1A", "output": "26"}
+{"instruction": "Corrige valeur binaire string", "input": "0b1010", "output": "10"}
+{"instruction": "Corrige valeur octal string", "input": "0o77", "output": "63"}
+{"instruction": "Supprime ligne vide CSV", "input": "val1,val2,,val3", "output": "val1,val2,val3"}
+{"instruction": "Supprime ligne vide JSONL", "input": "{\"a\":1}\n\n{\"b\":2}", "output": "{\"a\":1}\n{\"b\":2}"}
+{"instruction": "Supprime ligne vide TXT", "input": "AI\n\nData", "output": "AI\nData"}
+{"instruction": "Supprime caractère spécial CSV", "input": "\"Nom\",\"Pré!nom\"", "output": "\"Nom\",\"Prenom\""}
+{"instruction": "Supprime guillemets inutiles", "input": "\"Claude\"", "output": "Claude"}
+{"instruction": "Corrige double guillemets", "input": "\"\"Nom\"\"", "output": "\"Nom\""}
+{"instruction": "Supprime quotes simples inutiles", "input": "'AI'", "output": "AI"}
+{"instruction": "Supprime accents CSV", "input": "Café,Pâté", "output": "Cafe,Pate"}
+{"instruction": "Supprime accents TSV", "input": "Café\tPâté", "output": "Cafe\tPate"}
+{"instruction": "Corrige date Excel", "input": "44910", "output": "2023-01-01"}
+{"instruction": "Supprime champ inutile XML", "input": "<temp>123</temp>", "output": ""}
+{"instruction": "Supprime balises inutiles HTML", "input": "<div></div>", "output": ""}
+{"instruction": "Supprime meta inutiles", "input": "<meta name='viewport'>", "output": ""}
+{"instruction": "Supprime style inline", "input": "<p style='color:red'>Data</p>", "output": "Data"}
+{"instruction": "Supprime attributs inutiles", "input": "<img alt='test'>", "output": "<img>"}
+{"instruction": "Corrige URL relative", "input": "/home", "output": "http://localhost/home"}
+{"instruction": "Corrige URL relative API", "input": "/api/data", "output": "http://localhost/api/data"}
