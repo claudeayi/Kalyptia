@@ -18,3 +18,53 @@
 {"instruction": "Liste les fichiers mentionnés", "input": "Documents: rapport.pdf, data.csv", "output": "[\"rapport.pdf\", \"data.csv\"]"}
 {"instruction": "Détecte si le texte contient des coordonnées GPS", "input": "Coordonnées: 48.8566, 2.3522", "output": "Oui"}
 {"instruction": "Extrait les prénoms du texte", "input": "Participants: Alice, Bob, Chloé", "output": "[\"Alice\", \"Bob\", \"Chloé\"]"}
+{"instruction": "Extrait les noms propres du texte", "input": "Claude crée Kalyptia à Douala", "output": "[\"Claude\", \"Kalyptia\", \"Douala\"]"}
+{"instruction": "Repère les emails dans ce message", "input": "Support: help@kalyptia.ai, contact@legionweb.io", "output": "[\"help@kalyptia.ai\", \"contact@legionweb.io\"]"}
+{"instruction": "Compte les chiffres présents", "input": "Revenus 2022: 1000, 2023: 2500", "output": "2"}
+{"instruction": "Détecte si une url HTTPS est présente", "input": "Lien: http://test.com et https://secure.com", "output": "Oui: https://secure.com"}
+{"instruction": "Extrait les entités monétaires", "input": "Montant: 5000 CFA, 100 USD", "output": "[\"CFA\", \"USD\"]"}
+{"instruction": "Identifie la langue du texte", "input": "La inteligencia artificial es el futuro", "output": "Espagnol"}
+{"instruction": "Liste les domaines internet", "input": "Sites: www.google.com, app.kalyptia.ai", "output": "[\"google.com\", \"kalyptia.ai\"]"}
+{"instruction": "Récupère les hashtags", "input": "#Data #Marketplace #Blockchain", "output": "[\"#Data\", \"#Marketplace\", \"#Blockchain\"]"}
+{"instruction": "Extrait les coordonnées GPS", "input": "Location: 3.8480, 11.5021", "output": "[\"3.8480, 11.5021\"]"}
+{"instruction": "Transforme le texte en tokens", "input": "IA transforme le monde", "output": "[\"IA\", \"transforme\", \"le\", \"monde\"]"}
+{"instruction": "Détecte si le texte est JSON ou CSV", "input": "{\"user\":\"Alice\",\"age\":30}", "output": "JSON"}
+{"instruction": "Extrait les urls d’un HTML", "input": "<a href='https://kalyptia.ai'>Visiter</a>", "output": "[\"https://kalyptia.ai\"]"}
+{"instruction": "Liste les numéros de commande", "input": "CMD-12345, CMD-67890", "output": "[\"CMD-12345\", \"CMD-67890\"]"}
+{"instruction": "Identifie les pays dans le texte", "input": "Clients en France, USA, Cameroun", "output": "[\"France\", \"USA\", \"Cameroun\"]"}
+{"instruction": "Détecte la devise dominante", "input": "Montants: 50 USD, 100 USD, 20 EUR", "output": "USD"}
+{"instruction": "Extrait les identifiants Twitter", "input": "Suivez @Kalyptia et @ClaudeCEO", "output": "[\"@Kalyptia\", \"@ClaudeCEO\"]"}
+{"instruction": "Repère les dates", "input": "Projet lancé le 15 janvier 2023", "output": "[\"15 janvier 2023\"]"}
+{"instruction": "Repère les heures", "input": "RDV à 14h30 demain", "output": "[\"14h30\"]"}
+{"instruction": "Repère les noms d’entreprises", "input": "Partenaires: Google, Amazon, Kalyptia", "output": "[\"Google\", \"Amazon\", \"Kalyptia\"]"}
+{"instruction": "Extrait les prénoms", "input": "Membres: Alice, Jean, Fatima", "output": "[\"Alice\", \"Jean\", \"Fatima\"]"}
+{"instruction": "Liste les extensions de fichiers", "input": "Documents: data.csv, rapport.pdf, archive.zip", "output": "[\"csv\", \"pdf\", \"zip\"]"}
+{"instruction": "Identifie les IPs", "input": "Serveurs: 192.168.0.1, 10.0.0.5", "output": "[\"192.168.0.1\", \"10.0.0.5\"]"}
+{"instruction": "Repère les noms de domaines", "input": "Sites: docs.kalyptia.ai, cloud.google.com", "output": "[\"kalyptia.ai\", \"google.com\"]"}
+{"instruction": "Extrait les adresses email", "input": "Envoyez à ceo@kalyptia.ai", "output": "[\"ceo@kalyptia.ai\"]"}
+{"instruction": "Compte le nombre de phrases", "input": "Kalyptia est puissant. Il surpasse le marché.", "output": "2"}
+{"instruction": "Récupère les codes pays", "input": "+237 694000000, +33 612345678", "output": "[\"+237\", \"+33\"]"}
+{"instruction": "Détecte si un texte contient une adresse IP", "input": "Accès via 172.16.0.2", "output": "Oui"}
+{"instruction": "Extrait les entités financières", "input": "Bourse: NASDAQ, CAC40", "output": "[\"NASDAQ\", \"CAC40\"]"}
+{"instruction": "Repère les unités de mesure", "input": "Température: 25°C, Distance: 10 km", "output": "[\"°C\", \"km\"]"}
+{"instruction": "Extrait les années", "input": "Données: 2018, 2019, 2020, 2025", "output": "[\"2018\", \"2019\", \"2020\", \"2025\"]"}
+{"instruction": "Identifie les devises", "input": "Montant: 1000 USD, 500 EUR", "output": "[\"USD\", \"EUR\"]"}
+{"instruction": "Repère les hashtags", "input": "#AI #DataScience #DeepSeek", "output": "[\"#AI\", \"#DataScience\", \"#DeepSeek\"]"}
+{"instruction": "Liste les adresses emails", "input": "Clients: test1@mail.com, test2@mail.com", "output": "[\"test1@mail.com\", \"test2@mail.com\"]"}
+{"instruction": "Extrait les noms de villes", "input": "Paris, Douala, New York", "output": "[\"Paris\", \"Douala\", \"New York\"]"}
+{"instruction": "Identifie les continents cités", "input": "Marchés: Afrique, Europe, Asie", "output": "[\"Afrique\", \"Europe\", \"Asie\"]"}
+{"instruction": "Repère les horaires", "input": "Horaires: 9h00, 18h30", "output": "[\"9h00\", \"18h30\"]"}
+{"instruction": "Extrait les codes produit", "input": "Réf: PROD-001, PROD-002", "output": "[\"PROD-001\", \"PROD-002\"]"}
+{"instruction": "Détecte les numéros de série", "input": "SN: 12345-ABC, SN: 67890-XYZ", "output": "[\"12345-ABC\", \"67890-XYZ\"]"}
+{"instruction": "Extrait les tags XML", "input": "<data><item>A</item></data>", "output": "[\"<data>\", \"<item>\"]"}
+{"instruction": "Liste les IDs", "input": "ID: 001, ID: 002, ID: 003", "output": "[\"001\", \"002\", \"003\"]"}
+{"instruction": "Repère les mentions sociales", "input": "Mention @user1 et @user2", "output": "[\"@user1\", \"@user2\"]"}
+{"instruction": "Extrait les montants financiers", "input": "Facture: 1000€, Paiement: 1500€", "output": "[1000,1500]"}
+{"instruction": "Récupère les identifiants", "input": "UserID=123, ClientID=456", "output": "[\"123\", \"456\"]"}
+{"instruction": "Extrait les codes couleurs hexadécimaux", "input": "Design: #FF0000, #00FF00", "output": "[\"#FF0000\", \"#00FF00\"]"}
+{"instruction": "Identifie les systèmes d’exploitation", "input": "OS: Windows, Linux, MacOS", "output": "[\"Windows\", \"Linux\", \"MacOS\"]"}
+{"instruction": "Détecte les versions logicielles", "input": "v1.0, v2.3.4, v10.5", "output": "[\"v1.0\", \"v2.3.4\", \"v10.5\"]"}
+{"instruction": "Extrait les noms de packages", "input": "npm install react, npm install express", "output": "[\"react\", \"express\"]"}
+{"instruction": "Repère les adresses MAC", "input": "MAC: AA:BB:CC:DD:EE:FF", "output": "[\"AA:BB:CC:DD:EE:FF\"]"}
+{"instruction": "Liste les formats de fichier", "input": "Fichiers: image.png, son.mp3, video.mp4", "output": "[\"png\", \"mp3\", \"mp4\"]"}
+{"instruction": "Extrait les noms de datasets", "input": "Datasets: Clients2024, TransactionsQ1", "output": "[\"Clients2024\", \"TransactionsQ1\"]"}
