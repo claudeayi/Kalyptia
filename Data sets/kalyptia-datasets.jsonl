@@ -68,3 +68,53 @@
 {"instruction": "Repère les adresses MAC", "input": "MAC: AA:BB:CC:DD:EE:FF", "output": "[\"AA:BB:CC:DD:EE:FF\"]"}
 {"instruction": "Liste les formats de fichier", "input": "Fichiers: image.png, son.mp3, video.mp4", "output": "[\"png\", \"mp3\", \"mp4\"]"}
 {"instruction": "Extrait les noms de datasets", "input": "Datasets: Clients2024, TransactionsQ1", "output": "[\"Clients2024\", \"TransactionsQ1\"]"}
+{"instruction": "Extrait les emails", "input": "Équipe: data@kalyptia.ai, ai@deepseek.org", "output": "[\"data@kalyptia.ai\", \"ai@deepseek.org\"]"}
+{"instruction": "Repère les hashtags", "input": "#IA #Data #Marketplace", "output": "[\"#IA\", \"#Data\", \"#Marketplace\"]"}
+{"instruction": "Compte les phrases", "input": "Kalyptia collecte. Elle nettoie. Elle structure.", "output": "3"}
+{"instruction": "Identifie la devise principale", "input": "Montants: 3000 USD, 100 EUR", "output": "USD"}
+{"instruction": "Extrait les noms de pays", "input": "Utilisateurs en Chine, Brésil, Nigeria", "output": "[\"Chine\", \"Brésil\", \"Nigeria\"]"}
+{"instruction": "Repère les codes postaux", "input": "75000 Paris, 23700 Bertoua", "output": "[\"75000\", \"23700\"]"}
+{"instruction": "Extrait les prénoms", "input": "Clients: Mohamed, Sarah, Yves", "output": "[\"Mohamed\", \"Sarah\", \"Yves\"]"}
+{"instruction": "Liste les dates", "input": "12/05/2024, 01/01/2025", "output": "[\"12/05/2024\", \"01/01/2025\"]"}
+{"instruction": "Extrait les heures", "input": "RDV: 10h, 14h30", "output": "[\"10h\", \"14h30\"]"}
+{"instruction": "Repère les IPs", "input": "Serveurs: 192.168.1.1, 8.8.8.8", "output": "[\"192.168.1.1\", \"8.8.8.8\"]"}
+{"instruction": "Détecte si JSON ou CSV", "input": "Nom, Age, Ville", "output": "CSV"}
+{"instruction": "Extrait les url", "input": "Visitez https://kalyptia.ai et http://deepseek.org", "output": "[\"https://kalyptia.ai\", \"http://deepseek.org\"]"}
+{"instruction": "Liste les systèmes d’exploitation", "input": "Support: Windows, Android, Linux", "output": "[\"Windows\", \"Android\", \"Linux\"]"}
+{"instruction": "Extrait les noms propres", "input": "Claude dirige Kalyptia depuis Douala", "output": "[\"Claude\", \"Kalyptia\", \"Douala\"]"}
+{"instruction": "Repère les mentions Twitter", "input": "Merci @user1 et @user2", "output": "[\"@user1\", \"@user2\"]"}
+{"instruction": "Extrait les devises", "input": "Valeurs: 1000 XAF, 200 USD, 50 EUR", "output": "[\"XAF\", \"USD\", \"EUR\"]"}
+{"instruction": "Extrait les fichiers", "input": "Upload: data.csv, rapport.docx", "output": "[\"data.csv\", \"rapport.docx\"]"}
+{"instruction": "Détecte les couleurs hex", "input": "#FFFFFF, #000000", "output": "[\"#FFFFFF\", \"#000000\"]"}
+{"instruction": "Extrait les versions", "input": "v1.0, v2.5.3", "output": "[\"v1.0\", \"v2.5.3\"]"}
+{"instruction": "Repère les entités financières", "input": "Indices: NASDAQ, DAX", "output": "[\"NASDAQ\", \"DAX\"]"}
+{"instruction": "Liste les tags XML", "input": "<item><name>Produit</name></item>", "output": "[\"<item>\", \"<name>\"]"}
+{"instruction": "Extrait les identifiants", "input": "User: ID123, Client: CL456", "output": "[\"ID123\", \"CL456\"]"}
+{"instruction": "Extrait les codes produit", "input": "Réf: PROD-99, PROD-100", "output": "[\"PROD-99\", \"PROD-100\"]"}
+{"instruction": "Repère les villes", "input": "Paris, Yaoundé, Abidjan", "output": "[\"Paris\", \"Yaoundé\", \"Abidjan\"]"}
+{"instruction": "Extrait les noms de datasets", "input": "Datasets: Clients2025, SalesQ2", "output": "[\"Clients2025\", \"SalesQ2\"]"}
+{"instruction": "Extrait les emails", "input": "Contact: admin@kalyptia.io", "output": "[\"admin@kalyptia.io\"]"}
+{"instruction": "Repère les années", "input": "2019, 2020, 2025", "output": "[\"2019\", \"2020\", \"2025\"]"}
+{"instruction": "Extrait les codes couleurs", "input": "Design: #FF5733, #33FF57", "output": "[\"#FF5733\", \"#33FF57\"]"}
+{"instruction": "Détecte les prénoms", "input": "Equipe: Alice, Bob, Carine", "output": "[\"Alice\", \"Bob\", \"Carine\"]"}
+{"instruction": "Liste les rôles utilisateurs", "input": "Admin, User, Premium", "output": "[\"Admin\", \"User\", \"Premium\"]"}
+{"instruction": "Extrait les transactions", "input": "TX-001, TX-002, TX-003", "output": "[\"TX-001\", \"TX-002\", \"TX-003\"]"}
+{"instruction": "Extrait les codes pays", "input": "Numéros: +237..., +225...", "output": "[\"+237\", \"+225\"]"}
+{"instruction": "Détecte si coordonnées GPS présentes", "input": "Lat: 48.8566, Lng: 2.3522", "output": "Oui"}
+{"instruction": "Repère les IPs publiques", "input": "8.8.8.8, 1.1.1.1", "output": "[\"8.8.8.8\", \"1.1.1.1\"]"}
+{"instruction": "Extrait les noms d’entreprises", "input": "Google, Kalyptia, Microsoft", "output": "[\"Google\", \"Kalyptia\", \"Microsoft\"]"}
+{"instruction": "Extrait les heures", "input": "Heure: 8h, 16h45", "output": "[\"8h\", \"16h45\"]"}
+{"instruction": "Extrait les montants", "input": "Prix: 1200€, 300$", "output": "[1200, 300]"}
+{"instruction": "Détecte les hashtags", "input": "#DeepSeek #IA #Kalyptia", "output": "[\"#DeepSeek\", \"#IA\", \"#Kalyptia\"]"}
+{"instruction": "Extrait les noms propres", "input": "Claude Ayissi fonde Legionweb", "output": "[\"Claude Ayissi\", \"Legionweb\"]"}
+{"instruction": "Liste les emails", "input": "u1@test.com, u2@test.com", "output": "[\"u1@test.com\", \"u2@test.com\"]"}
+{"instruction": "Extrait les dates", "input": "01-01-2025, 15-06-2024", "output": "[\"01-01-2025\", \"15-06-2024\"]"}
+{"instruction": "Extrait les devises", "input": "Montant: 100 GBP, 200 EUR", "output": "[\"GBP\", \"EUR\"]"}
+{"instruction": "Repère les codes produits", "input": "Items: ITM001, ITM002", "output": "[\"ITM001\", \"ITM002\"]"}
+{"instruction": "Extrait les systèmes OS", "input": "MacOS, Ubuntu, Windows", "output": "[\"MacOS\", \"Ubuntu\", \"Windows\"]"}
+{"instruction": "Détecte les numéros de série", "input": "Serial: SN-A1, SN-B2", "output": "[\"SN-A1\", \"SN-B2\"]"}
+{"instruction": "Extrait les identifiants Twitter", "input": "Follow @ClaudeCEO @KalyptiaAI", "output": "[\"@ClaudeCEO\", \"@KalyptiaAI\"]"}
+{"instruction": "Extrait les fichiers", "input": "Docs: readme.md, api.js", "output": "[\"readme.md\", \"api.js\"]"}
+{"instruction": "Liste les tokens", "input": "Kalyptia IA mondiale", "output": "[\"Kalyptia\", \"IA\", \"mondiale\"]"}
+{"instruction": "Extrait les continents", "input": "Europe, Asie, Amérique", "output": "[\"Europe\", \"Asie\", \"Amérique\"]"}
+{"instruction": "Extrait les formats", "input": "PNG, PDF, DOCX", "output": "[\"PNG\", \"PDF\", \"DOCX\"]"}
