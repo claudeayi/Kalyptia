@@ -487,3 +487,54 @@
 {"instruction": "Supprime attributs inutiles", "input": "<img alt='test'>", "output": "<img>"}
 {"instruction": "Corrige URL relative", "input": "/home", "output": "http://localhost/home"}
 {"instruction": "Corrige URL relative API", "input": "/api/data", "output": "http://localhost/api/data"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Nom: Claude, Age: 30, Ville: Yaoundé", "output": "{ \"nom\": \"Claude\", \"age\": 30, \"ville\": \"Yaoundé\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Produit=Ordinateur; Prix=350000; Etat=Neuf", "output": "{ \"produit\": \"Ordinateur\", \"prix\": 350000, \"etat\": \"Neuf\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Titre: AI, Auteur: John, Année: 2024", "output": "{ \"titre\": \"AI\", \"auteur\": \"John\", \"annee\": 2024 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Dataset: Clients; Taille=1200; Type=CSV", "output": "{ \"dataset\": \"Clients\", \"taille\": 1200, \"type\": \"CSV\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Pays: Cameroun; Capitale: Yaoundé", "output": "{ \"pays\": \"Cameroun\", \"capitale\": \"Yaoundé\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Ville: Douala, Population: 2500000", "output": "{ \"ville\": \"Douala\", \"population\": 2500000 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Langue=Français; Code=FR", "output": "{ \"langue\": \"Français\", \"code\": \"FR\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "TransactionID: 12345, Montant: 50000, Devise: XAF", "output": "{ \"transaction_id\": 12345, \"montant\": 50000, \"devise\": \"XAF\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Produit: Livre, Quantité: 10, Prix: 1500", "output": "{ \"produit\": \"Livre\", \"quantite\": 10, \"prix\": 1500 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Nom=Sarah; Age=28; Ville=Paris", "output": "{ \"nom\": \"Sarah\", \"age\": 28, \"ville\": \"Paris\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Email: user@example.com; Abonnement: Premium", "output": "{ \"email\": \"user@example.com\", \"abonnement\": \"Premium\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Produit: Café; Quantité: 5kg", "output": "{ \"produit\": \"Café\", \"quantite\": \"5kg\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Nom: Lingua, Type: Application, Domaine: Education", "output": "{ \"nom\": \"Lingua\", \"type\": \"Application\", \"domaine\": \"Education\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Pays: Sénégal, Population: 17000000", "output": "{ \"pays\": \"Sénégal\", \"population\": 17000000 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "ID: 789, Status: Validé", "output": "{ \"id\": 789, \"status\": \"Validé\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Service: Cloud; Prix: 50 USD/mois", "output": "{ \"service\": \"Cloud\", \"prix\": \"50 USD/mois\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "NomProduit=Chaise; Couleur=Bleue; Stock=25", "output": "{ \"nom_produit\": \"Chaise\", \"couleur\": \"Bleue\", \"stock\": 25 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Dataset=Transactions; Format=JSONL", "output": "{ \"dataset\": \"Transactions\", \"format\": \"JSONL\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Ville: Bertoua, Region: Est", "output": "{ \"ville\": \"Bertoua\", \"region\": \"Est\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Organisation=Samariya; Mission=Solidarité", "output": "{ \"organisation\": \"Samariya\", \"mission\": \"Solidarité\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Langue: Ewondo; Alphabet: Latin", "output": "{ \"langue\": \"Ewondo\", \"alphabet\": \"Latin\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Produit: Ordinateur; Garantie: 12 mois", "output": "{ \"produit\": \"Ordinateur\", \"garantie\": \"12 mois\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Cours: Mathématiques; Niveau: Bac", "output": "{ \"cours\": \"Mathématiques\", \"niveau\": \"Bac\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Entreprise: UInova; Secteur: Nocode", "output": "{ \"entreprise\": \"UInova\", \"secteur\": \"Nocode\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Application: Kalyptia; Domaine: Data AI", "output": "{ \"application\": \"Kalyptia\", \"domaine\": \"Data AI\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Module: Paiement; Système: Stripe", "output": "{ \"module\": \"Paiement\", \"systeme\": \"Stripe\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "UserID=998, Role=Admin", "output": "{ \"user_id\": 998, \"role\": \"Admin\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Client: Jean; Statut: Premium", "output": "{ \"client\": \"Jean\", \"statut\": \"Premium\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Adresse: 123 Rue, Ville: Douala", "output": "{ \"adresse\": \"123 Rue\", \"ville\": \"Douala\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Projet: IA; Budget: 50000", "output": "{ \"projet\": \"IA\", \"budget\": 50000 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Événement: Conférence AI; Date: 2025-05-10", "output": "{ \"evenement\": \"Conférence AI\", \"date\": \"2025-05-10\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Centre: CPFF; Localité: Yokadouma", "output": "{ \"centre\": \"CPFF\", \"localite\": \"Yokadouma\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Nom: Global Language Center; Type: Institution", "output": "{ \"nom\": \"Global Language Center\", \"type\": \"Institution\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Nom: Nexora; Produit: Copilote AI", "output": "{ \"nom\": \"Nexora\", \"produit\": \"Copilote AI\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Langue: Fulfulde; Type: Alphabétisation", "output": "{ \"langue\": \"Fulfulde\", \"type\": \"Alphabétisation\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Module=Apprentissage; Niveau=A1", "output": "{ \"module\": \"Apprentissage\", \"niveau\": \"A1\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Nom: John; Email: john@example.com", "output": "{ \"nom\": \"John\", \"email\": \"john@example.com\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Nom: Alice; Age: 26; Ville: Londres", "output": "{ \"nom\": \"Alice\", \"age\": 26, \"ville\": \"Londres\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Produit=Téléphone; Prix=250000; Marque=Samsung", "output": "{ \"produit\": \"Téléphone\", \"prix\": 250000, \"marque\": \"Samsung\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Fichier: data.csv; Taille=2MB", "output": "{ \"fichier\": \"data.csv\", \"taille\": \"2MB\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Blockchain: Active; Blocks=200", "output": "{ \"blockchain\": \"Active\", \"blocks\": 200 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Token=KAL; Supply=1000000", "output": "{ \"token\": \"KAL\", \"supply\": 1000000 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Organisation: ONG; Objectif: Éducation", "output": "{ \"organisation\": \"ONG\", \"objectif\": \"Éducation\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Jeu: Puzzle; Catégorie: Éducation", "output": "{ \"jeu\": \"Puzzle\", \"categorie\": \"Éducation\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Badge: Or; Points: 500", "output": "{ \"badge\": \"Or\", \"points\": 500 }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Niveau: A2; Module: Grammaire", "output": "{ \"niveau\": \"A2\", \"module\": \"Grammaire\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Statut: Rejeté; Motif: Non conforme", "output": "{ \"statut\": \"Rejeté\", \"motif\": \"Non conforme\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Paiement: Stripe; Montant=30USD", "output": "{ \"paiement\": \"Stripe\", \"montant\": \"30USD\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Utilisateur: Emma; Role: User", "output": "{ \"utilisateur\": \"Emma\", \"role\": \"User\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Utilisateur: Mark; Role: Premium", "output": "{ \"utilisateur\": \"Mark\", \"role\": \"Premium\" }"}
+{"instruction": "Structurer dataset brut en JSON", "input": "Utilisateur: Daniel; Role: Admin", "output": "{ \"utilisateur\": \"Daniel\", \"role\": \"Admin\" }"}
