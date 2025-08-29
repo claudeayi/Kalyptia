@@ -1,0 +1,20 @@
+{"instruction": "Extrait les emails de ce texte", "input": "Contacts: alice@mail.com, bob@gmail.com, carla@outlook.fr", "output": "[\"alice@mail.com\", \"bob@gmail.com\", \"carla@outlook.fr\"]"}
+{"instruction": "Identifie le format du fichier", "input": "Nom, Age, Ville\nAlice,25,Paris", "output": "CSV"}
+{"instruction": "Liste les urls présentes dans ce texte", "input": "Sources: https://kalyptia.ai, http://github.com/kalyptia", "output": "[\"https://kalyptia.ai\", \"http://github.com/kalyptia\"]"}
+{"instruction": "Extrait les numéros de téléphone", "input": "Clients: +33 612345678, 0678123456", "output": "[\"+33 612345678\", \"0678123456\"]"}
+{"instruction": "Identifie la langue du texte", "input": "Bonjour, je m'appelle Claude", "output": "Français"}
+{"instruction": "Identifie la langue du texte", "input": "Hello, my name is Claude", "output": "Anglais"}
+{"instruction": "Compte le nombre de mots", "input": "Kalyptia collecte et valorise les datasets", "output": "6"}
+{"instruction": "Détecte si ce texte contient des données sensibles", "input": "Nom: Alice, N° carte: 1234-5678-9123-4567", "output": "Oui, données sensibles (carte bancaire)"}
+{"instruction": "Récupère les hashtags", "input": "Analyse #IA #Data #Kalyptia", "output": "[\"#IA\", \"#Data\", \"#Kalyptia\"]"}
+{"instruction": "Identifie la date dans le texte", "input": "Réunion prévue le 12/03/2025 à 15h", "output": "12/03/2025"}
+{"instruction": "Extrait les adresses postales", "input": "Adresse: 10 rue des Fleurs, 75000 Paris", "output": "[\"10 rue des Fleurs, 75000 Paris\"]"}
+{"instruction": "Transforme ce texte en liste de mots", "input": "Paris est une ville", "output": "[\"Paris\", \"est\", \"une\", \"ville\"]"}
+{"instruction": "Détecte le format du dataset", "input": "[{\"Nom\":\"Alice\",\"Age\":25}]", "output": "JSON"}
+{"instruction": "Nettoie les balises HTML et garde le texte brut", "input": "<p>Kalyptia est <b>innovant</b></p>", "output": "Kalyptia est innovant"}
+{"instruction": "Extrait les codes postaux", "input": "75000 Paris, 69000 Lyon", "output": "[\"75000\", \"69000\"]"}
+{"instruction": "Identifie les devises présentes", "input": "Prix: 200€ et 150 USD", "output": "[\"EUR\", \"USD\"]"}
+{"instruction": "Extrait les mentions Twitter", "input": "Merci à @Claude et @KalyptiaTeam", "output": "[\"@Claude\", \"@KalyptiaTeam\"]"}
+{"instruction": "Liste les fichiers mentionnés", "input": "Documents: rapport.pdf, data.csv", "output": "[\"rapport.pdf\", \"data.csv\"]"}
+{"instruction": "Détecte si le texte contient des coordonnées GPS", "input": "Coordonnées: 48.8566, 2.3522", "output": "Oui"}
+{"instruction": "Extrait les prénoms du texte", "input": "Participants: Alice, Bob, Chloé", "output": "[\"Alice\", \"Bob\", \"Chloé\"]"}
