@@ -4,6 +4,7 @@ import { io } from "socket.io-client";
 import { Line } from "react-chartjs-2";
 import { motion } from "framer-motion";
 import API from "../api/axios";
+import Loader from "../components/Loader";
 
 export default function Home() {
   const [revenue, setRevenue] = useState(0);
@@ -13,56 +14,66 @@ export default function Home() {
   const [chatHistory, setChatHistory] = useState([]);
   const [userInput, setUserInput] = useState("");
   const [loadingAI, setLoadingAI] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         setRevenue((await getRevenue()).data.totalRevenue);
         setStats((await getStats()).data);
 
-        // ✅ IA Copilot résumé simulé
-        setAiSummary([
-          "📊 Revenus stables (+10% cette semaine).",
-          "⚡ 3 nouveaux datasets créés aujourd’hui.",
-          "💰 Transactions en hausse de 18% sur les datasets financiers.",
-          "🚀 Projection IA : +40% de revenus possibles d’ici 30 jours.",
-        ]);
+        try {
+          const res = await API.get("/ai/summary");
+          setAiSummary(res.data.summary || []);
+        } catch {
+          setAiSummary([
+            "📊 Revenus stables (+10% cette semaine).",
+            "⚡ 3 nouveaux datasets créés aujourd’hui.",
+            "💰 Transactions en hausse de 18% sur les datasets financiers.",
+            "🚀 Projection IA : +40% de revenus possibles d’ici 30 jours.",
+          ]);
+        }
       } catch (err) {
         console.error("❌ Erreur Home Dashboard:", err);
+        setError("Impossible de charger les données du tableau de bord.");
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
 
-    // ✅ Socket.io pour activité temps réel
-    const socket = io("http://localhost:5000");
+    // ✅ Socket.io temps réel
+    const token = localStorage.getItem("token");
+    const socket = io("http://localhost:5000", { auth: { token } });
+
     socket.on("DATASET_CREATED", (data) =>
-      setActivity((prev) => [
-        { type: "dataset", message: `📂 Dataset ${data.name} créé`, time: new Date().toLocaleTimeString() },
-        ...prev,
-      ])
+      pushActivity("dataset", `📂 Dataset ${data.name} créé`)
     );
     socket.on("DATASET_PURCHASED", (data) =>
-      setActivity((prev) => [
-        { type: "transaction", message: `💰 Dataset #${data.datasetId} acheté`, time: new Date().toLocaleTimeString() },
-        ...prev,
-      ])
+      pushActivity("transaction", `💰 Dataset #${data.datasetId} acheté`)
     );
     socket.on("PAYMENT_SUCCESS", (data) =>
-      setActivity((prev) => [
-        { type: "payment", message: `💳 Paiement ${data.amount} ${data.currency}`, time: new Date().toLocaleTimeString() },
-        ...prev,
-      ])
+      pushActivity("payment", `💳 Paiement ${data.amount} ${data.currency}`)
     );
+
+    const pushActivity = (type, message) => {
+      setActivity((prev) => [
+        { type, message, time: new Date().toLocaleTimeString() },
+        ...prev,
+      ]);
+    };
 
     return () => socket.disconnect();
   }, []);
 
-  // ✅ Exemple graphique (revenus réels + projection IA)
+  // ✅ Graphique revenus + projection IA
   const chartData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May"],
+    labels: ["Jan", "Fév", "Mar", "Avr", "Mai"],
     datasets: [
       {
-        label: "Revenu ($)",
+        label: "Revenus ($)",
         data: [500, 1200, 900, 1800, revenue],
         borderColor: "#3B82F6",
         backgroundColor: "rgba(59,130,246,0.3)",
@@ -81,23 +92,22 @@ export default function Home() {
     ],
   };
 
-  // ✅ Chat IA – Appel API simulé (plus tard branché au backend IA)
+  // ✅ Chat IA
   const handleAskAI = async () => {
     if (!userInput.trim()) return;
     const question = userInput;
     setUserInput("");
     setLoadingAI(true);
 
-    // Ajouter la question de l’utilisateur dans l’historique
     setChatHistory((prev) => [...prev, { sender: "user", text: question }]);
 
     try {
-      // Simulation IA – remplacer par API backend `/ai/chat`
-      const res = await API.post("/ai/summarize", { text: question });
-      const answer = res.data.result || "🤖 Je n’ai pas encore la réponse exacte, mais je vais apprendre.";
-
+      const res = await API.post("/ai/chat", { text: question });
+      const answer =
+        res.data.result ||
+        "🤖 Je n’ai pas encore la réponse exacte, mais je vais apprendre.";
       setChatHistory((prev) => [...prev, { sender: "ai", text: answer }]);
-    } catch (err) {
+    } catch {
       setChatHistory((prev) => [
         ...prev,
         { sender: "ai", text: "❌ Erreur IA, réessaie plus tard." },
@@ -107,11 +117,25 @@ export default function Home() {
     }
   };
 
+  if (loading) return <Loader text="Chargement du tableau de bord..." />;
+  if (error)
+    return (
+      <p className="text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 p-3 rounded">
+        {error}
+      </p>
+    );
+
   return (
-    <div className="space-y-10">
+    <div className="space-y-10 relative">
+      {/* Effet background cockpit */}
+      <div className="absolute inset-0 -z-10 opacity-10">
+        <div className="absolute top-0 left-1/2 w-[800px] h-[800px] bg-blue-500 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/3 w-[600px] h-[600px] bg-purple-500 rounded-full blur-3xl" />
+      </div>
+
       {/* Titre */}
       <motion.h2
-        className="text-3xl font-extrabold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent dark:from-blue-300 dark:to-purple-400"
+        className="text-3xl font-extrabold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
@@ -135,7 +159,7 @@ export default function Home() {
       </motion.div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {[
           { label: "💵 Revenu total", value: `${revenue} $`, color: "from-green-400 to-green-600" },
           { label: "👥 Utilisateurs", value: stats.users || 0, color: "from-blue-400 to-blue-600" },
@@ -144,7 +168,7 @@ export default function Home() {
         ].map((kpi, i) => (
           <motion.div
             key={i}
-            className={`p-6 rounded-xl shadow-lg bg-gradient-to-br ${kpi.color} text-white text-center`}
+            className={`p-6 rounded-xl shadow-lg bg-gradient-to-br ${kpi.color} text-white text-center animate-pulse`}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.2 }}
@@ -173,10 +197,19 @@ export default function Home() {
       >
         <h3 className="font-semibold mb-4">⚡ Activité récente</h3>
         {activity.slice(0, 5).map((event, i) => (
-          <div key={i} className="border-b py-2">
-            <p className="text-sm">
-              {event.time} — {event.message}
-            </p>
+          <div key={i} className="border-b py-2 flex justify-between">
+            <span>{event.time}</span>
+            <span
+              className={`px-2 py-0.5 rounded text-xs ${
+                event.type === "dataset"
+                  ? "bg-blue-500 text-white"
+                  : event.type === "transaction"
+                  ? "bg-green-500 text-white"
+                  : "bg-yellow-500 text-white"
+              }`}
+            >
+              {event.message}
+            </span>
           </div>
         ))}
         {activity.length === 0 && <p className="text-gray-500">Aucune activité pour l’instant...</p>}
@@ -222,6 +255,14 @@ export default function Home() {
           >
             Envoyer
           </button>
+          {chatHistory.length > 0 && (
+            <button
+              onClick={() => setChatHistory([])}
+              className="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600"
+            >
+              Effacer
+            </button>
+          )}
         </div>
       </motion.div>
     </div>
