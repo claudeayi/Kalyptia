@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { getDatasets } from "../api/dataset";
 import { payWithStripe, payWithPayPal, payWithCinetPay } from "../api/payment";
 import { motion } from "framer-motion";
+import API from "../api/axios";
+import { formatDistanceToNow } from "date-fns";
+import { fr } from "date-fns/locale";
+import Loader from "../components/Loader";
 
 export default function Marketplace() {
   const [datasets, setDatasets] = useState([]);
@@ -9,7 +13,8 @@ export default function Marketplace() {
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [ownerFilter, setOwnerFilter] = useState("");
   const [priceFilter, setPriceFilter] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [favorites, setFavorites] = useState(() =>
     JSON.parse(localStorage.getItem("favorites") || "[]")
@@ -21,9 +26,10 @@ export default function Marketplace() {
     try {
       setLoading(true);
       const res = await getDatasets();
-      setDatasets(res.data);
+      setDatasets(res.data || []);
     } catch (err) {
       console.error("❌ Erreur récupération datasets:", err);
+      setError("Impossible de récupérer la marketplace.");
     } finally {
       setLoading(false);
     }
@@ -33,7 +39,7 @@ export default function Marketplace() {
     fetchDatasets();
   }, []);
 
-  // ❤️ Favoris (localStorage)
+  // ❤️ Favoris
   const toggleFavorite = (id) => {
     let updated;
     if (favorites.includes(id)) {
@@ -62,8 +68,11 @@ export default function Marketplace() {
           description: "Achat dataset Kalyptia",
         });
       }
-      setMessage(`✅ Paiement réussi via ${method.toUpperCase()} : Transaction #${res.data.transaction.id}`);
+      setMessage(
+        `✅ Paiement réussi via ${method.toUpperCase()} : Transaction #${res.data.transaction.id}`
+      );
     } catch (err) {
+      console.error("❌ Paiement échoué:", err);
       setMessage(`❌ Paiement ${method} échoué`);
     }
   };
@@ -75,37 +84,48 @@ export default function Marketplace() {
       (ds.description || "").toLowerCase().includes(search.toLowerCase());
     const matchesStatus = statusFilter === "ALL" || ds.status === statusFilter;
     const matchesOwner =
-      ownerFilter === "" || (ds.owner?.name || "").toLowerCase().includes(ownerFilter.toLowerCase());
+      ownerFilter === "" ||
+      (ds.owner?.name || "").toLowerCase().includes(ownerFilter.toLowerCase());
     const matchesPrice =
       priceFilter === "" || parseFloat(priceFilter) <= (ds.price || 10);
     return matchesSearch && matchesStatus && matchesOwner && matchesPrice;
   });
 
-  // 🤖 IA Insights (placeholder, mock)
+  // 🤖 IA Insights mock
   const getAIInsights = (dataset) => {
     return {
       score: Math.floor(Math.random() * 100),
       insights: [
-        "💡 Qualité des données : bonne, mais 8% de valeurs manquantes détectées.",
+        "💡 Qualité des données : bonne, mais 8% de valeurs manquantes.",
         "📊 Potentiel de marché élevé : forte demande en datasets similaires.",
-        "🚀 Recommandation : enrichir avec métadonnées pour +20% ventes."
+        "🚀 Recommandation : enrichir avec métadonnées pour +20% ventes.",
       ],
-      prediction: `Ce dataset pourrait générer environ ${Math.floor(Math.random() * 500) + 100}$ dans le prochain mois.`
+      prediction: `Prévision : ce dataset pourrait générer environ ${
+        Math.floor(Math.random() * 500) + 100
+      } $ dans le mois.`,
     };
   };
+
+  if (loading) return <Loader text="Chargement de la marketplace..." />;
+  if (error)
+    return (
+      <p className="text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 p-3 rounded">
+        {error}
+      </p>
+    );
 
   return (
     <div className="space-y-10">
       <motion.h2
-        className="text-3xl font-extrabold bg-gradient-to-r from-green-500 to-blue-600 bg-clip-text text-transparent dark:from-green-300 dark:to-blue-400"
+        className="text-3xl font-extrabold bg-gradient-to-r from-green-500 to-blue-600 bg-clip-text text-transparent"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        🛒 Marketplace des Datasets
+        🛒 Marketplace des Datasets ({filtered.length})
       </motion.h2>
 
       {/* 🔍 Filtres */}
-      <div className="grid grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
         <input
           type="text"
           placeholder="🔍 Rechercher..."
@@ -139,30 +159,50 @@ export default function Marketplace() {
         />
       </div>
 
-      {loading && <p className="text-gray-500 dark:text-gray-400">Chargement...</p>}
-      {message && <p className="mb-4 text-sm">{message}</p>}
+      {message && (
+        <p className="mb-4 text-sm font-semibold text-indigo-600">{message}</p>
+      )}
 
       {/* 🗂️ Liste datasets */}
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filtered.map((ds) => (
           <motion.div
             key={ds.id}
-            className="bg-white dark:bg-gray-900 shadow p-4 rounded border dark:border-gray-700 flex flex-col justify-between"
+            className="bg-white dark:bg-gray-900 shadow p-4 rounded-lg border dark:border-gray-700 flex flex-col justify-between"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
           >
             <div>
               <div className="flex justify-between items-center">
-                <h3 className="font-semibold text-lg text-gray-800 dark:text-white">{ds.name}</h3>
+                <h3 className="font-semibold text-lg text-gray-800 dark:text-white">
+                  {ds.name}
+                </h3>
                 <button
                   onClick={() => toggleFavorite(ds.id)}
-                  className={`text-xl ${favorites.includes(ds.id) ? "text-red-500" : "text-gray-400"}`}
+                  className={`text-xl ${
+                    favorites.includes(ds.id)
+                      ? "text-red-500"
+                      : "text-gray-400 hover:text-red-400"
+                  }`}
                 >
                   ♥
                 </button>
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">{ds.description}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">👤 {ds.owner?.name || "N/A"}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                {ds.description}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                👤 {ds.owner?.name || "N/A"}
+              </p>
+              {ds.createdAt && (
+                <p className="text-xs text-gray-400">
+                  📅 Publié{" "}
+                  {formatDistanceToNow(new Date(ds.createdAt), {
+                    addSuffix: true,
+                    locale: fr,
+                  })}
+                </p>
+              )}
             </div>
             <div className="mt-4 flex gap-2">
               <button
@@ -176,26 +216,32 @@ export default function Marketplace() {
         ))}
       </div>
 
-      {filtered.length === 0 && !loading && (
-        <p className="text-gray-500 dark:text-gray-400">Aucun dataset trouvé...</p>
+      {filtered.length === 0 && (
+        <p className="text-gray-500 dark:text-gray-400">
+          Aucun dataset trouvé...
+        </p>
       )}
 
-      {/* 🔎 Modal Aperçu + IA widget */}
+      {/* 🔎 Modal Aperçu */}
       {selected && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <motion.div
-            className="bg-white dark:bg-gray-900 p-6 rounded shadow-lg max-w-lg w-full relative"
+            className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-xl max-w-lg w-full relative"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
           >
             <button
               onClick={() => setSelected(null)}
-              className="absolute top-2 right-2 text-gray-500 hover:text-black dark:hover:text-white"
+              className="absolute top-2 right-2 text-gray-500 hover:text-red-500"
             >
               ✖
             </button>
-            <h3 className="text-xl font-bold mb-2 text-gray-800 dark:text-white">{selected.name}</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">{selected.description}</p>
+            <h3 className="text-xl font-bold mb-2 text-gray-800 dark:text-white">
+              {selected.name}
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+              {selected.description}
+            </p>
 
             {/* ✅ Widget IA */}
             <div className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-4 rounded-lg shadow mb-4">
@@ -209,7 +255,13 @@ export default function Marketplace() {
                       <p className="text-sm">Score Qualité :</p>
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div
-                          className="bg-green-400 h-2 rounded-full"
+                          className={`h-2 rounded-full ${
+                            ai.score > 70
+                              ? "bg-green-500"
+                              : ai.score > 40
+                              ? "bg-yellow-500"
+                              : "bg-red-500"
+                          }`}
                           style={{ width: `${ai.score}%` }}
                         ></div>
                       </div>
@@ -234,21 +286,21 @@ export default function Marketplace() {
             <div className="flex gap-2">
               <button
                 onClick={() => handlePayment("stripe", selected.id, 10)}
-                className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm"
+                className="flex-1 bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 text-sm"
               >
-                Stripe
+                💳 Stripe
               </button>
               <button
                 onClick={() => handlePayment("paypal", selected.id, 10)}
-                className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 text-sm"
+                className="flex-1 bg-yellow-500 text-white px-3 py-2 rounded hover:bg-yellow-600 text-sm"
               >
-                PayPal
+                🅿 PayPal
               </button>
               <button
                 onClick={() => handlePayment("cinetpay", selected.id, 10)}
-                className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 text-sm"
+                className="flex-1 bg-green-600 text-white px-3 py-2 rounded hover:bg-green-700 text-sm"
               >
-                CinetPay
+                🌍 CinetPay
               </button>
             </div>
           </motion.div>
