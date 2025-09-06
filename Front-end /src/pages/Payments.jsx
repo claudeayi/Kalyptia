@@ -1,17 +1,25 @@
 import { useState } from "react";
 import { payWithStripe, payWithPayPal, payWithCinetPay } from "../api/payment";
 import { motion } from "framer-motion";
-import { useNotifications } from "../context/NotificationContext"; // ✅ ajout
+import { useNotifications } from "../context/NotificationContext";
 
 export default function Payments() {
   const [amount, setAmount] = useState("");
   const [datasetId, setDatasetId] = useState("");
   const [message, setMessage] = useState("");
   const [result, setResult] = useState(null);
-  const { addNotification } = useNotifications(); // ✅ hook notif global
+  const [loading, setLoading] = useState(false);
+  const [history, setHistory] = useState([]);
+  const { addNotification } = useNotifications();
 
   const handlePayment = async (method) => {
+    if (!amount || !datasetId) {
+      setMessage("❌ Veuillez remplir tous les champs.");
+      return;
+    }
+
     try {
+      setLoading(true);
       setMessage("");
       setResult(null);
       let res;
@@ -33,7 +41,13 @@ export default function Payments() {
       const successMsg = `✅ Paiement réussi via ${method.toUpperCase()} (Transaction #${res.data.transaction.id})`;
       setMessage(successMsg);
 
-      // ✅ Notification temps réel
+      // ✅ Historique local
+      setHistory((prev) => [
+        { method, amount, datasetId, id: res.data.transaction.id, status: "success" },
+        ...prev.slice(0, 2),
+      ]);
+
+      // ✅ Notification cockpit
       addNotification({
         type: "payment",
         message: successMsg,
@@ -45,13 +59,19 @@ export default function Payments() {
       const failMsg = `❌ Paiement via ${method.toUpperCase()} échoué`;
       setMessage(failMsg);
 
-      // ✅ Notif d’échec
+      setHistory((prev) => [
+        { method, amount, datasetId, id: Date.now(), status: "failed" },
+        ...prev.slice(0, 2),
+      ]);
+
       addNotification({
         type: "payment",
         message: failMsg,
         data: { datasetId, amount },
         link: "/payments",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,7 +79,7 @@ export default function Payments() {
     <div className="space-y-10">
       {/* Titre cockpit */}
       <motion.h2
-        className="text-3xl font-extrabold bg-gradient-to-r from-purple-500 to-pink-600 bg-clip-text text-transparent dark:from-purple-300 dark:to-pink-400"
+        className="text-3xl font-extrabold bg-gradient-to-r from-purple-500 to-pink-600 bg-clip-text text-transparent"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
@@ -102,25 +122,28 @@ export default function Payments() {
         <div className="flex flex-col sm:flex-row gap-4">
           <button
             onClick={() => handlePayment("stripe")}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition"
+            disabled={loading}
+            className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-4 py-2 rounded transition"
           >
-            Payer avec Stripe
+            💳 Stripe
           </button>
           <button
             onClick={() => handlePayment("paypal")}
-            className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded transition"
+            disabled={loading}
+            className="flex-1 bg-yellow-500 hover:bg-yellow-600 disabled:opacity-50 text-white px-4 py-2 rounded transition"
           >
-            Payer avec PayPal
+            🅿 PayPal
           </button>
           <button
             onClick={() => handlePayment("cinetpay")}
-            className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition"
+            disabled={loading}
+            className="flex-1 bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white px-4 py-2 rounded transition"
           >
-            Payer avec CinetPay
+            🌍 CinetPay
           </button>
         </div>
 
-        {/* Résultat cockpit IA */}
+        {/* Résultat cockpit */}
         {message && (
           <motion.div
             className={`p-4 rounded text-sm ${
@@ -145,6 +168,39 @@ export default function Payments() {
           </motion.div>
         )}
       </div>
+
+      {/* Historique local */}
+      {history.length > 0 && (
+        <motion.div
+          className="bg-white dark:bg-gray-900 shadow p-6 rounded-xl space-y-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <h3 className="font-semibold text-gray-700 dark:text-gray-200">
+            🕒 Derniers paiements
+          </h3>
+          <ul className="space-y-2 text-sm">
+            {history.map((h) => (
+              <li
+                key={h.id}
+                className={`p-2 rounded flex justify-between ${
+                  h.status === "success"
+                    ? "bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-100"
+                    : "bg-red-100 dark:bg-red-800 text-red-700 dark:text-red-100"
+                }`}
+              >
+                <span>
+                  {h.method.toUpperCase()} — Dataset #{h.datasetId} — {h.amount}{" "}
+                  {h.method === "cinetpay" ? "XAF" : "USD"}
+                </span>
+                <span className="text-xs">
+                  {h.status === "success" ? "✅" : "❌"}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </motion.div>
+      )}
     </div>
   );
 }
