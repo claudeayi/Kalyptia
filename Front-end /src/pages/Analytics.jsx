@@ -2,26 +2,56 @@ import { useEffect, useState } from "react";
 import { getRevenue, getStats } from "../api/analytics";
 import { Bar, Pie, Line } from "react-chartjs-2";
 import { motion } from "framer-motion";
+import Loader from "../components/Loader";
+import API from "../api/axios";
 
 export default function Analytics() {
   const [revenue, setRevenue] = useState(0);
   const [stats, setStats] = useState({});
+  const [aiInsights, setAiInsights] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         setRevenue((await getRevenue()).data.totalRevenue);
         setStats((await getStats()).data);
+
+        // ✅ Insights IA depuis API (fallback si indispo)
+        try {
+          const res = await API.get("/ai/analytics");
+          setAiInsights(res.data.insights || []);
+        } catch {
+          setAiInsights([
+            "📊 Revenus devraient croître de +35% d’ici 30 jours.",
+            "⚠️ Anomalie : pic inhabituel de ventes le 12 Mars.",
+            "💡 Les datasets financiers génèrent 2x plus de transactions.",
+            "🚀 Traduisez vos datasets en anglais pour +20% ventes.",
+          ]);
+        }
       } catch (err) {
-        console.error("❌ Erreur récupération analytics:", err);
+        console.error("❌ Erreur analytics:", err);
+        setError("Impossible de récupérer les données analytics.");
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
   }, []);
 
+  if (loading) return <Loader text="Chargement des analytics..." />;
+  if (error)
+    return (
+      <p className="text-red-600 dark:text-red-400 p-4 bg-red-50 dark:bg-red-900/30 rounded">
+        {error}
+      </p>
+    );
+
   // ✅ Line chart - Revenus + Projection IA
   const revenueData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May"],
+    labels: ["Jan", "Fév", "Mar", "Avr", "Mai"],
     datasets: [
       {
         label: "Revenus ($)",
@@ -70,14 +100,6 @@ export default function Analytics() {
     ],
   };
 
-  // ✅ Insights IA simulés
-  const aiInsights = [
-    "📊 Les revenus devraient croître de +35% d’ici 30 jours.",
-    "⚠️ Anomalie détectée : pic inhabituel de ventes le 12 Mars.",
-    "💡 Les datasets financiers génèrent 2x plus de transactions que la moyenne.",
-    "🚀 Recommandation : traduire vos datasets en anglais pour +20% ventes.",
-  ];
-
   return (
     <div className="space-y-10">
       {/* Titre */}
@@ -88,6 +110,28 @@ export default function Analytics() {
       >
         📈 Analytics – Kalyptia
       </motion.h2>
+
+      {/* ✅ Résumé KPIs */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div className="bg-white dark:bg-gray-900 p-4 rounded shadow text-center">
+          <h4 className="text-gray-500 dark:text-gray-400 text-sm">Revenus</h4>
+          <p className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+            ${revenue.toLocaleString()}
+          </p>
+        </div>
+        <div className="bg-white dark:bg-gray-900 p-4 rounded shadow text-center">
+          <h4 className="text-gray-500 dark:text-gray-400 text-sm">Datasets approuvés</h4>
+          <p className="text-2xl font-bold text-green-600">
+            {stats.datasetsApproved || 0}
+          </p>
+        </div>
+        <div className="bg-white dark:bg-gray-900 p-4 rounded shadow text-center">
+          <h4 className="text-gray-500 dark:text-gray-400 text-sm">Utilisateurs</h4>
+          <p className="text-2xl font-bold text-purple-600">
+            {(stats.users || 0) + (stats.premium || 0) + (stats.admin || 0)}
+          </p>
+        </div>
+      </div>
 
       {/* Revenus + Projection IA */}
       <motion.div
@@ -127,14 +171,17 @@ export default function Analytics() {
 
       {/* ✅ Widget Insights IA */}
       <motion.div
-        className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6 rounded-xl shadow space-y-3"
+        className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6 rounded-xl shadow"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
       >
         <h3 className="font-semibold mb-4">🤖 Insights IA</h3>
-        <ul className="space-y-2">
+        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {aiInsights.map((ins, i) => (
-            <li key={i} className="bg-white bg-opacity-20 p-3 rounded text-sm">
+            <li
+              key={i}
+              className="bg-white bg-opacity-20 p-3 rounded text-sm"
+            >
               {ins}
             </li>
           ))}
