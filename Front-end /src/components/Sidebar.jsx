@@ -1,4 +1,3 @@
-
 import { NavLink } from "react-router-dom";
 import { useNotifications } from "../context/NotificationContext";
 import { useEffect, useState } from "react";
@@ -10,41 +9,40 @@ import {
   LinearScale,
   PointElement,
   LineElement,
+  Tooltip,
 } from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip);
 
 export default function Sidebar() {
   const { notifications } = useNotifications();
   const [counts, setCounts] = useState({ datasets: 0, transactions: 0 });
   const [revenues, setRevenues] = useState([]);
-  const [openAI, setOpenAI] = useState(false); // ✅ toggle IA Insights
+  const [loading, setLoading] = useState(true);
+  const [openAI, setOpenAI] = useState(false);
 
   useEffect(() => {
-    const fetchCounts = async () => {
+    const fetchData = async () => {
       try {
-        const ds = await API.get("/datasets");
-        const tx = await API.get("/transactions");
+        const [ds, tx, rev] = await Promise.all([
+          API.get("/datasets"),
+          API.get("/transactions"),
+          API.get("/analytics/revenue"),
+        ]);
         setCounts({
-          datasets: ds.data.length,
-          transactions: tx.data.length,
+          datasets: ds.data.length || 0,
+          transactions: tx.data.length || 0,
         });
+        setRevenues(rev.data.history || []);
       } catch (err) {
-        console.error("❌ Erreur Sidebar counts:", err);
+        console.error("❌ Erreur Sidebar:", err);
+        setCounts({ datasets: 0, transactions: 0 });
+        setRevenues([]);
+      } finally {
+        setLoading(false);
       }
     };
-
-    const fetchRevenue = async () => {
-      try {
-        const res = await API.get("/analytics/revenue");
-        setRevenues(res.data.history || []);
-      } catch (err) {
-        console.error("❌ Erreur Sidebar revenue:", err);
-      }
-    };
-
-    fetchCounts();
-    fetchRevenue();
+    fetchData();
   }, []);
 
   const links = [
@@ -73,9 +71,10 @@ export default function Sidebar() {
       {
         data: revenues,
         borderColor: "#3B82F6",
-        backgroundColor: "rgba(59,130,246,0.3)",
+        backgroundColor: "rgba(59,130,246,0.15)",
         tension: 0.4,
         pointRadius: 0,
+        fill: true,
       },
     ],
   };
@@ -85,7 +84,18 @@ export default function Sidebar() {
     maintainAspectRatio: false,
     plugins: { legend: { display: false } },
     scales: { x: { display: false }, y: { display: false } },
+    elements: { line: { borderWidth: 2 } },
   };
+
+  // Variation % revenus
+  const variation =
+    revenues.length > 1
+      ? (
+          ((revenues[revenues.length - 1] - revenues[revenues.length - 2]) /
+            revenues[revenues.length - 2]) *
+          100
+        ).toFixed(1)
+      : 0;
 
   return (
     <aside className="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white w-60 min-h-screen p-4 flex flex-col justify-between">
@@ -95,10 +105,11 @@ export default function Sidebar() {
             <NavLink
               to={link.to}
               end={link.to === "/"}
+              aria-label={`Aller vers ${link.label}`}
               className={({ isActive }) =>
                 `flex-1 block px-3 py-2 rounded transition ${
                   isActive
-                    ? "bg-blue-600 text-white"
+                    ? "bg-blue-600 text-white font-semibold"
                     : "hover:bg-gray-300 dark:hover:bg-gray-700"
                 }`
               }
@@ -106,7 +117,7 @@ export default function Sidebar() {
               {link.label}
             </NavLink>
 
-            {/* ✅ Badge cockpit IA */}
+            {/* ✅ Badge cockpit */}
             {link.badge !== undefined && link.badge > 0 && (
               <span
                 className={`ml-2 px-2 py-0.5 text-xs font-bold rounded-full text-white ${
@@ -122,22 +133,26 @@ export default function Sidebar() {
         {/* ✅ Section IA Insights collapsible */}
         <li>
           <button
+            aria-label="Ouvrir menu IA Insights"
             onClick={() => setOpenAI(!openAI)}
-            className="w-full flex justify-between items-center px-3 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition"
+            className="w-full flex justify-between items-center px-3 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition font-medium"
           >
             <span>🤖 IA Insights</span>
-            <span>{openAI ? "▲" : "▼"}</span>
+            <span className="text-xs bg-purple-600 text-white px-2 py-0.5 rounded-full">
+              {openAI ? "▲" : "▼"} Beta
+            </span>
           </button>
           {openAI && (
-            <ul className="ml-4 mt-2 space-y-2">
+            <ul className="ml-4 mt-2 space-y-2 animate-fadeIn">
               {aiLinks.map((ai) => (
                 <li key={ai.to}>
                   <NavLink
                     to={ai.to}
+                    aria-label={`Aller vers ${ai.label}`}
                     className={({ isActive }) =>
-                      `block px-2 py-1 rounded text-sm ${
+                      `block px-2 py-1 rounded text-sm transition ${
                         isActive
-                          ? "bg-purple-600 text-white"
+                          ? "bg-purple-600 text-white font-semibold"
                           : "hover:bg-gray-300 dark:hover:bg-gray-700"
                       }`
                     }
@@ -152,16 +167,37 @@ export default function Sidebar() {
       </ul>
 
       {/* ✅ Sparkline Analytics */}
-      {revenues.length > 0 && (
-        <div className="mt-6">
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-            📊 Revenus récents
-          </p>
-          <div className="h-16">
-            <Line data={chartData} options={chartOptions} />
+      <div className="mt-6">
+        {loading ? (
+          <div className="animate-pulse h-16 bg-gray-300 dark:bg-gray-700 rounded"></div>
+        ) : revenues.length > 0 ? (
+          <div>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-1 flex justify-between items-center">
+              <span>📊 Revenus récents</span>
+              <span
+                className={`ml-2 font-bold text-xs ${
+                  variation > 0 ? "text-green-500" : "text-red-500"
+                }`}
+              >
+                {variation > 0 ? `+${variation}%` : `${variation}%`}
+              </span>
+            </p>
+            <div className="h-16">
+              <Line data={chartData} options={chartOptions} />
+            </div>
+            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+              Dernier revenu :{" "}
+              <span className="font-semibold">
+                {revenues[revenues.length - 1]} $
+              </span>
+            </p>
           </div>
-        </div>
-      )}
+        ) : (
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            Aucune donnée disponible
+          </p>
+        )}
+      </div>
     </aside>
   );
 }
