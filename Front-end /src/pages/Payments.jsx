@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { payWithStripe, payWithPayPal, payWithCinetPay } from "../api/payment";
+import {
+  payWithStripe,
+  payWithPayPal,
+  payWithCinetPay,
+  payWithMobileMoney,
+  payWithCrypto,
+} from "../api/payment";
 import { motion } from "framer-motion";
 import { useNotifications } from "../context/NotificationContext";
 
@@ -13,8 +19,8 @@ export default function Payments() {
   const { addNotification } = useNotifications();
 
   const handlePayment = async (method) => {
-    if (!amount || !datasetId) {
-      setMessage("❌ Veuillez remplir tous les champs.");
+    if (!amount || !datasetId || parseFloat(amount) <= 0) {
+      setMessage("❌ Veuillez entrer un montant valide et un Dataset ID.");
       return;
     }
 
@@ -24,30 +30,61 @@ export default function Payments() {
       setResult(null);
       let res;
 
-      if (method === "stripe") {
-        res = await payWithStripe({ datasetId, amount, currency: "USD" });
-      } else if (method === "paypal") {
-        res = await payWithPayPal({ datasetId, amount, currency: "USD" });
-      } else if (method === "cinetpay") {
-        res = await payWithCinetPay({
-          datasetId,
-          amount,
-          currency: "XAF",
-          description: "Achat dataset Kalyptia",
-        });
+      switch (method) {
+        case "stripe":
+          res = await payWithStripe({ datasetId, amount, currency: "USD" });
+          break;
+        case "paypal":
+          res = await payWithPayPal({ datasetId, amount, currency: "USD" });
+          break;
+        case "cinetpay":
+          res = await payWithCinetPay({
+            datasetId,
+            amount,
+            currency: "XAF",
+            description: "Achat dataset Kalyptia",
+          });
+          break;
+        case "mobile":
+          res = await payWithMobileMoney({
+            datasetId,
+            amount,
+            currency: "XAF",
+            phone: "+237600000000",
+            provider: "MTN", // ou "ORANGE"
+          });
+          break;
+        case "crypto":
+          res = await payWithCrypto({
+            datasetId,
+            amount,
+            currency: "USDT",
+            walletAddress: "0x1234567890abcdef",
+            network: "ETH",
+          });
+          break;
+        default:
+          throw new Error("Méthode de paiement inconnue");
       }
 
       setResult(res.data);
-      const successMsg = `✅ Paiement réussi via ${method.toUpperCase()} (Transaction #${res.data.transaction.id})`;
+      const successMsg = `✅ Paiement via ${method.toUpperCase()} réussi (Transaction #${res.data.transaction.id})`;
       setMessage(successMsg);
 
-      // ✅ Historique local
+      // Historique local cockpit
       setHistory((prev) => [
-        { method, amount, datasetId, id: res.data.transaction.id, status: "success" },
-        ...prev.slice(0, 2),
+        {
+          method,
+          amount,
+          datasetId,
+          id: res.data.transaction.id,
+          status: "success",
+          date: new Date().toLocaleString(),
+        },
+        ...prev.slice(0, 4),
       ]);
 
-      // ✅ Notification cockpit
+      // Notification cockpit
       addNotification({
         type: "payment",
         message: successMsg,
@@ -60,8 +97,15 @@ export default function Payments() {
       setMessage(failMsg);
 
       setHistory((prev) => [
-        { method, amount, datasetId, id: Date.now(), status: "failed" },
-        ...prev.slice(0, 2),
+        {
+          method,
+          amount,
+          datasetId,
+          id: Date.now(),
+          status: "failed",
+          date: new Date().toLocaleString(),
+        },
+        ...prev.slice(0, 4),
       ]);
 
       addNotification({
@@ -96,6 +140,7 @@ export default function Payments() {
             </label>
             <input
               type="number"
+              min="1"
               className="w-full p-2 border rounded dark:bg-gray-800 dark:text-white dark:border-gray-700"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
@@ -119,27 +164,41 @@ export default function Payments() {
         </div>
 
         {/* Boutons paiement */}
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
           <button
             onClick={() => handlePayment("stripe")}
             disabled={loading}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-4 py-2 rounded transition"
+            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-4 py-2 rounded transition"
           >
             💳 Stripe
           </button>
           <button
             onClick={() => handlePayment("paypal")}
             disabled={loading}
-            className="flex-1 bg-yellow-500 hover:bg-yellow-600 disabled:opacity-50 text-white px-4 py-2 rounded transition"
+            className="bg-yellow-500 hover:bg-yellow-600 disabled:opacity-50 text-white px-4 py-2 rounded transition"
           >
             🅿 PayPal
           </button>
           <button
             onClick={() => handlePayment("cinetpay")}
             disabled={loading}
-            className="flex-1 bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white px-4 py-2 rounded transition"
+            className="bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white px-4 py-2 rounded transition"
           >
             🌍 CinetPay
+          </button>
+          <button
+            onClick={() => handlePayment("mobile")}
+            disabled={loading}
+            className="bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white px-4 py-2 rounded transition"
+          >
+            📱 Mobile Money
+          </button>
+          <button
+            onClick={() => handlePayment("crypto")}
+            disabled={loading}
+            className="bg-gray-800 hover:bg-gray-900 disabled:opacity-50 text-white px-4 py-2 rounded transition"
+          >
+            ₿ Crypto
           </button>
         </div>
 
@@ -169,7 +228,7 @@ export default function Payments() {
         )}
       </div>
 
-      {/* Historique local */}
+      {/* Historique local cockpit */}
       {history.length > 0 && (
         <motion.div
           className="bg-white dark:bg-gray-900 shadow p-6 rounded-xl space-y-4"
@@ -183,7 +242,7 @@ export default function Payments() {
             {history.map((h) => (
               <li
                 key={h.id}
-                className={`p-2 rounded flex justify-between ${
+                className={`p-2 rounded flex justify-between items-center ${
                   h.status === "success"
                     ? "bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-100"
                     : "bg-red-100 dark:bg-red-800 text-red-700 dark:text-red-100"
@@ -191,10 +250,10 @@ export default function Payments() {
               >
                 <span>
                   {h.method.toUpperCase()} — Dataset #{h.datasetId} — {h.amount}{" "}
-                  {h.method === "cinetpay" ? "XAF" : "USD"}
+                  {["cinetpay", "mobile"].includes(h.method) ? "XAF" : "USD"}
                 </span>
                 <span className="text-xs">
-                  {h.status === "success" ? "✅" : "❌"}
+                  {h.date} {h.status === "success" ? "✅" : "❌"}
                 </span>
               </li>
             ))}
