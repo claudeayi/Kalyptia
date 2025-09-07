@@ -52,6 +52,16 @@ body {
   @apply bg-white dark:bg-gray-900 shadow-lg rounded-xl p-6 border border-gray-200 dark:border-gray-700;
 }
 
+/* ✅ Carte interactive */
+.kalyptia-card-hover {
+  @apply transition transform duration-200 hover:shadow-xl hover:-translate-y-1;
+}
+
+/* ✅ Effet Glassmorphism */
+.glass {
+  @apply bg-white/30 dark:bg-gray-800/30 backdrop-blur-lg border border-white/20 dark:border-gray-700/30;
+}
+
 /* ===========================
    ⚡ Animations
 =========================== */
@@ -92,4 +102,35 @@ body {
   50% {
     opacity: 0.6;
   }
+}
+
+/* ✅ Animation shimmer (SkeletonLoader) */
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+  background-color: #e5e7eb; /* gray-200 */
+}
+
+.dark .shimmer {
+  background-color: #374151; /* gray-700 */
+}
+
+.shimmer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmer 2s infinite;
 }
