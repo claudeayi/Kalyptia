@@ -1,18 +1,27 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const NotificationContext = createContext();
 
 export const NotificationProvider = ({ children }) => {
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState(() => {
+    // ✅ Charger depuis localStorage si dispo
+    const stored = localStorage.getItem("notifications");
+    return stored ? JSON.parse(stored) : [];
+  });
+
+  // ✅ Sauvegarde dans localStorage à chaque changement
+  useEffect(() => {
+    localStorage.setItem("notifications", JSON.stringify(notifications));
+  }, [notifications]);
 
   // ✅ Ajouter une notification
-  const addNotification = ({ type, message, data, link }) => {
+  const addNotification = ({ type, message, data, link, duration = 8000 }) => {
     const id = Date.now();
-    const time = new Date().toLocaleTimeString();
+    const time = new Date().toLocaleString();
 
     const newNotif = {
       id,
-      type,
+      type: type || "system",
       message,
       data,
       link,
@@ -22,10 +31,12 @@ export const NotificationProvider = ({ children }) => {
 
     setNotifications((prev) => [newNotif, ...prev]);
 
-    // ✅ Suppression auto après 8s (toast)
-    setTimeout(() => {
-      setNotifications((prev) => prev.filter((n) => n.id !== id));
-    }, 8000);
+    // ✅ Suppression auto (toast) après durée définie
+    if (duration > 0) {
+      setTimeout(() => {
+        setNotifications((prev) => prev.filter((n) => n.id !== id));
+      }, duration);
+    }
   };
 
   // ✅ Marquer comme lue une notif
@@ -45,8 +56,19 @@ export const NotificationProvider = ({ children }) => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
   };
 
+  // ✅ Vider l’historique complet
+  const clearNotifications = () => {
+    setNotifications([]);
+  };
+
   // ✅ Nombre de notifs non lues
   const unreadCount = notifications.filter((n) => !n.read).length;
+
+  // ✅ Compteur par type
+  const byType = notifications.reduce((acc, n) => {
+    acc[n.type] = (acc[n.type] || 0) + 1;
+    return acc;
+  }, {});
 
   return (
     <NotificationContext.Provider
@@ -56,7 +78,9 @@ export const NotificationProvider = ({ children }) => {
         removeNotification,
         markAsRead,
         markAllAsRead,
+        clearNotifications,
         unreadCount,
+        byType,
       }}
     >
       {children}
