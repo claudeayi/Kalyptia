@@ -7,6 +7,7 @@ import "./index.css";
 // 🌍 Context Providers
 import { ThemeProvider } from "./context/ThemeContext";
 import { NotificationProvider } from "./context/NotificationContext";
+import { AIProvider } from "./context/AIContext"; // ✅ ajout IA global
 
 // 🌀 Loader global (fallback suspense)
 import Loader from "./components/Loader";
@@ -51,11 +52,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <ErrorBoundary>
       <ThemeProvider>
         <NotificationProvider>
-          <BrowserRouter>
-            <Suspense fallback={<Loader />}>
-              <App />
-            </Suspense>
-          </BrowserRouter>
+          <AIProvider> {/* ✅ Fournit l’IA globalement */}
+            <BrowserRouter>
+              <Suspense fallback={<Loader text="Initialisation..." />}>
+                <App />
+              </Suspense>
+            </BrowserRouter>
+          </AIProvider>
         </NotificationProvider>
       </ThemeProvider>
     </ErrorBoundary>
