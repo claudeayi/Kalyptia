@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import API from "../api/axios";
 
@@ -7,7 +7,16 @@ export default function AIAssistantSidebar({ currentPage }) {
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [userQuery, setUserQuery] = useState("");
-  const [aiResponse, setAiResponse] = useState(null);
+  const [chatHistory, setChatHistory] = useState(() =>
+    JSON.parse(localStorage.getItem("aiChatHistory") || "[]")
+  );
+
+  const chatEndRef = useRef(null);
+
+  // ✅ Scroll auto vers le bas
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatHistory]);
 
   // ✅ Suggestions IA contextuelles
   useEffect(() => {
@@ -22,12 +31,12 @@ export default function AIAssistantSidebar({ currentPage }) {
           marketplace: [
             "💡 Le dataset financier #12 est en forte demande.",
             "🚀 Traduisez vos datasets en anglais pour +25% de ventes.",
-            "⚠️ 2 datasets similaires performent mieux, ajustez la description."
+            "⚠️ Ajustez vos descriptions pour surpasser vos concurrents."
           ],
           analytics: [
             "📊 Revenus en hausse de 10% cette semaine.",
             "⚡ Prévision IA : +30% d’ici 30 jours.",
-            "💰 Catégorie 'finance' surperforme toutes les autres."
+            "💰 La catégorie 'finance' surperforme."
           ],
           profile: [
             "👤 Activez PREMIUM pour +50% opportunités.",
@@ -58,15 +67,33 @@ export default function AIAssistantSidebar({ currentPage }) {
     e.preventDefault();
     if (!userQuery.trim()) return;
 
-    setAiResponse({ type: "loading", text: "⏳ L’IA réfléchit..." });
-    try {
-      const res = await API.post("/ai/ask", { query: userQuery, page: currentPage });
-      setAiResponse({ type: "success", text: res.data.answer });
-    } catch (err) {
-      setAiResponse({ type: "error", text: "❌ Impossible de joindre l’IA." });
-    }
+    const userMsg = { sender: "user", text: userQuery, time: new Date().toLocaleTimeString() };
+    setChatHistory((prev) => [...prev, userMsg]);
+
     setUserQuery("");
+
+    const aiMsg = { sender: "ai", text: "⏳ L’IA réfléchit...", loading: true };
+    setChatHistory((prev) => [...prev, aiMsg]);
+
+    try {
+      const res = await API.post("/ai/ask", { query: userMsg.text, page: currentPage });
+      const answer = res.data.answer || "🤖 Pas de réponse disponible.";
+      setChatHistory((prev) => [
+        ...prev.slice(0, -1),
+        { sender: "ai", text: answer, time: new Date().toLocaleTimeString() },
+      ]);
+    } catch (err) {
+      setChatHistory((prev) => [
+        ...prev.slice(0, -1),
+        { sender: "ai", text: "❌ Impossible de joindre l’IA.", error: true },
+      ]);
+    }
   };
+
+  // ✅ Sauvegarde historique localStorage
+  useEffect(() => {
+    localStorage.setItem("aiChatHistory", JSON.stringify(chatHistory));
+  }, [chatHistory]);
 
   // ✅ Fermer avec Escape
   useEffect(() => {
@@ -96,58 +123,70 @@ export default function AIAssistantSidebar({ currentPage }) {
             animate={{ x: 0 }}
             exit={{ x: 400 }}
             transition={{ type: "spring", stiffness: 80 }}
-            className="fixed top-0 right-0 h-full w-80 bg-white dark:bg-gray-900 shadow-lg p-6 z-40 flex flex-col"
+            className="fixed top-0 right-0 h-full w-96 bg-white dark:bg-gray-900 shadow-lg p-6 z-40 flex flex-col"
           >
             <h3 className="text-xl font-bold mb-4 text-gray-800 dark:text-white">
               🤖 Assistant IA
             </h3>
 
-            {/* Suggestions */}
-            <div className="flex-1 overflow-y-auto space-y-3">
-              {loading ? (
-                <p className="text-sm text-gray-500 dark:text-gray-400">Chargement...</p>
-              ) : (
-                suggestions.map((s, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.1 }}
-                    className="bg-gray-100 dark:bg-gray-800 p-3 rounded text-sm text-gray-700 dark:text-gray-200 shadow"
-                  >
-                    {s}
-                  </motion.div>
-                ))
-              )}
+            {/* ✅ Suggestions contextuelles */}
+            <div className="mb-4">
+              <h4 className="text-sm font-semibold mb-2 text-gray-600 dark:text-gray-300">
+                Suggestions IA
+              </h4>
+              <div className="space-y-2">
+                {loading ? (
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Chargement...</p>
+                ) : (
+                  suggestions.map((s, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                      className="bg-gray-100 dark:bg-gray-800 p-2 rounded text-sm shadow"
+                    >
+                      {s}
+                    </motion.div>
+                  ))
+                )}
+              </div>
             </div>
 
-            {/* IA Answer */}
-            {aiResponse && (
-              <div
-                className={`mt-3 p-3 rounded text-sm shadow ${
-                  aiResponse.type === "success"
-                    ? "bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-200"
-                    : aiResponse.type === "error"
-                    ? "bg-red-100 dark:bg-red-800 text-red-700 dark:text-red-200"
-                    : "bg-yellow-100 dark:bg-yellow-800 text-yellow-700 dark:text-yellow-200"
-                }`}
-              >
-                {aiResponse.text}
-              </div>
-            )}
+            {/* ✅ Chat IA */}
+            <div className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-800 p-3 rounded space-y-3">
+              {chatHistory.map((msg, i) => (
+                <div
+                  key={i}
+                  className={`p-2 rounded-lg max-w-[80%] ${
+                    msg.sender === "user"
+                      ? "ml-auto bg-indigo-500 text-white"
+                      : msg.error
+                      ? "bg-red-100 dark:bg-red-800 text-red-700 dark:text-red-200"
+                      : "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+                  }`}
+                >
+                  <p className="text-sm">{msg.text}</p>
+                  {msg.time && (
+                    <span className="block mt-1 text-[10px] opacity-70">{msg.time}</span>
+                  )}
+                </div>
+              ))}
+              <div ref={chatEndRef} />
+            </div>
 
-            {/* Input IA */}
-            <form onSubmit={askAI} className="mt-4 flex">
+            {/* ✅ Input IA */}
+            <form onSubmit={askAI} className="mt-3 flex">
               <input
                 type="text"
                 value={userQuery}
                 onChange={(e) => setUserQuery(e.target.value)}
                 placeholder="Posez une question à l’IA..."
-                className="flex-1 p-2 rounded-l bg-gray-100 dark:bg-gray-800 text-sm text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-700"
+                className="flex-1 p-2 rounded-l bg-gray-100 dark:bg-gray-700 text-sm text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600"
               />
               <button
                 type="submit"
-                className="px-3 rounded-r bg-indigo-600 text-white hover:bg-indigo-700"
+                className="px-4 bg-indigo-600 text-white rounded-r hover:bg-indigo-700"
               >
                 Envoyer
               </button>
@@ -155,7 +194,7 @@ export default function AIAssistantSidebar({ currentPage }) {
 
             <button
               onClick={() => setOpen(false)}
-              className="mt-4 px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600"
+              className="mt-3 px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600"
             >
               Fermer
             </button>
