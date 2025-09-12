@@ -13,21 +13,20 @@ export default function AIAssistantSidebar({ currentPage }) {
 
   const chatEndRef = useRef(null);
 
-  // ✅ Scroll auto vers le bas
+  /* 🔄 Scroll auto */
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatHistory]);
 
-  // ✅ Suggestions IA contextuelles
+  /* 📌 Suggestions IA contextuelles */
   useEffect(() => {
     const fetchSuggestions = async () => {
       try {
         setLoading(true);
         const res = await API.get(`/ai/suggestions?page=${currentPage}`);
         setSuggestions(res.data.suggestions || []);
-      } catch (err) {
-        console.warn("⚠️ API IA indisponible, fallback local.");
-        const contexts = {
+      } catch {
+        const fallback = {
           marketplace: [
             "💡 Le dataset financier #12 est en forte demande.",
             "🚀 Traduisez vos datasets en anglais pour +25% de ventes.",
@@ -54,7 +53,7 @@ export default function AIAssistantSidebar({ currentPage }) {
             "📈 Consultez vos analytics pour détecter anomalies/opportunités."
           ]
         };
-        setSuggestions(contexts[currentPage] || contexts.default);
+        setSuggestions(fallback[currentPage] || fallback.default);
       } finally {
         setLoading(false);
       }
@@ -62,14 +61,13 @@ export default function AIAssistantSidebar({ currentPage }) {
     fetchSuggestions();
   }, [currentPage]);
 
-  // ✅ Envoi d’une question à l’IA
+  /* 💬 Envoi question à l’IA */
   const askAI = async (e) => {
     e.preventDefault();
     if (!userQuery.trim()) return;
 
     const userMsg = { sender: "user", text: userQuery, time: new Date().toLocaleTimeString() };
     setChatHistory((prev) => [...prev, userMsg]);
-
     setUserQuery("");
 
     const aiMsg = { sender: "ai", text: "⏳ L’IA réfléchit...", loading: true };
@@ -82,7 +80,7 @@ export default function AIAssistantSidebar({ currentPage }) {
         ...prev.slice(0, -1),
         { sender: "ai", text: answer, time: new Date().toLocaleTimeString() },
       ]);
-    } catch (err) {
+    } catch {
       setChatHistory((prev) => [
         ...prev.slice(0, -1),
         { sender: "ai", text: "❌ Impossible de joindre l’IA.", error: true },
@@ -90,23 +88,21 @@ export default function AIAssistantSidebar({ currentPage }) {
     }
   };
 
-  // ✅ Sauvegarde historique localStorage
+  /* 💾 Sauvegarde historique */
   useEffect(() => {
     localStorage.setItem("aiChatHistory", JSON.stringify(chatHistory));
   }, [chatHistory]);
 
-  // ✅ Fermer avec Escape
+  /* ⌨️ Fermer avec Escape */
   useEffect(() => {
-    const handleEsc = (e) => {
-      if (e.key === "Escape") setOpen(false);
-    };
+    const handleEsc = (e) => e.key === "Escape" && setOpen(false);
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, []);
 
   return (
     <>
-      {/* Bouton toggle flottant */}
+      {/* ⚡ Bouton toggle flottant */}
       <button
         onClick={() => setOpen(!open)}
         aria-label="Ouvrir assistant IA"
@@ -115,7 +111,7 @@ export default function AIAssistantSidebar({ currentPage }) {
         🤖
       </button>
 
-      {/* Sidebar flottant */}
+      {/* 📌 Sidebar Dockable */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -123,13 +119,21 @@ export default function AIAssistantSidebar({ currentPage }) {
             animate={{ x: 0 }}
             exit={{ x: 400 }}
             transition={{ type: "spring", stiffness: 80 }}
-            className="fixed top-0 right-0 h-full w-96 bg-white dark:bg-gray-900 shadow-lg p-6 z-40 flex flex-col"
+            className="fixed top-0 right-0 h-full w-96 bg-white dark:bg-gray-900 shadow-2xl border-l border-gray-200 dark:border-gray-700 p-6 z-40 flex flex-col"
           >
-            <h3 className="text-xl font-bold mb-4 text-gray-800 dark:text-white">
-              🤖 Assistant IA
-            </h3>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+                🤖 Assistant IA
+              </h3>
+              <button
+                onClick={() => setOpen(false)}
+                className="text-gray-500 hover:text-red-500"
+              >
+                ✖
+              </button>
+            </div>
 
-            {/* ✅ Suggestions contextuelles */}
+            {/* ✅ Suggestions */}
             <div className="mb-4">
               <h4 className="text-sm font-semibold mb-2 text-gray-600 dark:text-gray-300">
                 Suggestions IA
@@ -153,7 +157,7 @@ export default function AIAssistantSidebar({ currentPage }) {
               </div>
             </div>
 
-            {/* ✅ Chat IA */}
+            {/* ✅ Chatbox */}
             <div className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-800 p-3 rounded space-y-3">
               {chatHistory.map((msg, i) => (
                 <div
@@ -175,7 +179,7 @@ export default function AIAssistantSidebar({ currentPage }) {
               <div ref={chatEndRef} />
             </div>
 
-            {/* ✅ Input IA */}
+            {/* ✅ Input */}
             <form onSubmit={askAI} className="mt-3 flex">
               <input
                 type="text"
@@ -191,13 +195,6 @@ export default function AIAssistantSidebar({ currentPage }) {
                 Envoyer
               </button>
             </form>
-
-            <button
-              onClick={() => setOpen(false)}
-              className="mt-3 px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600"
-            >
-              Fermer
-            </button>
           </motion.div>
         )}
       </AnimatePresence>
