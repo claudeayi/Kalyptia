@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { getDatasets } from "../api/dataset";
 import { payWithStripe, payWithPayPal, payWithCinetPay } from "../api/payment";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { Radar } from "react-chartjs-2";
 import API from "../api/axios";
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -15,7 +16,7 @@ export default function Marketplace() {
   const [priceFilter, setPriceFilter] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
+  const [toast, setToast] = useState(null);
   const [favorites, setFavorites] = useState(() =>
     JSON.parse(localStorage.getItem("favorites") || "[]")
   );
@@ -54,7 +55,7 @@ export default function Marketplace() {
   // 💳 Paiements
   const handlePayment = async (method, datasetId, amount) => {
     try {
-      setMessage("");
+      setToast(null);
       let res;
       if (method === "stripe") {
         res = await payWithStripe({ datasetId, amount, currency: "USD" });
@@ -68,12 +69,10 @@ export default function Marketplace() {
           description: "Achat dataset Kalyptia",
         });
       }
-      setMessage(
-        `✅ Paiement réussi via ${method.toUpperCase()} : Transaction #${res.data.transaction.id}`
-      );
+      setToast(`✅ Paiement réussi via ${method.toUpperCase()} – Tx #${res.data.transaction.id}`);
     } catch (err) {
       console.error("❌ Paiement échoué:", err);
-      setMessage(`❌ Paiement ${method} échoué`);
+      setToast(`❌ Paiement ${method} échoué`);
     }
   };
 
@@ -103,6 +102,23 @@ export default function Marketplace() {
       prediction: `Prévision : ce dataset pourrait générer environ ${
         Math.floor(Math.random() * 500) + 100
       } $ dans le mois.`,
+      radar: {
+        labels: ["Qualité", "Marché", "Popularité", "Clarté", "Accessibilité"],
+        datasets: [
+          {
+            label: "Score IA",
+            data: [
+              Math.floor(Math.random() * 100),
+              Math.floor(Math.random() * 100),
+              Math.floor(Math.random() * 100),
+              Math.floor(Math.random() * 100),
+              Math.floor(Math.random() * 100),
+            ],
+            backgroundColor: "rgba(59,130,246,0.2)",
+            borderColor: "#3B82F6",
+          },
+        ],
+      },
     };
   };
 
@@ -116,6 +132,21 @@ export default function Marketplace() {
 
   return (
     <div className="space-y-10">
+      {/* ✅ Toast */}
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            key={toast}
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 40 }}
+            className="fixed bottom-6 right-6 bg-black text-white px-4 py-2 rounded shadow-lg z-50 text-sm"
+          >
+            {toast}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <motion.h2
         className="text-3xl font-extrabold bg-gradient-to-r from-green-500 to-blue-600 bg-clip-text text-transparent"
         initial={{ opacity: 0, y: -20 }}
@@ -159,10 +190,6 @@ export default function Marketplace() {
         />
       </div>
 
-      {message && (
-        <p className="mb-4 text-sm font-semibold text-indigo-600">{message}</p>
-      )}
-
       {/* 🗂️ Liste datasets */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filtered.map((ds) => (
@@ -194,15 +221,16 @@ export default function Marketplace() {
               <p className="text-xs text-gray-500 dark:text-gray-400">
                 👤 {ds.owner?.name || "N/A"}
               </p>
-              {ds.createdAt && (
-                <p className="text-xs text-gray-400">
-                  📅 Publié{" "}
-                  {formatDistanceToNow(new Date(ds.createdAt), {
-                    addSuffix: true,
-                    locale: fr,
-                  })}
-                </p>
-              )}
+              <p className="text-xs text-gray-400">
+                📅 Publié{" "}
+                {formatDistanceToNow(new Date(ds.createdAt), {
+                  addSuffix: true,
+                  locale: fr,
+                })}
+              </p>
+              <p className="text-sm mt-1 font-semibold text-indigo-600">
+                💵 {ds.price || 10} $
+              </p>
             </div>
             <div className="mt-4 flex gap-2">
               <button
@@ -223,89 +251,80 @@ export default function Marketplace() {
       )}
 
       {/* 🔎 Modal Aperçu */}
-      {selected && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <AnimatePresence>
+        {selected && (
           <motion.div
-            className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-xl max-w-lg w-full relative"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
           >
-            <button
-              onClick={() => setSelected(null)}
-              className="absolute top-2 right-2 text-gray-500 hover:text-red-500"
+            <motion.div
+              className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-xl max-w-lg w-full relative"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
             >
-              ✖
-            </button>
-            <h3 className="text-xl font-bold mb-2 text-gray-800 dark:text-white">
-              {selected.name}
-            </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
-              {selected.description}
-            </p>
-
-            {/* ✅ Widget IA */}
-            <div className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-4 rounded-lg shadow mb-4">
-              <h4 className="font-semibold mb-2">🤖 Analyse IA</h4>
-              {(() => {
-                const ai = getAIInsights(selected);
-                return (
-                  <>
-                    {/* Score */}
-                    <div className="mb-2">
-                      <p className="text-sm">Score Qualité :</p>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div
-                          className={`h-2 rounded-full ${
-                            ai.score > 70
-                              ? "bg-green-500"
-                              : ai.score > 40
-                              ? "bg-yellow-500"
-                              : "bg-red-500"
-                          }`}
-                          style={{ width: `${ai.score}%` }}
-                        ></div>
-                      </div>
-                      <p className="text-xs mt-1">⚡ {ai.score}/100</p>
-                    </div>
-
-                    {/* Insights */}
-                    <ul className="list-disc list-inside space-y-1 text-sm">
-                      {ai.insights.map((ins, i) => (
-                        <li key={i}>{ins}</li>
-                      ))}
-                    </ul>
-
-                    {/* Prévision */}
-                    <p className="text-sm mt-2 italic">{ai.prediction}</p>
-                  </>
-                );
-              })()}
-            </div>
-
-            {/* Paiements */}
-            <div className="flex gap-2">
               <button
-                onClick={() => handlePayment("stripe", selected.id, 10)}
-                className="flex-1 bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 text-sm"
+                onClick={() => setSelected(null)}
+                className="absolute top-2 right-2 text-gray-500 hover:text-red-500"
               >
-                💳 Stripe
+                ✖
               </button>
-              <button
-                onClick={() => handlePayment("paypal", selected.id, 10)}
-                className="flex-1 bg-yellow-500 text-white px-3 py-2 rounded hover:bg-yellow-600 text-sm"
-              >
-                🅿 PayPal
-              </button>
-              <button
-                onClick={() => handlePayment("cinetpay", selected.id, 10)}
-                className="flex-1 bg-green-600 text-white px-3 py-2 rounded hover:bg-green-700 text-sm"
-              >
-                🌍 CinetPay
-              </button>
-            </div>
+              <h3 className="text-xl font-bold mb-2 text-gray-800 dark:text-white">
+                {selected.name}
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+                {selected.description}
+              </p>
+
+              {/* ✅ Widget IA */}
+              <div className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-4 rounded-lg shadow mb-4">
+                <h4 className="font-semibold mb-2">🤖 Analyse IA</h4>
+                {(() => {
+                  const ai = getAIInsights(selected);
+                  return (
+                    <>
+                      {/* Radar chart */}
+                      <Radar data={ai.radar} />
+                      {/* Insights */}
+                      <ul className="list-disc list-inside space-y-1 text-sm mt-2">
+                        {ai.insights.map((ins, i) => (
+                          <li key={i}>{ins}</li>
+                        ))}
+                      </ul>
+                      {/* Prévision */}
+                      <p className="text-sm mt-2 italic">{ai.prediction}</p>
+                    </>
+                  );
+                })()}
+              </div>
+
+              {/* Paiements */}
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handlePayment("stripe", selected.id, selected.price || 10)}
+                  className="flex-1 bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 text-sm"
+                >
+                  💳 Stripe
+                </button>
+                <button
+                  onClick={() => handlePayment("paypal", selected.id, selected.price || 10)}
+                  className="flex-1 bg-yellow-500 text-white px-3 py-2 rounded hover:bg-yellow-600 text-sm"
+                >
+                  🅿 PayPal
+                </button>
+                <button
+                  onClick={() => handlePayment("cinetpay", selected.id, selected.price || 10)}
+                  className="flex-1 bg-green-600 text-white px-3 py-2 rounded hover:bg-green-700 text-sm"
+                >
+                  🌍 CinetPay
+                </button>
+              </div>
+            </motion.div>
           </motion.div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </div>
   );
 }
