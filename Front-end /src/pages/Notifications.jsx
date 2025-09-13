@@ -5,7 +5,12 @@ import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
 
 export default function Notifications() {
-  const { notifications, clearNotifications, markAllAsRead } = useNotifications();
+  const {
+    notifications,
+    clearNotifications,
+    markAllAsRead,
+    unreadCount,
+  } = useNotifications();
   const [filter, setFilter] = useState("ALL");
 
   const filtered =
@@ -17,12 +22,17 @@ export default function Notifications() {
     dataset: { color: "bg-blue-600", icon: "📂" },
     transaction: { color: "bg-green-600", icon: "💰" },
     payment: { color: "bg-yellow-500", icon: "💳" },
-    default: { color: "bg-purple-600", icon: "🔔" },
+    ai: { color: "bg-purple-600", icon: "🤖" },
+    default: { color: "bg-indigo-500", icon: "🔔" },
+  };
+
+  const copyMessage = (msg) => {
+    navigator.clipboard.writeText(msg);
   };
 
   return (
     <div className="space-y-8">
-      {/* Titre cockpit */}
+      {/* ✅ Titre cockpit */}
       <motion.h2
         className="text-3xl font-extrabold bg-gradient-to-r from-indigo-500 to-blue-600 bg-clip-text text-transparent"
         initial={{ opacity: 0, y: -20 }}
@@ -31,10 +41,28 @@ export default function Notifications() {
         🔔 Historique Notifications
       </motion.h2>
 
-      {/* Actions */}
+      {/* ✅ Stats résumé */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="bg-white dark:bg-gray-900 shadow p-3 rounded text-center">
+          <p className="text-xs text-gray-500">Total</p>
+          <p className="text-lg font-bold">{notifications.length}</p>
+        </div>
+        <div className="bg-white dark:bg-gray-900 shadow p-3 rounded text-center">
+          <p className="text-xs text-gray-500">Non lues</p>
+          <p className="text-lg font-bold text-red-500">{unreadCount}</p>
+        </div>
+        <div className="bg-white dark:bg-gray-900 shadow p-3 rounded text-center">
+          <p className="text-xs text-gray-500">Filtre actif</p>
+          <p className="text-lg font-bold">
+            {filter === "ALL" ? "Toutes" : filter}
+          </p>
+        </div>
+      </div>
+
+      {/* ✅ Actions */}
       <div className="flex flex-wrap gap-3 items-center">
         <div className="flex gap-2">
-          {["ALL", "dataset", "transaction", "payment"].map((f) => (
+          {["ALL", "dataset", "transaction", "payment", "ai"].map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
@@ -66,7 +94,7 @@ export default function Notifications() {
         )}
       </div>
 
-      {/* Liste notifications */}
+      {/* ✅ Liste notifications */}
       {filtered.length === 0 ? (
         <p className="text-gray-600 dark:text-gray-400">
           Aucune notification {filter !== "ALL" ? `de type ${filter}` : ""}.
@@ -78,9 +106,14 @@ export default function Notifications() {
             return (
               <motion.div
                 key={n.id}
-                className="mb-8"
+                className={`mb-8 rounded-lg transition ${
+                  n.read
+                    ? "bg-white dark:bg-gray-900"
+                    : "bg-indigo-50 dark:bg-gray-800"
+                }`}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
+                whileHover={{ scale: 1.01 }}
                 transition={{ delay: i * 0.05 }}
               >
                 {/* Point timeline */}
@@ -91,7 +124,7 @@ export default function Notifications() {
                 </div>
 
                 {/* Carte notif */}
-                <div className="bg-white dark:bg-gray-900 shadow-md p-4 rounded border border-gray-200 dark:border-gray-700">
+                <div className="shadow-md p-4 rounded border border-gray-200 dark:border-gray-700">
                   <p className="text-xs text-gray-500 dark:text-gray-400">
                     🕒{" "}
                     {formatDistanceToNow(new Date(parseInt(n.id)), {
@@ -122,6 +155,16 @@ export default function Notifications() {
                       ➡ Voir plus
                     </a>
                   )}
+
+                  {/* ✅ Boutons actions */}
+                  <div className="mt-2 flex gap-2">
+                    <button
+                      onClick={() => copyMessage(n.message)}
+                      className="text-xs px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600"
+                    >
+                      📋 Copier
+                    </button>
+                  </div>
                 </div>
               </motion.div>
             );
