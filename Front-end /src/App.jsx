@@ -1,118 +1,89 @@
-import API from "./axios";
+// src/App.tsx
+import { Routes, Route, Navigate } from "react-router-dom";
+import { Suspense, lazy } from "react";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Loader from "./components/Loader";
 
-/**
- * Wrapper sécurisé → retourne { success, data, error }
- */
-const safeRequest = async (fn) => {
-  try {
-    const res = await fn();
-    return { success: true, data: res.data, error: null };
-  } catch (err) {
-    console.error("❌ Erreur API Paiement:", err.response?.data || err.message);
-    return {
-      success: false,
-      data: null,
-      error: err.response?.data || "Erreur serveur",
-    };
-  }
-};
+// 🔑 Auth pages
+const Login = lazy(() => import("./pages/Login"));
+const Register = lazy(() => import("./pages/Register"));
 
-/* ============================================================================
- * 💳 PAIEMENTS CLASSIQUES
- * ========================================================================== */
+// 📊 Dashboard & pages
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Home = lazy(() => import("./pages/Home"));
+const Marketplace = lazy(() => import("./pages/Marketplace"));
+const Datasets = lazy(() => import("./pages/Datasets"));
+const Transactions = lazy(() => import("./pages/Transactions"));
+const Payments = lazy(() => import("./pages/Payments"));
+const Analytics = lazy(() => import("./pages/Analytics"));
+const AI = lazy(() => import("./pages/AI"));
+const Blockchain = lazy(() => import("./pages/Blockchain"));
+const Activity = lazy(() => import("./pages/Activity"));
+const Notifications = lazy(() => import("./pages/Notifications"));
+const Profile = lazy(() => import("./pages/Profile"));
 
-/** 💳 Carte via Stripe */
-export const payWithStripe = (data) =>
-  safeRequest(() => API.post("/payments/stripe", data));
+// 🤖 IA Insights
+const Suggestions = lazy(() => import("./pages/Suggestions"));
+const Anomalies = lazy(() => import("./pages/Anomalies"));
+const Predictions = lazy(() => import("./pages/Predictions"));
 
-/** 🅿️ Paiement PayPal */
-export const payWithPayPal = (data) =>
-  safeRequest(() => API.post("/payments/paypal", data));
+// ❌ 404 Page
+const NotFound = () => (
+  <div className="h-screen flex items-center justify-center text-gray-600 dark:text-gray-300">
+    <div className="text-center space-y-4">
+      <h1 className="text-6xl font-extrabold text-red-500">404</h1>
+      <p className="text-lg font-medium">Oups… Page non trouvée 🚫</p>
+      <a
+        href="/"
+        className="inline-block px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+      >
+        Retour au Dashboard
+      </a>
+    </div>
+  </div>
+);
 
-/** 🌍 Paiement CinetPay */
-export const payWithCinetPay = (data) =>
-  safeRequest(() => API.post("/payments/cinetpay", data));
+function App() {
+  return (
+    <Suspense fallback={<Loader text="🚀 Chargement de l’application..." />}>
+      <Routes>
+        {/* 🌍 Routes publiques */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
-/* ============================================================================
- * 📱 PAIEMENTS MOBILE MONEY
- * ========================================================================== */
+        {/* 🔐 Routes protégées */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute roles={["USER", "PREMIUM", "ADMIN"]}>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        >
+          {/* 🏠 Dashboard routes */}
+          <Route index element={<Home />} />
+          <Route path="marketplace" element={<Marketplace />} />
+          <Route path="datasets" element={<Datasets />} />
+          <Route path="transactions" element={<Transactions />} />
+          <Route path="payments" element={<Payments />} />
+          <Route path="analytics" element={<Analytics />} />
+          <Route path="ai" element={<AI />} />
+          <Route path="blockchain" element={<Blockchain />} />
+          <Route path="activity" element={<Activity />} />
+          <Route path="notifications" element={<Notifications />} />
+          <Route path="profile" element={<Profile />} />
 
-/** 📱 Paiement via Mobile Money (Orange, MTN, MoMo, etc.) */
-export const payWithMobileMoney = (data) =>
-  safeRequest(() => API.post("/payments/mobile", data));
-// Exemple data: { phone: "+2376XXXX", provider: "MTN"|"ORANGE", amount, currency }
+          {/* 🤖 IA Insights */}
+          <Route path="ai/suggestions" element={<Suggestions />} />
+          <Route path="ai/anomalies" element={<Anomalies />} />
+          <Route path="ai/predictions" element={<Predictions />} />
+        </Route>
 
-/* ============================================================================
- * ₿ PAIEMENTS CRYPTO
- * ========================================================================== */
-
-/** ₿ Paiement via Crypto (BTC, ETH, USDT, etc.) */
-export const payWithCrypto = (data) =>
-  safeRequest(() => API.post("/payments/crypto", data));
-// Exemple data: { walletAddress, network: "BTC"|"ETH"|"USDT", amount, currency }
-
-/** 🔑 Vérifier adresse de wallet avant envoi */
-export const validateWallet = (walletAddress, network) =>
-  safeRequest(() =>
-    API.post("/payments/crypto/validate", { walletAddress, network })
+        {/* ❌ Catch-all */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Suspense>
   );
+}
 
-/* ============================================================================
- * 📜 TRANSACTIONS & HISTORIQUE
- * ========================================================================== */
-
-/** 📋 Liste toutes les transactions */
-export const getTransactions = () =>
-  safeRequest(() => API.get("/transactions"));
-
-/** 🔎 Filtrer transactions */
-export const getTransactionsByFilter = (filters) =>
-  safeRequest(() => API.get("/transactions", { params: filters }));
-// Exemple filters: { method: "stripe", status: "SUCCESS", from: "2025-01-01", to: "2025-01-31" }
-
-/** 🔎 Vérifier le statut d’un paiement */
-export const getPaymentStatus = (transactionId) =>
-  safeRequest(() => API.get(`/payments/status/${transactionId}`));
-
-/** 💸 Demander un remboursement */
-export const refundPayment = (transactionId) =>
-  safeRequest(() => API.post(`/payments/${transactionId}/refund`));
-
-/** 📤 Exporter transactions (CSV/PDF/Excel) */
-export const exportTransactions = (format = "csv") =>
-  safeRequest(() =>
-    API.get(`/transactions/export`, {
-      params: { format },
-      responseType: format === "pdf" ? "blob" : "json",
-    })
-  );
-
-/* ============================================================================
- * ⚡ TEMPS RÉEL (WebSocket)
- * ========================================================================== */
-
-/** 🎧 Suivi temps réel des paiements via WebSocket */
-export const onPaymentUpdate = (socket, callback) => {
-  if (!socket) return;
-  socket.on("PAYMENT_SUCCESS", (data) => callback("success", data));
-  socket.on("PAYMENT_FAILED", (data) => callback("failed", data));
-  socket.on("PAYMENT_PENDING", (data) => callback("pending", data));
-  socket.on("REFUND_SUCCESS", (data) => callback("refund_success", data));
-  socket.on("REFUND_FAILED", (data) => callback("refund_failed", data));
-};
-
-/* ============================================================================
- * 🚀 FONCTIONS AVANCÉES
- * ========================================================================== */
-
-/** 📊 Statistiques paiements (par méthode, période, utilisateur) */
-export const getPaymentStats = (filters = {}) =>
-  safeRequest(() => API.get("/payments/stats", { params: filters }));
-
-/** 📈 Historique revenus (courbes par mois/semaine) */
-export const getRevenueTrends = () =>
-  safeRequest(() => API.get("/payments/revenue/trends"));
-
-/** 🔗 Générer un lien de paiement (checkout hosted page) */
-export const generatePaymentLink = (data) =>
-  safeRequest(() => API.post("/payments/link", data));
+export default App;
