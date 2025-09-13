@@ -1,4 +1,19 @@
-// ... imports identiques
+import { NavLink } from "react-router-dom";
+import { useNotifications } from "../context/NotificationContext";
+import { useEffect, useState } from "react";
+import API from "../api/axios";
+import { Line } from "react-chartjs-2";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Tooltip,
+} from "chart.js";
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip);
 
 export default function Sidebar() {
   const { notifications } = useNotifications();
@@ -6,10 +21,33 @@ export default function Sidebar() {
   const [revenues, setRevenues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openAI, setOpenAI] = useState(false);
-  const [openDataOps, setOpenDataOps] = useState(false); // ✅ nouveau
 
-  // ... useEffect identique
+  // ✅ Récupération KPIs Sidebar
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [ds, tx, rev] = await Promise.all([
+          API.get("/datasets"),
+          API.get("/transactions"),
+          API.get("/analytics/revenue"),
+        ]);
+        setCounts({
+          datasets: ds.data.length || 0,
+          transactions: tx.data.length || 0,
+        });
+        setRevenues(rev.data.history || []);
+      } catch (err) {
+        console.error("❌ Erreur Sidebar:", err);
+        setCounts({ datasets: 0, transactions: 0 });
+        setRevenues([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
+  // ✅ Liens principaux
   const links = [
     { to: "/", label: "🏠 Accueil" },
     { to: "/marketplace", label: "🛒 Marketplace" },
@@ -38,21 +76,51 @@ export default function Sidebar() {
     { to: "/profile", label: "👤 Profil" },
   ];
 
+  // ✅ Liens IA Insights
   const aiLinks = [
     { to: "/ai/suggestions", label: "📊 Suggestions IA" },
     { to: "/ai/anomalies", label: "⚠ Anomalies" },
     { to: "/ai/predictions", label: "🔮 Prédictions" },
   ];
 
-  // ✅ Nouveaux liens DataOps
-  const dataOpsLinks = [
-    { to: "/dataops/pipelines", label: "🚚 Pipelines" },
-    { to: "/dataops/cleaning", label: "🧹 Nettoyage" },
-    { to: "/dataops/enrichment", label: "✨ Enrichissement" },
-    { to: "/dataops/monitoring", label: "📡 Monitoring" },
-  ];
+  // ✅ Sparkline config
+  const chartData = {
+    labels: revenues.map((_, i) => i + 1),
+    datasets: [
+      {
+        data: revenues,
+        borderColor: "#3B82F6",
+        backgroundColor: (ctx) => {
+          const { ctx: context } = ctx.chart;
+          const gradient = context.createLinearGradient(0, 0, 0, 120);
+          gradient.addColorStop(0, "rgba(59,130,246,0.4)");
+          gradient.addColorStop(1, "rgba(59,130,246,0.05)");
+          return gradient;
+        },
+        tension: 0.4,
+        pointRadius: 0,
+        fill: true,
+      },
+    ],
+  };
 
-  // ... chartData & variation identiques
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: { x: { display: false }, y: { display: false } },
+    elements: { line: { borderWidth: 2 } },
+  };
+
+  // ✅ Variation % revenus
+  const variation =
+    revenues.length > 1
+      ? (
+          ((revenues[revenues.length - 1] - revenues[revenues.length - 2]) /
+            revenues[revenues.length - 2]) *
+          100
+        ).toFixed(1)
+      : 0;
 
   return (
     <aside
@@ -60,7 +128,7 @@ export default function Sidebar() {
       role="navigation"
       aria-label="Menu latéral"
     >
-      {/* Branding */}
+      {/* 🚀 Branding */}
       <div className="mb-6 flex items-center justify-between">
         <a
           href="/"
@@ -80,6 +148,7 @@ export default function Sidebar() {
             <NavLink
               to={link.to}
               end={link.to === "/"}
+              aria-label={`Aller vers ${link.label}`}
               className={({ isActive }) =>
                 `flex-1 block px-3 py-2 rounded transition ${
                   isActive
@@ -90,6 +159,8 @@ export default function Sidebar() {
             >
               {link.label}
             </NavLink>
+
+            {/* ✅ Badge cockpit */}
             {link.badge !== undefined && link.badge > 0 && (
               <span
                 className={`ml-2 px-2 py-0.5 text-xs font-bold rounded-full text-white ${
@@ -102,19 +173,21 @@ export default function Sidebar() {
           </li>
         ))}
 
-        {/* Section IA Insights */}
+        {/* ✅ Section IA Insights collapsible */}
         <li>
           <button
-            onClick={() => setOpenAI(!openAI)}
+            aria-label="Ouvrir menu IA Insights"
             aria-expanded={openAI}
             aria-controls="ai-insights"
-            className="w-full flex justify-between items-center px-3 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition font-medium"
+            onClick={() => setOpenAI(!openAI)}
+            className="w-full flex justify-between items-center px-3 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition font-medium focus:outline-none"
           >
             <span>🤖 IA Insights</span>
             <span className="text-xs bg-purple-600 text-white px-2 py-0.5 rounded-full">
               {openAI ? "▲" : "▼"} Beta
             </span>
           </button>
+
           <AnimatePresence>
             {openAI && (
               <motion.ul
@@ -122,12 +195,14 @@ export default function Sidebar() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
                 className="ml-4 mt-2 space-y-2"
               >
                 {aiLinks.map((ai) => (
                   <li key={ai.to}>
                     <NavLink
                       to={ai.to}
+                      aria-label={`Aller vers ${ai.label}`}
                       className={({ isActive }) =>
                         `block px-2 py-1 rounded text-sm transition ${
                           isActive
@@ -144,52 +219,9 @@ export default function Sidebar() {
             )}
           </AnimatePresence>
         </li>
-
-        {/* ✅ Nouvelle Section DataOps */}
-        <li>
-          <button
-            onClick={() => setOpenDataOps(!openDataOps)}
-            aria-expanded={openDataOps}
-            aria-controls="data-ops"
-            className="w-full flex justify-between items-center px-3 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition font-medium"
-          >
-            <span>⚙️ DataOps</span>
-            <span className="text-xs bg-green-600 text-white px-2 py-0.5 rounded-full">
-              {openDataOps ? "▲" : "▼"} Pro
-            </span>
-          </button>
-          <AnimatePresence>
-            {openDataOps && (
-              <motion.ul
-                id="data-ops"
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="ml-4 mt-2 space-y-2"
-              >
-                {dataOpsLinks.map((d) => (
-                  <li key={d.to}>
-                    <NavLink
-                      to={d.to}
-                      className={({ isActive }) =>
-                        `block px-2 py-1 rounded text-sm transition ${
-                          isActive
-                            ? "bg-green-600 text-white font-semibold"
-                            : "hover:bg-gray-300 dark:hover:bg-gray-700"
-                        }`
-                      }
-                    >
-                      {d.label}
-                    </NavLink>
-                  </li>
-                ))}
-              </motion.ul>
-            )}
-          </AnimatePresence>
-        </li>
       </ul>
 
-      {/* Sparkline Analytics */}
+      {/* ✅ Sparkline Analytics */}
       <div className="mt-6">
         {loading ? (
           <div className="animate-pulse h-16 bg-gray-300 dark:bg-gray-700 rounded"></div>
