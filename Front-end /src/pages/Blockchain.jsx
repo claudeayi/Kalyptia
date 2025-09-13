@@ -1,32 +1,75 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { io } from "socket.io-client";
 import API from "../api/axios";
 import Loader from "../components/Loader";
+import { useNotifications } from "../context/NotificationContext"; // ✅ Import context notif
 
 export default function Blockchain() {
   const [blocks, setBlocks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [toast, setToast] = useState(null);
 
+  const { addNotification } = useNotifications(); // ✅ Hook notif global
+
+  // ✅ Récupération des blocs
   const fetchBlocks = async () => {
     try {
       setLoading(true);
       const res = await API.get("/blockchain");
       setBlocks(res.data || []);
+      setError("");
     } catch (err) {
       console.error("❌ Erreur récupération blockchain:", err);
       setError("Impossible de charger le ledger.");
+      setBlocks([]);
     } finally {
       setLoading(false);
     }
   };
 
+  // ✅ Connexion WebSocket temps réel
   useEffect(() => {
     fetchBlocks();
+
+    const token = localStorage.getItem("token");
+    const socket = io("http://localhost:5000", {
+      auth: { token },
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 2000,
+    });
+
+    socket.on("connect", () => console.log("✅ Socket blockchain connecté"));
+    socket.on("disconnect", () => console.warn("⚠️ Socket blockchain déconnecté"));
+
+    socket.on("NEW_BLOCK", (block) => {
+      console.log("⚡ Nouveau bloc reçu:", block);
+      setBlocks((prev) => [block, ...prev]);
+      showToast("✅ Nouveau bloc ajouté !");
+      
+      // 🔔 Notification globale
+      addNotification({
+        id: Date.now(),
+        message: `⛓ Nouveau bloc ajouté : ${block.action || "inconnu"}`,
+        type: "blockchain",
+        timestamp: new Date(),
+      });
+    });
+
+    return () => socket.disconnect();
   }, []);
 
+  // ✅ Copier avec confirmation
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
+    showToast("📋 Copié dans le presse-papier !");
+  };
+
+  const showToast = (msg) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 2500);
   };
 
   const typeIcons = {
@@ -46,6 +89,20 @@ export default function Blockchain() {
 
   return (
     <div className="space-y-10">
+      {/* ✅ Toast notification */}
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 40 }}
+            className="fixed bottom-6 right-6 bg-black text-white px-4 py-2 rounded shadow-lg z-50 text-sm"
+          >
+            {toast}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Titre */}
       <motion.h2
         className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent"
@@ -54,6 +111,32 @@ export default function Blockchain() {
       >
         ⛓ Blockchain Ledger
       </motion.h2>
+
+      {/* Résumé stats */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="bg-white dark:bg-gray-900 shadow p-4 rounded text-center">
+          <h4 className="text-xs text-gray-500">Nombre de blocs</h4>
+          <p className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            {blocks.length}
+          </p>
+        </div>
+        <div className="bg-white dark:bg-gray-900 shadow p-4 rounded text-center">
+          <h4 className="text-xs text-gray-500">Dernier hash</h4>
+          <p
+            className="text-xs truncate cursor-pointer text-indigo-600 dark:text-indigo-400"
+            title="Cliquez pour copier"
+            onClick={() => copyToClipboard(blocks[0]?.hash || "")}
+          >
+            {blocks[0]?.hash || "—"}
+          </p>
+        </div>
+        <div className="bg-white dark:bg-gray-900 shadow p-4 rounded text-center">
+          <h4 className="text-xs text-gray-500">Dernière mise à jour</h4>
+          <p className="text-sm text-gray-700 dark:text-gray-300">
+            {new Date().toLocaleTimeString()}
+          </p>
+        </div>
+      </div>
 
       {/* Actions */}
       <div className="flex justify-end">
