@@ -90,7 +90,7 @@ export default function Profile() {
 
       {/* Détails supplémentaires */}
       <motion.div
-        className="grid grid-cols-2 md:grid-cols-3 gap-6"
+        className="grid grid-cols-2 md:grid-cols-4 gap-6"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
@@ -110,6 +110,34 @@ export default function Profile() {
             {user.transactions?.length || 0}
           </p>
         </div>
+        <div className="bg-white dark:bg-gray-900 shadow p-4 rounded-xl">
+          <h4 className="font-semibold text-gray-800 dark:text-white">🕒 Dernière connexion</h4>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            {user.lastLogin ? new Date(user.lastLogin).toLocaleString() : "N/A"}
+          </p>
+        </div>
+      </motion.div>
+
+      {/* Activité récente */}
+      <motion.div
+        className="bg-white dark:bg-gray-900 shadow p-6 rounded-xl space-y-3"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <h3 className="font-semibold text-gray-800 dark:text-white">🕒 Activité récente</h3>
+        <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-2">
+          {user.datasets?.slice(-3).map((d, i) => (
+            <li key={i}>📂 Dataset créé : {d.name}</li>
+          ))}
+          {user.transactions?.slice(-3).map((t, i) => (
+            <li key={i}>
+              💳 Transaction #{t.id} — {t.amount} {t.currency}
+            </li>
+          ))}
+          {(!user.datasets?.length && !user.transactions?.length) && (
+            <li>Aucune activité récente...</li>
+          )}
+        </ul>
       </motion.div>
 
       {/* ✅ Rapport IA */}
@@ -139,6 +167,27 @@ export default function Profile() {
             </li>
           ))}
         </ul>
+
+        {/* Suggestion upgrade */}
+        {user.role !== "PREMIUM" && (
+          <div className="mt-4 p-3 bg-yellow-400 text-black rounded text-sm font-semibold">
+            🚀 Passez en PREMIUM pour débloquer l’IA avancée et +30% revenus !
+          </div>
+        )}
+      </motion.div>
+
+      {/* Paramètres rapides */}
+      <motion.div
+        className="bg-white dark:bg-gray-900 shadow p-6 rounded-xl flex gap-3"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <button className="flex-1 bg-gray-200 dark:bg-gray-700 px-3 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-600">
+          🌙 Activer Dark Mode
+        </button>
+        <button className="flex-1 bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600">
+          🔑 Changer mot de passe
+        </button>
       </motion.div>
     </motion.div>
   );
