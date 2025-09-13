@@ -4,25 +4,36 @@ import { motion } from "framer-motion";
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
 import API from "../api/axios";
+import Loader from "../components/Loader";
 
 export default function Activity() {
   const [events, setEvents] = useState([]);
   const [aiInsights, setAiInsights] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [socketError, setSocketError] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const socket = io("http://localhost:5000", {
+    const socket = io(import.meta.env.VITE_API_URL || "http://localhost:5000", {
       auth: { token },
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 2000,
     });
 
-    socket.on("connect", () => console.log("✅ Socket connecté"));
-    socket.on("disconnect", () => console.warn("⚠️ Socket déconnecté"));
-    socket.on("connect_error", (err) =>
-      console.error("❌ Erreur socket:", err)
-    );
+    socket.on("connect", () => {
+      console.log("✅ Socket connecté");
+      setSocketError(null);
+    });
+
+    socket.on("disconnect", () => {
+      console.warn("⚠️ Socket déconnecté");
+    });
+
+    socket.on("connect_error", (err) => {
+      console.error("❌ Erreur socket:", err);
+      setSocketError("Impossible de se connecter au serveur temps réel.");
+    });
 
     const pushEvent = (type, message, data) => {
       setEvents((prev) => [
@@ -64,7 +75,7 @@ export default function Activity() {
     return () => socket.disconnect();
   }, []);
 
-  // ✅ Insights IA simulés (ou API)
+  // ✅ Fetch insights IA
   useEffect(() => {
     const fetchInsights = async () => {
       try {
@@ -77,6 +88,8 @@ export default function Activity() {
           "📊 Forte activité sur les datasets financiers.",
           "🚀 Prévision IA : +25% de paiements d’ici 7 jours.",
         ]);
+      } finally {
+        setLoading(false);
       }
     };
     fetchInsights();
@@ -99,24 +112,55 @@ export default function Activity() {
         ⚡ Activité en temps réel
       </motion.h2>
 
+      {/* Loader global */}
+      {loading && <Loader text="Connexion au flux temps réel..." />}
+
+      {/* Erreur socket */}
+      {socketError && (
+        <div className="p-3 rounded bg-red-100 text-red-700 text-sm">
+          {socketError}
+        </div>
+      )}
+
       {/* Boutons actions */}
       <div className="flex justify-between items-center">
         <p className="text-sm text-gray-600 dark:text-gray-400">
           {events.length} événements suivis
         </p>
-        {events.length > 0 && (
+        <div className="flex gap-2">
+          {events.length > 0 && (
+            <button
+              onClick={() => setEvents([])}
+              className="text-xs px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+            >
+              Effacer
+            </button>
+          )}
           <button
-            onClick={() => setEvents([])}
-            className="text-xs px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+            onClick={() =>
+              setEvents((prev) => [
+                {
+                  id: Date.now(),
+                  type: "demo",
+                  message: "🔄 Événement de test ajouté",
+                  time: new Date(),
+                },
+                ...prev,
+              ])
+            }
+            className="text-xs px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600"
           >
-            Effacer
+            Rejouer test
           </button>
-        )}
+        </div>
       </div>
 
       {/* Timeline */}
-      <div className="relative border-l-2 border-blue-600 dark:border-blue-400 pl-6">
-        {events.length === 0 && (
+      <div
+        className="relative border-l-2 border-blue-600 dark:border-blue-400 pl-6"
+        role="feed"
+      >
+        {events.length === 0 && !loading && (
           <p className="text-gray-500 dark:text-gray-400">
             Aucune activité détectée...
           </p>
@@ -129,11 +173,12 @@ export default function Activity() {
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.05 }}
+            role="article"
           >
             {/* Point timeline */}
             <div
               className={`absolute -left-3 w-6 h-6 rounded-full flex items-center justify-center text-white text-xs ${
-                typeStyles[event.type]
+                typeStyles[event.type] || "bg-gray-400"
               }`}
             >
               {i + 1}
