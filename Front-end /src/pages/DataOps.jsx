@@ -1,3 +1,4 @@
+// src/pages/DataOps.jsx
 import { useState } from "react";
 import { motion } from "framer-motion";
 import API from "../api/axios";
@@ -16,7 +17,7 @@ export default function DataOps() {
       const formData = new FormData();
       formData.append("dataset", file);
 
-      // 🔮 Endpoint DataOps backend : nettoyage + enrichissement IA
+      // 🔮 Endpoint DataOps backend
       const res = await API.post("/dataops/clean", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
