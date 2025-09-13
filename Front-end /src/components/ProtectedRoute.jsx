@@ -1,11 +1,13 @@
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation, Outlet } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { useNotifications } from "../context/NotificationContext";
 
 export default function ProtectedRoute({ children, roles }) {
   const { user, loading } = useAuth();
+  const { addNotification } = useNotifications();
   const location = useLocation();
 
-  // ⏳ Loading state pro (squelette animé)
+  // ⏳ Loader pro
   if (loading) {
     return (
       <div
@@ -22,21 +24,41 @@ export default function ProtectedRoute({ children, roles }) {
     );
   }
 
-  // 🚪 Non connecté → redirection vers login
+  // 🚪 Utilisateur non connecté
   if (!user) {
     console.warn("🔒 Accès refusé : utilisateur non authentifié.");
+    addNotification({
+      type: "auth",
+      message: "🔒 Tentative d’accès non autorisé – redirection login",
+      data: { path: location.pathname },
+    });
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // 🔑 Vérifie si l'utilisateur a un rôle autorisé
+  // 🔑 Vérification du rôle
   if (roles && !roles.includes(user.role)) {
     console.warn(
       `🚫 Accès refusé : rôle "${user.role}" requis parmi [${roles.join(", ")}].`
     );
+    addNotification({
+      type: "auth",
+      message: `🚫 Accès refusé – rôle "${user.role}" insuffisant`,
+      data: { path: location.pathname, required: roles },
+    });
+
+    // 🔄 Redirection intelligente (fallback)
+    const fallback =
+      user.role === "USER"
+        ? "/profile"
+        : user.role === "PREMIUM"
+        ? "/datasets"
+        : "/";
+
     return (
       <div
         className="flex flex-col items-center justify-center h-screen text-center px-6"
         role="alert"
+        aria-live="assertive"
       >
         <h2 className="text-2xl font-bold text-red-600 mb-3">
           Accès non autorisé
@@ -45,7 +67,7 @@ export default function ProtectedRoute({ children, roles }) {
           Vous n’avez pas les permissions nécessaires pour accéder à cette page.
         </p>
         <a
-          href="/"
+          href={fallback}
           className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
         >
           Retour à l’accueil
@@ -54,6 +76,6 @@ export default function ProtectedRoute({ children, roles }) {
     );
   }
 
-  // ✅ Autorisé → affiche les enfants (un ou plusieurs)
-  return <>{children}</>;
+  // ✅ Autorisé → enfants ou Outlet
+  return children ? <>{children}</> : <Outlet />;
 }
