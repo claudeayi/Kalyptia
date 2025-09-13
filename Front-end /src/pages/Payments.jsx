@@ -6,7 +6,7 @@ import {
   payWithMobileMoney,
   payWithCrypto,
 } from "../api/payment";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useNotifications } from "../context/NotificationContext";
 
 export default function Payments() {
@@ -16,6 +16,7 @@ export default function Payments() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState([]);
+  const [filter, setFilter] = useState("ALL");
   const { addNotification } = useNotifications();
 
   const handlePayment = async (method) => {
@@ -51,7 +52,7 @@ export default function Payments() {
             amount,
             currency: "XAF",
             phone: "+237600000000",
-            provider: "MTN", // ou "ORANGE"
+            provider: "MTN", // ou ORANGE
           });
           break;
         case "crypto":
@@ -81,7 +82,7 @@ export default function Payments() {
           status: "success",
           date: new Date().toLocaleString(),
         },
-        ...prev.slice(0, 4),
+        ...prev.slice(0, 9),
       ]);
 
       // Notification cockpit
@@ -105,7 +106,7 @@ export default function Payments() {
           status: "failed",
           date: new Date().toLocaleString(),
         },
-        ...prev.slice(0, 4),
+        ...prev.slice(0, 9),
       ]);
 
       addNotification({
@@ -119,8 +120,41 @@ export default function Payments() {
     }
   };
 
+  // ✅ Stats résumé
+  const stats = {
+    total: history.length,
+    success: history.filter((h) => h.status === "success").length,
+    failed: history.filter((h) => h.status === "failed").length,
+  };
+
+  const filteredHistory =
+    filter === "ALL" ? history : history.filter((h) => h.method === filter);
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text);
+  };
+
   return (
-    <div className="space-y-10">
+    <div className="space-y-10 relative">
+      {/* ✅ Overlay Loader */}
+      <AnimatePresence>
+        {loading && (
+          <motion.div
+            className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <div className="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-lg text-center">
+              <div className="animate-spin h-10 w-10 border-4 border-purple-500 border-t-transparent rounded-full mx-auto mb-3"></div>
+              <p className="text-sm text-gray-700 dark:text-gray-300">
+                Traitement du paiement...
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Titre cockpit */}
       <motion.h2
         className="text-3xl font-extrabold bg-gradient-to-r from-purple-500 to-pink-600 bg-clip-text text-transparent"
@@ -129,6 +163,22 @@ export default function Payments() {
       >
         💳 Paiements
       </motion.h2>
+
+      {/* ✅ Stats */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="bg-white dark:bg-gray-900 p-3 rounded shadow text-center">
+          <p className="text-xs text-gray-500">Total</p>
+          <p className="font-bold text-lg">{stats.total}</p>
+        </div>
+        <div className="bg-white dark:bg-gray-900 p-3 rounded shadow text-center">
+          <p className="text-xs text-gray-500">Réussis</p>
+          <p className="font-bold text-green-500">{stats.success}</p>
+        </div>
+        <div className="bg-white dark:bg-gray-900 p-3 rounded shadow text-center">
+          <p className="text-xs text-gray-500">Échoués</p>
+          <p className="font-bold text-red-500">{stats.failed}</p>
+        </div>
+      </div>
 
       {/* Carte formulaire */}
       <div className="bg-white dark:bg-gray-900 shadow p-6 rounded-xl space-y-6">
@@ -165,41 +215,23 @@ export default function Payments() {
 
         {/* Boutons paiement */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-          <button
-            onClick={() => handlePayment("stripe")}
-            disabled={loading}
-            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-4 py-2 rounded transition"
-          >
-            💳 Stripe
-          </button>
-          <button
-            onClick={() => handlePayment("paypal")}
-            disabled={loading}
-            className="bg-yellow-500 hover:bg-yellow-600 disabled:opacity-50 text-white px-4 py-2 rounded transition"
-          >
-            🅿 PayPal
-          </button>
-          <button
-            onClick={() => handlePayment("cinetpay")}
-            disabled={loading}
-            className="bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white px-4 py-2 rounded transition"
-          >
-            🌍 CinetPay
-          </button>
-          <button
-            onClick={() => handlePayment("mobile")}
-            disabled={loading}
-            className="bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white px-4 py-2 rounded transition"
-          >
-            📱 Mobile Money
-          </button>
-          <button
-            onClick={() => handlePayment("crypto")}
-            disabled={loading}
-            className="bg-gray-800 hover:bg-gray-900 disabled:opacity-50 text-white px-4 py-2 rounded transition"
-          >
-            ₿ Crypto
-          </button>
+          {[
+            { key: "stripe", label: "💳 Stripe", color: "bg-blue-600" },
+            { key: "paypal", label: "🅿 PayPal", color: "bg-yellow-500" },
+            { key: "cinetpay", label: "🌍 CinetPay", color: "bg-green-600" },
+            { key: "mobile", label: "📱 Mobile Money", color: "bg-orange-500" },
+            { key: "crypto", label: "₿ Crypto", color: "bg-gray-800" },
+          ].map((btn) => (
+            <motion.button
+              key={btn.key}
+              onClick={() => handlePayment(btn.key)}
+              disabled={loading}
+              whileTap={{ scale: 0.9 }}
+              className={`${btn.color} hover:opacity-90 disabled:opacity-50 text-white px-4 py-2 rounded transition`}
+            >
+              {btn.label}
+            </motion.button>
+          ))}
         </div>
 
         {/* Résultat cockpit */}
@@ -219,27 +251,47 @@ export default function Payments() {
 
         {result && (
           <motion.div
-            className="bg-gray-50 dark:bg-gray-800 p-4 rounded text-xs overflow-x-auto"
+            className="bg-gray-50 dark:bg-gray-800 p-4 rounded text-xs overflow-x-auto relative"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
           >
+            <button
+              onClick={() => copyToClipboard(result.transaction.id)}
+              className="absolute top-2 right-2 text-xs bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600"
+            >
+              📋 Copier ID
+            </button>
             <pre>{JSON.stringify(result, null, 2)}</pre>
           </motion.div>
         )}
       </div>
 
-      {/* Historique local cockpit */}
+      {/* Historique cockpit */}
       {history.length > 0 && (
         <motion.div
           className="bg-white dark:bg-gray-900 shadow p-6 rounded-xl space-y-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <h3 className="font-semibold text-gray-700 dark:text-gray-200">
-            🕒 Derniers paiements
-          </h3>
+          <div className="flex justify-between items-center">
+            <h3 className="font-semibold text-gray-700 dark:text-gray-200">
+              🕒 Historique paiements
+            </h3>
+            <select
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              className="text-sm p-1 rounded border dark:bg-gray-800 dark:text-white dark:border-gray-700"
+            >
+              <option value="ALL">Tous</option>
+              <option value="stripe">Stripe</option>
+              <option value="paypal">PayPal</option>
+              <option value="cinetpay">CinetPay</option>
+              <option value="mobile">Mobile</option>
+              <option value="crypto">Crypto</option>
+            </select>
+          </div>
           <ul className="space-y-2 text-sm">
-            {history.map((h) => (
+            {filteredHistory.map((h) => (
               <li
                 key={h.id}
                 className={`p-2 rounded flex justify-between items-center ${
