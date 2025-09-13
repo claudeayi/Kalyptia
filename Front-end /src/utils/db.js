@@ -16,13 +16,25 @@ export const initDB = async () => {
 export const saveHistoryDB = async (items) => {
   const db = await initDB();
   const tx = db.transaction(STORE_NAME, "readwrite");
-  await Promise.all(items.map((item) => tx.store.put(item)));
+  for (const item of items) {
+    await tx.store.put({ ...item, synced: item.synced ?? true });
+  }
   await tx.done;
+};
+
+export const addHistoryItemDB = async (item) => {
+  const db = await initDB();
+  await db.put(STORE_NAME, { ...item, synced: false });
 };
 
 export const getHistoryDB = async () => {
   const db = await initDB();
   return await db.getAll(STORE_NAME);
+};
+
+export const getUnsyncedHistory = async () => {
+  const db = await initDB();
+  return await db.getAllFromIndex(STORE_NAME, "id"); // fallback : filtre en mémoire
 };
 
 export const deleteHistoryItemDB = async (id) => {
