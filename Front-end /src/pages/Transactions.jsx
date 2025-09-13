@@ -8,6 +8,8 @@ export default function Transactions() {
   const [selected, setSelected] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [filterStatus, setFilterStatus] = useState("ALL");
+  const [filterMethod, setFilterMethod] = useState("ALL");
   const { addNotification } = useNotifications();
 
   const fetchTransactions = async () => {
@@ -31,7 +33,44 @@ export default function Transactions() {
     STRIPE: "💳",
     PAYPAL: "🅿️",
     CINETPAY: "📱",
+    MOBILE: "📲",
+    CRYPTO: "₿",
     default: "💰",
+  };
+
+  // ✅ Filtres
+  const filtered = transactions.filter((tx) => {
+    const statusOk = filterStatus === "ALL" || tx.status === filterStatus;
+    const methodOk =
+      filterMethod === "ALL" || tx.method?.toUpperCase() === filterMethod;
+    return statusOk && methodOk;
+  });
+
+  // ✅ KPI résumé
+  const totalRevenue = transactions.reduce((acc, tx) => acc + tx.amount, 0);
+  const methodStats = transactions.reduce((acc, tx) => {
+    const m = tx.method?.toUpperCase() || "AUTRE";
+    acc[m] = (acc[m] || 0) + 1;
+    return acc;
+  }, {});
+
+  const exportCSV = () => {
+    const header = "ID,Montant,Devise,Méthode,Statut,Date\n";
+    const rows = transactions
+      .map(
+        (t) =>
+          `${t.id},${t.amount},${t.currency},${t.method},${t.status},${new Date(
+            t.createdAt
+          ).toLocaleString()}`
+      )
+      .join("\n");
+    const blob = new Blob([header + rows], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "transactions.csv";
+    a.click();
+    window.URL.revokeObjectURL(url);
   };
 
   if (loading)
@@ -55,12 +94,70 @@ export default function Transactions() {
         💰 Mes Transactions
       </motion.h2>
 
+      {/* KPI résumé */}
+      <motion.div
+        className="grid grid-cols-1 sm:grid-cols-3 gap-4"
+        initial={{ opacity: 0, y: -15 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <div className="p-4 bg-white dark:bg-gray-900 shadow rounded-xl">
+          <p className="text-sm text-gray-500">Total transactions</p>
+          <p className="text-2xl font-bold">{transactions.length}</p>
+        </div>
+        <div className="p-4 bg-white dark:bg-gray-900 shadow rounded-xl">
+          <p className="text-sm text-gray-500">Revenu cumulé</p>
+          <p className="text-2xl font-bold text-green-600">{totalRevenue} $</p>
+        </div>
+        <div className="p-4 bg-white dark:bg-gray-900 shadow rounded-xl">
+          <p className="text-sm text-gray-500">Méthodes utilisées</p>
+          <ul className="text-sm">
+            {Object.entries(methodStats).map(([m, c]) => (
+              <li key={m}>
+                {paymentIcons[m] || "💰"} {m} : {c}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </motion.div>
+
+      {/* Filtres */}
+      <div className="flex gap-3">
+        <select
+          value={filterStatus}
+          onChange={(e) => setFilterStatus(e.target.value)}
+          className="px-3 py-2 border rounded dark:bg-gray-800 dark:text-white"
+        >
+          <option value="ALL">Tous statuts</option>
+          <option value="SUCCESS">✅ Success</option>
+          <option value="PENDING">⏳ Pending</option>
+          <option value="FAILED">❌ Failed</option>
+        </select>
+        <select
+          value={filterMethod}
+          onChange={(e) => setFilterMethod(e.target.value)}
+          className="px-3 py-2 border rounded dark:bg-gray-800 dark:text-white"
+        >
+          <option value="ALL">Toutes méthodes</option>
+          <option value="STRIPE">Stripe</option>
+          <option value="PAYPAL">PayPal</option>
+          <option value="CINETPAY">CinetPay</option>
+          <option value="MOBILE">Mobile Money</option>
+          <option value="CRYPTO">Crypto</option>
+        </select>
+        <button
+          onClick={exportCSV}
+          className="ml-auto bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
+        >
+          ⬇ Export CSV
+        </button>
+      </div>
+
       {/* Liste */}
-      {transactions.length === 0 ? (
+      {filtered.length === 0 ? (
         <p className="text-gray-600 dark:text-gray-400">Aucune transaction trouvée...</p>
       ) : (
         <div className="relative border-l-2 border-blue-600 dark:border-blue-400 pl-6">
-          {transactions.map((tx, i) => (
+          {filtered.map((tx, i) => (
             <motion.div
               key={tx.id}
               className="mb-8 cursor-pointer"
@@ -69,12 +166,14 @@ export default function Transactions() {
               transition={{ delay: i * 0.05 }}
               onClick={() => {
                 setSelected(tx);
-                addNotification({
-                  type: "transaction",
-                  message: `👀 Consultation transaction #${tx.id}`,
-                  data: tx,
-                  link: "/transactions",
-                });
+                if (tx.amount > 2000) {
+                  addNotification({
+                    type: "transaction",
+                    message: `⚠️ Montant élevé détecté sur #${tx.id}`,
+                    data: tx,
+                    link: "/transactions",
+                  });
+                }
               }}
             >
               {/* Point timeline */}
