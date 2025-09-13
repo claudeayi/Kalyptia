@@ -1,36 +1,54 @@
 kalyptia-frontend/
 ├── src/
 │   ├── api/
-│   │   ├── axios.js         # Axios config avec JWT
-│   │   ├── auth.js          # Login, Register, Profil
-│   │   ├── dataset.js       # CRUD datasets
-│   │   ├── payment.js       # Stripe / PayPal / CinetPay
-│   │   └── analytics.js     # KPIs (revenus, stats)
+│   │   ├── axios.js          # ✅ Config Axios avec JWT + interceptors (401 auto logout)
+│   │   ├── auth.js           # ✅ Login, Register, Profil (auth/me)
+│   │   ├── dataset.js        # ✅ CRUD datasets + recherche + favoris
+│   │   ├── payment.js        # ✅ Stripe / PayPal / CinetPay / MobileMoney / Crypto
+│   │   ├── analytics.js      # ✅ KPIs (revenus, stats, tendances, prédictions)
+│   │   └── transactions.js   # ✅ Historique complet + export CSV/PDF
 │   │
 │   ├── components/
-│   │   ├── Navbar.jsx       # Branding + Profil + DarkMode + Logout
-│   │   └── Sidebar.jsx      # Navigation latérale (toutes les pages)
+│   │   ├── Navbar.jsx        # ✅ Branding + Profil + DarkMode + Logout
+│   │   ├── Sidebar.jsx       # ✅ Navigation latérale (toutes les pages cockpit)
+│   │   ├── Loader.jsx        # ✅ Skeleton/Spinner accessible et pro
+│   │   ├── Notification.jsx  # ✅ Centre de notifications temps réel
+│   │   ├── ErrorBoundary.jsx # ✅ Sécurité contre crashs UI
+│   │   ├── AIAssistantSidebar.jsx # ✅ Copilot IA flottant contextuel
+│   │   └── ProtectedRoute.jsx     # ✅ Vérif JWT + rôles (USER, PREMIUM, ADMIN)
 │   │
 │   ├── context/
-│   │   └── ThemeContext.jsx # Gestion Dark Mode global
+│   │   ├── ThemeContext.jsx        # ✅ Dark Mode global
+│   │   ├── NotificationContext.jsx # ✅ Gestion des notifs cockpit
+│   │   ├── AuthContext.jsx         # ✅ Gestion utilisateur global
+│   │   └── AIHistoryContext.jsx    # ✅ Historique partagé des appels IA
+│   │
+│   ├── hooks/
+│   │   ├── useAI.js         # ✅ Hook global → clean/summarize/predict/suggest
+│   │   └── useAIHistory.js  # ✅ Historique IA partagé multi-pages
 │   │
 │   ├── pages/
-│   │   ├── Login.jsx        # Authentification
-│   │   ├── Register.jsx     # Inscription
-│   │   ├── Dashboard.jsx    # Layout principal (Navbar + Sidebar + Outlet)
-│   │   ├── Home.jsx         # Cockpit IA futuriste (KPIs + Graph + Suggestions + Activity)
-│   │   ├── Marketplace.jsx  # Liste datasets + favoris + paiements directs
-│   │   ├── Datasets.jsx     # Gestion datasets (CRUD côté user)
-│   │   ├── Transactions.jsx # Historique d’achats (timeline)
-│   │   ├── Payments.jsx     # Tester paiements (Stripe, PayPal, CinetPay)
-│   │   ├── Analytics.jsx    # Graphiques stratégiques (revenus, datasets, utilisateurs)
-│   │   ├── AI.jsx           # Tester IA (clean, summarize)
-│   │   ├── Blockchain.jsx   # Ledger des blocs (timeline hashée)
-│   │   ├── Activity.jsx     # Flux temps réel (Socket.io)
-│   │   └── Profile.jsx      # Profil utilisateur + rôle + stats perso
+│   │   ├── Login.jsx         # ✅ Authentification
+│   │   ├── Register.jsx      # ✅ Inscription (multi-step + rôles)
+│   │   ├── Dashboard.jsx     # ✅ Layout principal (Navbar + Sidebar + Outlet)
+│   │   ├── Home.jsx          # ✅ Cockpit IA futuriste (KPIs + Graph + Copilot Chat + Activity)
+│   │   ├── Marketplace.jsx   # ✅ Liste datasets + favoris + paiements directs
+│   │   ├── Datasets.jsx      # ✅ CRUD datasets (ajout, recherche, filtrage, IA helper)
+│   │   ├── Transactions.jsx  # ✅ Historique timeline + modal détails + blockchain log
+│   │   ├── Payments.jsx      # ✅ Tester paiements (Stripe, PayPal, CinetPay, MobileMoney, Crypto)
+│   │   ├── Analytics.jsx     # ✅ Graphiques stratégiques (revenus, datasets, utilisateurs)
+│   │   ├── AI.jsx            # ✅ Tester IA (clean, summarize, generate)
+│   │   ├── Blockchain.jsx    # ✅ Ledger des blocs (timeline hashée + WebSocket)
+│   │   ├── Activity.jsx      # ✅ Flux temps réel (Socket.io, transactions, datasets, paiements)
+│   │   ├── Notifications.jsx # ✅ Historique filtrable (dataset, transaction, payment, etc.)
+│   │   ├── Profile.jsx       # ✅ Profil utilisateur + rôle + stats + rapport IA personnalisé
+│   │   ├── Suggestions.jsx   # ✅ Suggestions IA (priorité + actions Appliquer/Ignore)
+│   │   ├── Predictions.jsx   # ✅ Prévisions IA (courbes + insights stratégiques)
+│   │   └── Anomalies.jsx     # ✅ Détection anomalies (fraude, transactions suspectes)
 │   │
-│   ├── App.jsx              # Routes principales
-│   └── main.jsx             # Entrée React + Provider + Router
+│   ├── App.jsx               # ✅ Routes principales (public + protégées + 404)
+│   └── main.jsx              # ✅ Entrée React (Router + Context Providers + Theme)
 │
-├── index.css                # Styles globaux
-├── tailwind.config.js       # Config Tailwind (DarkMode = class)
+├── index.css                 # Styles globaux (Tailwind + animations)
+├── tailwind.config.js        # Config Tailwind (DarkMode = class, couleurs brand)
+└── vite.config.js            # Config Vite (alias @/src, proxy API backend)
