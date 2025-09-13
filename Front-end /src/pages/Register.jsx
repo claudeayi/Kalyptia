@@ -12,6 +12,7 @@ export default function Register() {
     role: "USER",
   });
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -23,9 +24,11 @@ export default function Register() {
     try {
       setLoading(true);
       setError("");
+      setSuccess("");
       const res = await register(form);
       localStorage.setItem("token", res.data.token);
-      navigate("/datasets");
+      setSuccess("✅ Compte créé avec succès !");
+      setTimeout(() => navigate("/datasets"), 1500);
     } catch (err) {
       console.error("❌ Erreur inscription:", err);
       setError("❌ Impossible de créer le compte. Vérifiez vos infos.");
@@ -53,7 +56,7 @@ export default function Register() {
         {/* Progression */}
         <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-6">
           <div
-            className="bg-gradient-to-r from-indigo-500 to-purple-600 h-2 rounded-full"
+            className="bg-gradient-to-r from-indigo-500 to-purple-600 h-2 rounded-full transition-all"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -65,6 +68,11 @@ export default function Register() {
         {error && (
           <p className="text-red-500 bg-red-100 dark:bg-red-800/40 p-2 rounded text-sm mb-4">
             {error}
+          </p>
+        )}
+        {success && (
+          <p className="text-green-600 bg-green-100 dark:bg-green-800/40 p-2 rounded text-sm mb-4">
+            {success}
           </p>
         )}
 
@@ -82,7 +90,9 @@ export default function Register() {
                 <input
                   type="text"
                   placeholder="Nom complet"
-                  className="w-full p-3 border rounded dark:bg-gray-800 dark:text-white dark:border-gray-700"
+                  className={`w-full p-3 border rounded dark:bg-gray-800 dark:text-white dark:border-gray-700 ${
+                    error.includes("Nom") ? "border-red-500" : ""
+                  }`}
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                   required
@@ -90,7 +100,9 @@ export default function Register() {
                 <input
                   type="email"
                   placeholder="Email"
-                  className="w-full p-3 border rounded dark:bg-gray-800 dark:text-white dark:border-gray-700"
+                  className={`w-full p-3 border rounded dark:bg-gray-800 dark:text-white dark:border-gray-700 ${
+                    error.includes("Email") ? "border-red-500" : ""
+                  }`}
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                   required
@@ -98,7 +110,9 @@ export default function Register() {
                 <input
                   type="password"
                   placeholder="Mot de passe (8+ caractères)"
-                  className="w-full p-3 border rounded dark:bg-gray-800 dark:text-white dark:border-gray-700"
+                  className={`w-full p-3 border rounded dark:bg-gray-800 dark:text-white dark:border-gray-700 ${
+                    error.includes("Mot de passe") ? "border-red-500" : ""
+                  }`}
                   value={form.password}
                   onChange={(e) => setForm({ ...form, password: e.target.value })}
                   required
