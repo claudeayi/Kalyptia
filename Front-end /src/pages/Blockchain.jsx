@@ -3,15 +3,17 @@ import { motion, AnimatePresence } from "framer-motion";
 import { io } from "socket.io-client";
 import API from "../api/axios";
 import Loader from "../components/Loader";
-import { useNotifications } from "../context/NotificationContext"; // ✅ Import context notif
+import { useNotifications } from "../context/NotificationContext";
 
 export default function Blockchain() {
   const [blocks, setBlocks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [toast, setToast] = useState(null);
+  const [filter, setFilter] = useState("all");
+  const [search, setSearch] = useState("");
 
-  const { addNotification } = useNotifications(); // ✅ Hook notif global
+  const { addNotification } = useNotifications();
 
   // ✅ Récupération des blocs
   const fetchBlocks = async () => {
@@ -29,7 +31,7 @@ export default function Blockchain() {
     }
   };
 
-  // ✅ Connexion WebSocket temps réel
+  // ✅ WebSocket temps réel
   useEffect(() => {
     fetchBlocks();
 
@@ -48,8 +50,7 @@ export default function Blockchain() {
       console.log("⚡ Nouveau bloc reçu:", block);
       setBlocks((prev) => [block, ...prev]);
       showToast("✅ Nouveau bloc ajouté !");
-      
-      // 🔔 Notification globale
+
       addNotification({
         id: Date.now(),
         message: `⛓ Nouveau bloc ajouté : ${block.action || "inconnu"}`,
@@ -61,15 +62,50 @@ export default function Blockchain() {
     return () => socket.disconnect();
   }, []);
 
-  // ✅ Copier avec confirmation
+  // ✅ Copier avec feedback
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
     showToast("📋 Copié dans le presse-papier !");
   };
 
+  // ✅ Toast animé
   const showToast = (msg) => {
     setToast(msg);
     setTimeout(() => setToast(null), 2500);
+  };
+
+  // ✅ Export JSON
+  const exportJSON = () => {
+    const blob = new Blob([JSON.stringify(blocks, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "blockchain-ledger.json";
+    a.click();
+    showToast("📤 Ledger exporté en JSON !");
+  };
+
+  // ✅ Export CSV
+  const exportCSV = () => {
+    const headers = ["Index", "Hash", "PrevHash", "Action", "Type", "Timestamp"];
+    const rows = blocks.map((b) => [
+      b.index,
+      b.hash,
+      b.previousHash,
+      b.action,
+      b.type,
+      b.timestamp,
+    ]);
+    const csvContent =
+      [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "blockchain-ledger.csv";
+    a.click();
+    showToast("📤 Ledger exporté en CSV !");
   };
 
   const typeIcons = {
@@ -78,6 +114,16 @@ export default function Blockchain() {
     payment: "💳",
     default: "⛓",
   };
+
+  // ✅ Filtrage & recherche
+  const filteredBlocks = blocks.filter((b) => {
+    const matchesFilter = filter === "all" || b.type === filter;
+    const matchesSearch =
+      !search ||
+      b.hash?.toLowerCase().includes(search.toLowerCase()) ||
+      b.action?.toLowerCase().includes(search.toLowerCase());
+    return matchesFilter && matchesSearch;
+  });
 
   if (loading) return <Loader text="Chargement du ledger blockchain..." />;
   if (error)
@@ -112,6 +158,33 @@ export default function Blockchain() {
         ⛓ Blockchain Ledger
       </motion.h2>
 
+      {/* Filtres & recherche */}
+      <div className="flex flex-wrap gap-3 items-center justify-between">
+        <div className="flex gap-2">
+          {["all", "dataset", "transaction", "payment"].map((t) => (
+            <button
+              key={t}
+              onClick={() => setFilter(t)}
+              className={`px-3 py-1 text-sm rounded ${
+                filter === t
+                  ? "bg-indigo-600 text-white"
+                  : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+              }`}
+            >
+              {t === "all" ? "Tout" : t}
+            </button>
+          ))}
+        </div>
+
+        <input
+          type="text"
+          placeholder="🔍 Rechercher hash/action..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="px-3 py-1 text-sm border rounded dark:bg-gray-800 dark:text-white"
+        />
+      </div>
+
       {/* Résumé stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white dark:bg-gray-900 shadow p-4 rounded text-center">
@@ -139,24 +212,36 @@ export default function Blockchain() {
       </div>
 
       {/* Actions */}
-      <div className="flex justify-end">
+      <div className="flex gap-3 justify-end">
         <button
           onClick={fetchBlocks}
           className="px-3 py-1 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700"
         >
           🔄 Rafraîchir
         </button>
+        <button
+          onClick={exportJSON}
+          className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700"
+        >
+          📤 Export JSON
+        </button>
+        <button
+          onClick={exportCSV}
+          className="px-3 py-1 text-sm bg-yellow-600 text-white rounded hover:bg-yellow-700"
+        >
+          📤 Export CSV
+        </button>
       </div>
 
       {/* Timeline */}
       <div className="relative border-l-2 border-blue-600 dark:border-blue-400 pl-6">
-        {blocks.length === 0 && (
+        {filteredBlocks.length === 0 && (
           <p className="text-gray-500 dark:text-gray-400">
-            Aucun bloc dans le ledger...
+            Aucun bloc trouvé...
           </p>
         )}
 
-        {blocks.map((block, i) => (
+        {filteredBlocks.map((block, i) => (
           <motion.div
             key={block.hash || i}
             className="mb-8"
