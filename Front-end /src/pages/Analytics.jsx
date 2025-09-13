@@ -4,6 +4,7 @@ import { Bar, Pie, Line } from "react-chartjs-2";
 import { motion } from "framer-motion";
 import Loader from "../components/Loader";
 import API from "../api/axios";
+import SkeletonLoader from "../components/SkeletonLoader";
 
 export default function Analytics() {
   const [revenue, setRevenue] = useState(0);
@@ -11,43 +12,64 @@ export default function Analytics() {
   const [aiInsights, setAiInsights] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [lastRevenue, setLastRevenue] = useState(0);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+
+      // ✅ Revenus + stats
+      const revRes = await getRevenue();
+      setRevenue(revRes.data.totalRevenue);
+      setLastRevenue(revRes.data.lastMonthRevenue || 0);
+
+      const statsRes = await getStats();
+      setStats(statsRes.data);
+
+      // ✅ Insights IA
+      try {
+        const res = await API.get("/ai/analytics");
+        setAiInsights(res.data.insights || []);
+      } catch {
+        setAiInsights([
+          "📊 Revenus devraient croître de +35% d’ici 30 jours.",
+          "⚠️ Anomalie : pic inhabituel de ventes le 12 Mars.",
+          "💡 Les datasets financiers génèrent 2x plus de transactions.",
+          "🚀 Traduisez vos datasets en anglais pour +20% ventes.",
+        ]);
+      }
+    } catch (err) {
+      console.error("❌ Erreur analytics:", err);
+      setError("Impossible de récupérer les données analytics.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        setRevenue((await getRevenue()).data.totalRevenue);
-        setStats((await getStats()).data);
-
-        // ✅ Insights IA depuis API (fallback si indispo)
-        try {
-          const res = await API.get("/ai/analytics");
-          setAiInsights(res.data.insights || []);
-        } catch {
-          setAiInsights([
-            "📊 Revenus devraient croître de +35% d’ici 30 jours.",
-            "⚠️ Anomalie : pic inhabituel de ventes le 12 Mars.",
-            "💡 Les datasets financiers génèrent 2x plus de transactions.",
-            "🚀 Traduisez vos datasets en anglais pour +20% ventes.",
-          ]);
-        }
-      } catch (err) {
-        console.error("❌ Erreur analytics:", err);
-        setError("Impossible de récupérer les données analytics.");
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchData();
   }, []);
 
-  if (loading) return <Loader text="Chargement des analytics..." />;
+  if (loading)
+    return (
+      <div className="space-y-8">
+        <SkeletonLoader type="card" count={3} lines={3} />
+        <SkeletonLoader type="card" count={2} lines={4} />
+      </div>
+    );
+
   if (error)
     return (
       <p className="text-red-600 dark:text-red-400 p-4 bg-red-50 dark:bg-red-900/30 rounded">
         {error}
       </p>
     );
+
+  // Variation %
+  const revenueVariation =
+    lastRevenue > 0
+      ? (((revenue - lastRevenue) / lastRevenue) * 100).toFixed(1)
+      : 0;
 
   // ✅ Line chart - Revenus + Projection IA
   const revenueData = {
@@ -100,16 +122,49 @@ export default function Analytics() {
     ],
   };
 
+  // ✅ Export CSV
+  const exportCSV = () => {
+    const rows = [
+      ["Metric", "Value"],
+      ["Revenue", revenue],
+      ["Datasets Approved", stats.datasetsApproved],
+      ["Users", stats.users + stats.premium + stats.admin],
+    ];
+    const csv = rows.map((r) => r.join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "analytics.csv";
+    a.click();
+  };
+
   return (
     <div className="space-y-10">
       {/* Titre */}
-      <motion.h2
-        className="text-3xl font-extrabold bg-gradient-to-r from-yellow-500 to-orange-600 bg-clip-text text-transparent dark:from-yellow-300 dark:to-orange-400"
+      <motion.div
+        className="flex justify-between items-center"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        📈 Analytics – Kalyptia
-      </motion.h2>
+        <h2 className="text-3xl font-extrabold bg-gradient-to-r from-yellow-500 to-orange-600 bg-clip-text text-transparent">
+          📈 Analytics – Kalyptia
+        </h2>
+        <div className="flex gap-2">
+          <button
+            onClick={fetchData}
+            className="px-3 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 text-sm"
+          >
+            🔄 Rafraîchir
+          </button>
+          <button
+            onClick={exportCSV}
+            className="px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
+          >
+            📤 Export CSV
+          </button>
+        </div>
+      </motion.div>
 
       {/* ✅ Résumé KPIs */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -118,6 +173,13 @@ export default function Analytics() {
           <p className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
             ${revenue.toLocaleString()}
           </p>
+          <span
+            className={`text-sm font-medium ${
+              revenueVariation >= 0 ? "text-green-500" : "text-red-500"
+            }`}
+          >
+            {revenueVariation >= 0 ? `+${revenueVariation}%` : `${revenueVariation}%`} vs mois dernier
+          </span>
         </div>
         <div className="bg-white dark:bg-gray-900 p-4 rounded shadow text-center">
           <h4 className="text-gray-500 dark:text-gray-400 text-sm">Datasets approuvés</h4>
