@@ -13,6 +13,8 @@ export default function Navbar() {
   const [loadingUser, setLoadingUser] = useState(true);
   const [openNotif, setOpenNotif] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
+  const [dataOpsStatus, setDataOpsStatus] = useState("⏳"); // ✅ état DataOps
+  const [aiActive, setAiActive] = useState(false); // ✅ statut IA
 
   const notifRef = useRef(null);
   const profileRef = useRef(null);
@@ -34,6 +36,26 @@ export default function Navbar() {
       }
     };
     fetchProfile();
+  }, []);
+
+  /* 🔄 Fetch DataOps status */
+  useEffect(() => {
+    const fetchDataOps = async () => {
+      try {
+        const res = await API.get("/dataops/status");
+        setDataOpsStatus(res.data?.pipelinesActive ? "✅" : "⚠️");
+      } catch {
+        setDataOpsStatus("❌");
+      }
+    };
+    fetchDataOps();
+
+    // check IA background
+    const aiInterval = setInterval(() => {
+      setAiActive((prev) => !prev); // clignotement
+    }, 2000);
+
+    return () => clearInterval(aiInterval);
   }, []);
 
   /* ✅ Gestion clic en dehors */
@@ -70,7 +92,10 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="flex justify-between items-center px-4 sm:px-6 py-3 bg-white dark:bg-gray-900 shadow relative">
+    <nav
+      role="navigation"
+      className="flex justify-between items-center px-4 sm:px-6 py-3 bg-white dark:bg-gray-900 shadow relative border-b border-gray-200 dark:border-gray-800"
+    >
       {/* 🚀 Branding */}
       <a
         href="/"
@@ -81,6 +106,24 @@ export default function Navbar() {
 
       {/* Actions */}
       <div className="flex items-center gap-4 sm:gap-6">
+        {/* ✅ DataOps Status */}
+        <div
+          className="hidden sm:flex items-center gap-2 text-xs font-semibold text-gray-600 dark:text-gray-300"
+          title="État DataOps"
+        >
+          ⚙️ DataOps: <span>{dataOpsStatus}</span>
+        </div>
+
+        {/* ✅ IA Active */}
+        <div
+          className={`hidden sm:block text-xs font-semibold ${
+            aiActive ? "text-green-500" : "text-gray-400"
+          }`}
+          title="Copilot IA en arrière-plan"
+        >
+          {aiActive ? "🤖 IA Active" : "🤖 IA Idle"}
+        </div>
+
         {/* 🔔 Notifications */}
         <div className="relative" ref={notifRef}>
           <button
@@ -97,7 +140,11 @@ export default function Navbar() {
           </button>
 
           {openNotif && (
-            <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-3 z-50 transition-all duration-200">
+            <div
+              className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-3 z-50 transition-all duration-200"
+              role="menu"
+              aria-label="Notifications"
+            >
               <div className="flex justify-between items-center mb-2">
                 <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-200">
                   Dernières notifications
@@ -189,6 +236,9 @@ export default function Navbar() {
                   <p className="text-sm font-semibold text-gray-800 dark:text-white">
                     {user.name}
                   </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {user.email}
+                  </p>
                   <span
                     title={`Rôle: ${user.role}`}
                     className={`text-xs px-2 py-0.5 rounded-full ${roleColors[user.role]}`}
@@ -200,7 +250,10 @@ export default function Navbar() {
 
               {/* Dropdown profil */}
               {openProfile && (
-                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-lg py-2 z-50 transition-all duration-200">
+                <div
+                  className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-lg py-2 z-50 transition-all duration-200"
+                  role="menu"
+                >
                   <a
                     href="/profile"
                     className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
