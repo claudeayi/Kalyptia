@@ -6,11 +6,15 @@ import Loader from "./components/Loader";
 // ✅ Layout principal
 import Dashboard from "./pages/Dashboard";
 
-// ✅ Pages publiques
+/* ============================================================================
+ *  Pages Publiques
+ * ========================================================================== */
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 
-// ✅ Pages privées
+/* ============================================================================
+ *  Pages Privées – Cockpit
+ * ========================================================================== */
 const Home = lazy(() => import("./pages/Home"));
 const Marketplace = lazy(() => import("./pages/Marketplace"));
 const Datasets = lazy(() => import("./pages/Datasets"));
@@ -21,13 +25,19 @@ const AI = lazy(() => import("./pages/AI"));
 const Blockchain = lazy(() => import("./pages/Blockchain"));
 const Activity = lazy(() => import("./pages/Activity"));
 const Profile = lazy(() => import("./pages/Profile"));
+
+/* ============================================================================
+ *  Pages Avancées – IA & DataOps
+ * ========================================================================== */
 const Suggestions = lazy(() => import("./pages/Suggestions"));
 const Predictions = lazy(() => import("./pages/Predictions"));
 const Notifications = lazy(() => import("./pages/Notifications"));
 const Anomalies = lazy(() => import("./pages/Anomalies"));
-const DataOps = lazy(() => import("./pages/DataOps")); // ✅ NEW
+const DataOps = lazy(() => import("./pages/DataOps")); // ⚡ Nouveau module cycle data
 
-// ✅ Error Boundary global
+/* ============================================================================
+ *  Error Boundary global
+ * ========================================================================== */
 function ErrorBoundary({ children }: { children: React.ReactNode }) {
   return (
     <Suspense
@@ -46,7 +56,9 @@ function ErrorBoundary({ children }: { children: React.ReactNode }) {
   );
 }
 
-// ✅ 404 page
+/* ============================================================================
+ *  Page 404
+ * ========================================================================== */
 const NotFound = () => (
   <div className="flex flex-col items-center justify-center h-screen text-center space-y-4">
     <h1 className="text-5xl font-extrabold text-red-600">404</h1>
@@ -62,16 +74,23 @@ const NotFound = () => (
   </div>
 );
 
+/* ============================================================================
+ *  App principale
+ * ========================================================================== */
 export default function App() {
   return (
     <BrowserRouter>
       <ErrorBoundary>
         <Routes>
-          {/* Routes publiques */}
+          {/* =======================
+              Routes Publiques
+          ======================= */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* Routes privées */}
+          {/* =======================
+              Routes Privées
+          ======================= */}
           <Route
             path="/"
             element={
@@ -80,7 +99,10 @@ export default function App() {
               </ProtectedRoute>
             }
           >
+            {/* Redirection / -> /home */}
             <Route index element={<Navigate to="/home" replace />} />
+
+            {/* Cockpit principal */}
             <Route path="home" element={<Home />} />
             <Route path="marketplace" element={<Marketplace />} />
             <Route path="datasets" element={<Datasets />} />
@@ -91,14 +113,20 @@ export default function App() {
             <Route path="blockchain" element={<Blockchain />} />
             <Route path="activity" element={<Activity />} />
             <Route path="profile" element={<Profile />} />
+
+            {/* Extensions IA */}
             <Route path="suggestions" element={<Suggestions />} />
             <Route path="predictions" element={<Predictions />} />
             <Route path="notifications" element={<Notifications />} />
             <Route path="anomalies" element={<Anomalies />} />
-            <Route path="dataops" element={<DataOps />} /> {/* ✅ NEW */}
+
+            {/* ⚡ Nouveau module – Cycle de la donnée */}
+            <Route path="dataops" element={<DataOps />} />
           </Route>
 
-          {/* 404 */}
+          {/* =======================
+              404
+          ======================= */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </ErrorBoundary>
