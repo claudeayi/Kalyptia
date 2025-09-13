@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getRevenue, getStats } from "../api/analytics";
 import { io } from "socket.io-client";
 import { Line } from "react-chartjs-2";
@@ -16,6 +16,14 @@ export default function Home() {
   const [loadingAI, setLoadingAI] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const chatEndRef = useRef(null);
+
+  // ✅ Scroll auto sur le chat
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [chatHistory]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,9 +53,19 @@ export default function Home() {
     fetchData();
 
     // ✅ Socket.io temps réel
+    const pushActivity = (type, message) => {
+      setActivity((prev) => [
+        { type, message, time: new Date().toLocaleTimeString() },
+        ...prev,
+      ]);
+    };
+
     const token = localStorage.getItem("token");
     const socket = io("http://localhost:5000", { auth: { token } });
 
+    socket.on("connect_error", () =>
+      pushActivity("error", "⚠️ Erreur connexion temps réel")
+    );
     socket.on("DATASET_CREATED", (data) =>
       pushActivity("dataset", `📂 Dataset ${data.name} créé`)
     );
@@ -57,13 +75,6 @@ export default function Home() {
     socket.on("PAYMENT_SUCCESS", (data) =>
       pushActivity("payment", `💳 Paiement ${data.amount} ${data.currency}`)
     );
-
-    const pushActivity = (type, message) => {
-      setActivity((prev) => [
-        { type, message, time: new Date().toLocaleTimeString() },
-        ...prev,
-      ]);
-    };
 
     return () => socket.disconnect();
   }, []);
@@ -90,6 +101,17 @@ export default function Home() {
         fill: true,
       },
     ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: { display: true, position: "bottom" },
+    },
+    scales: {
+      y: { beginAtZero: true, grid: { color: "rgba(0,0,0,0.05)" } },
+      x: { grid: { display: false } },
+    },
   };
 
   // ✅ Chat IA
@@ -168,7 +190,7 @@ export default function Home() {
         ].map((kpi, i) => (
           <motion.div
             key={i}
-            className={`p-6 rounded-xl shadow-lg bg-gradient-to-br ${kpi.color} text-white text-center animate-pulse`}
+            className={`p-6 rounded-xl shadow-lg bg-gradient-to-br ${kpi.color} text-white text-center hover:scale-105 transition`}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.2 }}
@@ -186,7 +208,7 @@ export default function Home() {
         animate={{ opacity: 1, scale: 1 }}
       >
         <h3 className="font-semibold mb-4">📊 Évolution des revenus</h3>
-        <Line data={chartData} />
+        <Line data={chartData} options={chartOptions} />
       </motion.div>
 
       {/* Activité récente */}
@@ -205,6 +227,8 @@ export default function Home() {
                   ? "bg-blue-500 text-white"
                   : event.type === "transaction"
                   ? "bg-green-500 text-white"
+                  : event.type === "error"
+                  ? "bg-red-500 text-white"
                   : "bg-yellow-500 text-white"
               }`}
             >
@@ -239,6 +263,7 @@ export default function Home() {
           {loadingAI && (
             <p className="text-sm italic text-gray-500 dark:text-gray-400">⏳ L’IA réfléchit...</p>
           )}
+          <div ref={chatEndRef} />
         </div>
 
         <div className="flex gap-2">
@@ -246,6 +271,7 @@ export default function Home() {
             type="text"
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleAskAI()}
             className="flex-1 p-2 rounded text-black dark:text-white dark:bg-gray-800"
             placeholder="Ex: Quels sont mes top datasets ?"
           />
