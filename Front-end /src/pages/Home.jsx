@@ -16,9 +16,9 @@ export default function Home() {
   const [loadingAI, setLoadingAI] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [activeTab, setActiveTab] = useState("kpi"); // mobile mode
   const chatEndRef = useRef(null);
 
-  // ✅ Scroll auto sur le chat
   useEffect(() => {
     if (chatEndRef.current) {
       chatEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -52,7 +52,6 @@ export default function Home() {
     };
     fetchData();
 
-    // ✅ Socket.io temps réel
     const pushActivity = (type, message) => {
       setActivity((prev) => [
         { type, message, time: new Date().toLocaleTimeString() },
@@ -63,9 +62,6 @@ export default function Home() {
     const token = localStorage.getItem("token");
     const socket = io("http://localhost:5000", { auth: { token } });
 
-    socket.on("connect_error", () =>
-      pushActivity("error", "⚠️ Erreur connexion temps réel")
-    );
     socket.on("DATASET_CREATED", (data) =>
       pushActivity("dataset", `📂 Dataset ${data.name} créé`)
     );
@@ -79,7 +75,6 @@ export default function Home() {
     return () => socket.disconnect();
   }, []);
 
-  // ✅ Graphique revenus + projection IA
   const chartData = {
     labels: ["Jan", "Fév", "Mar", "Avr", "Mai"],
     datasets: [
@@ -103,18 +98,6 @@ export default function Home() {
     ],
   };
 
-  const chartOptions = {
-    responsive: true,
-    plugins: {
-      legend: { display: true, position: "bottom" },
-    },
-    scales: {
-      y: { beginAtZero: true, grid: { color: "rgba(0,0,0,0.05)" } },
-      x: { grid: { display: false } },
-    },
-  };
-
-  // ✅ Chat IA
   const handleAskAI = async () => {
     if (!userInput.trim()) return;
     const question = userInput;
@@ -147,150 +130,112 @@ export default function Home() {
       </p>
     );
 
-  return (
-    <div className="space-y-10 relative">
-      {/* Effet background cockpit */}
-      <div className="absolute inset-0 -z-10 opacity-10">
-        <div className="absolute top-0 left-1/2 w-[800px] h-[800px] bg-blue-500 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/3 w-[600px] h-[600px] bg-purple-500 rounded-full blur-3xl" />
-      </div>
+  // ✅ Composants réutilisables
+  const KPIs = (
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {[
+        { label: "💵 Revenu total", value: `${revenue} $`, color: "from-green-400 to-green-600" },
+        { label: "👥 Utilisateurs", value: stats.users || 0, color: "from-blue-400 to-blue-600" },
+        { label: "📂 Datasets", value: stats.datasets || 0, color: "from-purple-400 to-purple-600" },
+        { label: "💰 Transactions", value: stats.transactions || 0, color: "from-yellow-400 to-yellow-600" },
+      ].map((kpi, i) => (
+        <motion.div
+          key={i}
+          className={`p-4 rounded-xl shadow bg-gradient-to-br ${kpi.color} text-white text-center`}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <h3 className="text-sm font-semibold">{kpi.label}</h3>
+          <p className="text-xl font-bold">{kpi.value}</p>
+        </motion.div>
+      ))}
+    </div>
+  );
 
-      {/* Titre */}
-      <motion.h2
-        className="text-3xl font-extrabold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        🚀 Tableau de Bord IA – Kalyptia
-      </motion.h2>
+  const Chart = (
+    <div className="bg-white dark:bg-gray-900 shadow p-4 rounded-xl">
+      <h3 className="font-semibold mb-2">📊 Évolution des revenus</h3>
+      <Line data={chartData} />
+    </div>
+  );
 
-      {/* ✅ Copilot IA – Résumé global */}
-      <motion.div
-        className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6 rounded-xl shadow space-y-3"
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <h3 className="font-semibold mb-4">🤖 Copilot IA – Synthèse Globale</h3>
-        <ul className="space-y-2">
-          {aiSummary.map((s, i) => (
-            <li key={i} className="bg-white bg-opacity-20 p-3 rounded text-sm">
-              {s}
-            </li>
-          ))}
-        </ul>
-      </motion.div>
-
-      {/* KPIs */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-        {[
-          { label: "💵 Revenu total", value: `${revenue} $`, color: "from-green-400 to-green-600" },
-          { label: "👥 Utilisateurs", value: stats.users || 0, color: "from-blue-400 to-blue-600" },
-          { label: "📂 Datasets", value: stats.datasets || 0, color: "from-purple-400 to-purple-600" },
-          { label: "💰 Transactions", value: stats.transactions || 0, color: "from-yellow-400 to-yellow-600" },
-        ].map((kpi, i) => (
-          <motion.div
+  const Chat = (
+    <div className="bg-gradient-to-r from-pink-500 to-red-600 text-white p-4 rounded-xl shadow space-y-4">
+      <h3 className="font-semibold">💬 Copilot IA</h3>
+      <div className="h-48 overflow-y-auto bg-white dark:bg-gray-800 p-3 rounded text-sm text-gray-900 dark:text-gray-200 space-y-2">
+        {chatHistory.map((msg, i) => (
+          <div
             key={i}
-            className={`p-6 rounded-xl shadow-lg bg-gradient-to-br ${kpi.color} text-white text-center hover:scale-105 transition`}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.2 }}
+            className={`p-2 rounded max-w-[80%] ${
+              msg.sender === "user"
+                ? "bg-blue-500 text-white ml-auto"
+                : "bg-gray-200 dark:bg-gray-700"
+            }`}
           >
-            <h3 className="font-semibold">{kpi.label}</h3>
-            <p className="text-2xl font-bold">{kpi.value}</p>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Graphique revenus */}
-      <motion.div
-        className="bg-white dark:bg-gray-900 shadow p-6 rounded-xl"
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-      >
-        <h3 className="font-semibold mb-4">📊 Évolution des revenus</h3>
-        <Line data={chartData} options={chartOptions} />
-      </motion.div>
-
-      {/* Activité récente */}
-      <motion.div
-        className="bg-white dark:bg-gray-900 shadow p-6 rounded-xl"
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <h3 className="font-semibold mb-4">⚡ Activité récente</h3>
-        {activity.slice(0, 5).map((event, i) => (
-          <div key={i} className="border-b py-2 flex justify-between">
-            <span>{event.time}</span>
-            <span
-              className={`px-2 py-0.5 rounded text-xs ${
-                event.type === "dataset"
-                  ? "bg-blue-500 text-white"
-                  : event.type === "transaction"
-                  ? "bg-green-500 text-white"
-                  : event.type === "error"
-                  ? "bg-red-500 text-white"
-                  : "bg-yellow-500 text-white"
-              }`}
-            >
-              {event.message}
-            </span>
+            {msg.text}
           </div>
         ))}
-        {activity.length === 0 && <p className="text-gray-500">Aucune activité pour l’instant...</p>}
-      </motion.div>
+        {loadingAI && <p className="italic text-gray-500">⏳ L’IA réfléchit...</p>}
+        <div ref={chatEndRef} />
+      </div>
+      <div className="flex gap-2">
+        <input
+          value={userInput}
+          onChange={(e) => setUserInput(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleAskAI()}
+          className="flex-1 p-2 rounded text-black dark:text-white dark:bg-gray-800"
+          placeholder="Pose ta question..."
+        />
+        <button onClick={handleAskAI} className="bg-black px-3 py-2 rounded">
+          Envoyer
+        </button>
+      </div>
+    </div>
+  );
 
-      {/* ✅ Copilot IA – Chat interactif */}
-      <motion.div
-        className="bg-gradient-to-r from-pink-500 to-red-600 text-white p-6 rounded-xl shadow space-y-4"
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <h3 className="font-semibold mb-4">💬 Copilot IA – Posez vos questions</h3>
+  return (
+    <div className="space-y-6">
+      <h2 className="text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent text-center md:text-left">
+        🚀 Tableau de Bord IA – Kalyptia
+      </h2>
 
-        <div className="h-64 overflow-y-auto bg-white dark:bg-gray-800 p-4 rounded text-gray-800 dark:text-gray-200 space-y-3">
-          {chatHistory.map((msg, i) => (
-            <div
-              key={i}
-              className={`p-2 rounded max-w-[80%] ${
-                msg.sender === "user"
-                  ? "bg-blue-500 text-white ml-auto"
-                  : "bg-gray-200 dark:bg-gray-700"
-              }`}
-            >
-              {msg.text}
-            </div>
-          ))}
-          {loadingAI && (
-            <p className="text-sm italic text-gray-500 dark:text-gray-400">⏳ L’IA réfléchit...</p>
-          )}
-          <div ref={chatEndRef} />
+      {/* Mode Desktop complet */}
+      <div className="hidden md:flex flex-col space-y-6">
+        {KPIs}
+        {Chart}
+        {Chat}
+      </div>
+
+      {/* Mode Mobile mini-dashboard */}
+      <div className="md:hidden">
+        <div className="mb-4">
+          {activeTab === "kpi" && KPIs}
+          {activeTab === "chart" && Chart}
+          {activeTab === "chat" && Chat}
         </div>
 
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleAskAI()}
-            className="flex-1 p-2 rounded text-black dark:text-white dark:bg-gray-800"
-            placeholder="Ex: Quels sont mes top datasets ?"
-          />
+        {/* Onglets mobile */}
+        <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t flex justify-around py-2 shadow-inner">
           <button
-            onClick={handleAskAI}
-            className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800"
+            onClick={() => setActiveTab("kpi")}
+            className={`flex-1 text-center ${activeTab === "kpi" ? "text-indigo-600 font-bold" : ""}`}
           >
-            Envoyer
+            📊 KPI
           </button>
-          {chatHistory.length > 0 && (
-            <button
-              onClick={() => setChatHistory([])}
-              className="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600"
-            >
-              Effacer
-            </button>
-          )}
+          <button
+            onClick={() => setActiveTab("chart")}
+            className={`flex-1 text-center ${activeTab === "chart" ? "text-indigo-600 font-bold" : ""}`}
+          >
+            📈 Graph
+          </button>
+          <button
+            onClick={() => setActiveTab("chat")}
+            className={`flex-1 text-center ${activeTab === "chat" ? "text-indigo-600 font-bold" : ""}`}
+          >
+            💬 Chat
+          </button>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }
