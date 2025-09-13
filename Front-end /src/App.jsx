@@ -1,15 +1,16 @@
-// src/App.tsx
-import { Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Suspense, lazy } from "react";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./routes/ProtectedRoute";
 import Loader from "./components/Loader";
 
-// 🔑 Auth pages
+// ✅ Layout principal
+import Dashboard from "./pages/Dashboard";
+
+// ✅ Pages publiques
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 
-// 📊 Dashboard & pages
-const Dashboard = lazy(() => import("./pages/Dashboard"));
+// ✅ Pages privées
 const Home = lazy(() => import("./pages/Home"));
 const Marketplace = lazy(() => import("./pages/Marketplace"));
 const Datasets = lazy(() => import("./pages/Datasets"));
@@ -19,71 +20,67 @@ const Analytics = lazy(() => import("./pages/Analytics"));
 const AI = lazy(() => import("./pages/AI"));
 const Blockchain = lazy(() => import("./pages/Blockchain"));
 const Activity = lazy(() => import("./pages/Activity"));
-const Notifications = lazy(() => import("./pages/Notifications"));
 const Profile = lazy(() => import("./pages/Profile"));
-
-// 🤖 IA Insights
 const Suggestions = lazy(() => import("./pages/Suggestions"));
-const Anomalies = lazy(() => import("./pages/Anomalies"));
 const Predictions = lazy(() => import("./pages/Predictions"));
+const Notifications = lazy(() => import("./pages/Notifications"));
+const Anomalies = lazy(() => import("./pages/Anomalies"));
 
-// ❌ 404 Page
+// ✅ 404 page
 const NotFound = () => (
-  <div className="h-screen flex items-center justify-center text-gray-600 dark:text-gray-300">
-    <div className="text-center space-y-4">
-      <h1 className="text-6xl font-extrabold text-red-500">404</h1>
-      <p className="text-lg font-medium">Oups… Page non trouvée 🚫</p>
-      <a
-        href="/"
-        className="inline-block px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
-      >
-        Retour au Dashboard
-      </a>
-    </div>
+  <div className="flex flex-col items-center justify-center h-screen text-center space-y-4">
+    <h1 className="text-5xl font-extrabold text-red-600">404</h1>
+    <p className="text-gray-600 dark:text-gray-300">
+      Oups, cette page n’existe pas 🚧
+    </p>
+    <a
+      href="/"
+      className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
+    >
+      Retour au tableau de bord
+    </a>
   </div>
 );
 
-function App() {
+export default function App() {
   return (
-    <Suspense fallback={<Loader text="🚀 Chargement de l’application..." />}>
-      <Routes>
-        {/* 🌍 Routes publiques */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+    <BrowserRouter>
+      <Suspense fallback={<Loader text="Chargement..." />}>
+        <Routes>
+          {/* Routes publiques */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
-        {/* 🔐 Routes protégées */}
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute roles={["USER", "PREMIUM", "ADMIN"]}>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        >
-          {/* 🏠 Dashboard routes */}
-          <Route index element={<Home />} />
-          <Route path="marketplace" element={<Marketplace />} />
-          <Route path="datasets" element={<Datasets />} />
-          <Route path="transactions" element={<Transactions />} />
-          <Route path="payments" element={<Payments />} />
-          <Route path="analytics" element={<Analytics />} />
-          <Route path="ai" element={<AI />} />
-          <Route path="blockchain" element={<Blockchain />} />
-          <Route path="activity" element={<Activity />} />
-          <Route path="notifications" element={<Notifications />} />
-          <Route path="profile" element={<Profile />} />
+          {/* Routes privées */}
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<Navigate to="/home" replace />} />
+            <Route path="home" element={<Home />} />
+            <Route path="marketplace" element={<Marketplace />} />
+            <Route path="datasets" element={<Datasets />} />
+            <Route path="transactions" element={<Transactions />} />
+            <Route path="payments" element={<Payments />} />
+            <Route path="analytics" element={<Analytics />} />
+            <Route path="ai" element={<AI />} />
+            <Route path="blockchain" element={<Blockchain />} />
+            <Route path="activity" element={<Activity />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="suggestions" element={<Suggestions />} />
+            <Route path="predictions" element={<Predictions />} />
+            <Route path="notifications" element={<Notifications />} />
+            <Route path="anomalies" element={<Anomalies />} />
+          </Route>
 
-          {/* 🤖 IA Insights */}
-          <Route path="ai/suggestions" element={<Suggestions />} />
-          <Route path="ai/anomalies" element={<Anomalies />} />
-          <Route path="ai/predictions" element={<Predictions />} />
-        </Route>
-
-        {/* ❌ Catch-all */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </Suspense>
+          {/* 404 */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
   );
 }
-
-export default App;
