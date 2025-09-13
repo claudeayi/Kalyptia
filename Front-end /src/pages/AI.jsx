@@ -6,19 +6,27 @@ export default function AI() {
   const [input, setInput] = useState("");
   const [result, setResult] = useState({ type: "", content: "" });
   const [loading, setLoading] = useState(false);
+  const [history, setHistory] = useState([]);
+  const [copied, setCopied] = useState(false);
 
   const callAI = async (endpoint, type) => {
     if (!input.trim()) return;
     try {
       setLoading(true);
       setResult({ type, content: "" });
+
       const res = await API.post(`/ai/${endpoint}`, { text: input });
-      setResult({
-        type,
-        content:
-          res.data.result ||
-          "✅ Traitement terminé, mais aucun résultat explicite.",
-      });
+
+      const finalResult =
+        res.data.result || "✅ Traitement terminé, mais aucun résultat explicite.";
+
+      setResult({ type, content: finalResult });
+
+      // ✅ Historique (stocke la requête et la réponse)
+      setHistory((prev) => [
+        { query: input, type, response: finalResult },
+        ...prev.slice(0, 4), // garde 5 dernières interactions
+      ]);
     } catch (err) {
       console.error("❌ Erreur IA:", err);
       if (err.response?.status === 401) {
@@ -27,7 +35,7 @@ export default function AI() {
       }
       setResult({
         type,
-        content: "❌ Erreur lors du traitement IA",
+        content: "❌ Erreur lors du traitement IA. Réessayez plus tard.",
       });
     } finally {
       setLoading(false);
@@ -37,7 +45,20 @@ export default function AI() {
   const copyResult = () => {
     if (result.content) {
       navigator.clipboard.writeText(result.content);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
     }
+  };
+
+  const exportResult = () => {
+    if (!result.content) return;
+    const blob = new Blob([result.content], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `AI_Result_${result.type}.txt`;
+    link.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -105,18 +126,55 @@ export default function AI() {
               <p className="text-gray-800 dark:text-gray-200 whitespace-pre-wrap">
                 {result.content}
               </p>
-              <button
-                onClick={copyResult}
-                className="absolute top-2 right-2 text-xs bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600"
-              >
-                📋 Copier
-              </button>
+
+              {/* Boutons d’action */}
+              <div className="absolute top-2 right-2 flex gap-2">
+                <button
+                  onClick={copyResult}
+                  className="text-xs bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600"
+                >
+                  {copied ? "✅ Copié" : "📋 Copier"}
+                </button>
+                <button
+                  onClick={exportResult}
+                  className="text-xs bg-blue-200 dark:bg-blue-700 px-2 py-1 rounded hover:bg-blue-300 dark:hover:bg-blue-600 text-blue-900 dark:text-white"
+                >
+                  ⬇ Export
+                </button>
+              </div>
             </>
           ) : (
             <p className="text-gray-400">Aucun résultat pour l’instant...</p>
           )}
         </motion.div>
       </div>
+
+      {/* Historique IA */}
+      {history.length > 0 && (
+        <div className="bg-white dark:bg-gray-900 shadow p-6 rounded-xl">
+          <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
+            📝 Historique des interactions
+          </h3>
+          <ul className="space-y-3 text-sm">
+            {history.map((h, i) => (
+              <li
+                key={i}
+                className="p-3 rounded bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
+              >
+                <p className="font-medium text-indigo-600 dark:text-indigo-400">
+                  {h.type} →
+                </p>
+                <p className="text-gray-700 dark:text-gray-300">
+                  <strong>Q :</strong> {h.query}
+                </p>
+                <p className="text-gray-800 dark:text-gray-200 mt-1">
+                  <strong>R :</strong> {h.response}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
