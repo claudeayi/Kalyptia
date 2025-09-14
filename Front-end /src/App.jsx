@@ -13,7 +13,7 @@ const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 
 /* ============================================================================
- *  Pages Privées – Cockpit
+ *  Pages Privées – Cockpit principal
  * ========================================================================== */
 const Home = lazy(() => import("./pages/Home"));
 const Marketplace = lazy(() => import("./pages/Marketplace"));
@@ -27,18 +27,27 @@ const Activity = lazy(() => import("./pages/Activity"));
 const Profile = lazy(() => import("./pages/Profile"));
 
 /* ============================================================================
- *  Pages Avancées – IA & DataOps
+ *  Pages Avancées – IA & Insights
  * ========================================================================== */
 const Suggestions = lazy(() => import("./pages/Suggestions"));
 const Predictions = lazy(() => import("./pages/Predictions"));
 const Notifications = lazy(() => import("./pages/Notifications"));
 const Anomalies = lazy(() => import("./pages/Anomalies"));
-const DataOps = lazy(() => import("./pages/DataOps")); // ⚡ Nouveau module cycle data
+
+/* ============================================================================
+ *  Module DataOps – Cycle complet de la donnée
+ * ========================================================================== */
+const DataOps = lazy(() => import("./pages/DataOps"));
+const Sources = lazy(() => import("./pages/Sources"));
+const Pipeline = lazy(() => import("./pages/Pipeline"));
+const Storage = lazy(() => import("./pages/Storage"));
+const Governance = lazy(() => import("./pages/Governance"));
+const Monetization = lazy(() => import("./pages/Monetization"));
 
 /* ============================================================================
  *  Error Boundary global
  * ========================================================================== */
-function ErrorBoundary({ children }: { children: React.ReactNode }) {
+function ErrorBoundary({ children }) {
   return (
     <Suspense
       fallback={
@@ -121,7 +130,14 @@ export default function App() {
             <Route path="anomalies" element={<Anomalies />} />
 
             {/* ⚡ Nouveau module – Cycle de la donnée */}
-            <Route path="dataops" element={<DataOps />} />
+            <Route path="dataops" element={<DataOps />}>
+              <Route index element={<Navigate to="/dataops/sources" replace />} />
+              <Route path="sources" element={<Sources />} />
+              <Route path="pipeline" element={<Pipeline />} />
+              <Route path="storage" element={<Storage />} />
+              <Route path="governance" element={<Governance />} />
+              <Route path="monetization" element={<Monetization />} />
+            </Route>
           </Route>
 
           {/* =======================
